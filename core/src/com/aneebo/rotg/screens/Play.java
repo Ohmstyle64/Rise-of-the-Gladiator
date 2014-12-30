@@ -1,5 +1,6 @@
 package com.aneebo.rotg.screens;
 
+import com.aneebo.rotg.components.CollisionComponent;
 import com.aneebo.rotg.components.InputComponent;
 import com.aneebo.rotg.components.MovementComponent;
 import com.aneebo.rotg.components.RenderComponent;
@@ -7,6 +8,7 @@ import com.aneebo.rotg.systems.CollisionSystem;
 import com.aneebo.rotg.systems.InputSystem;
 import com.aneebo.rotg.systems.MovementSystem;
 import com.aneebo.rotg.systems.RenderSystem;
+import com.aneebo.rotg.types.ColliderType;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Screen;
@@ -37,10 +39,12 @@ public class Play implements Screen {
 		player.add(new MovementComponent(3,2));
 		player.add(new InputComponent());
 		player.add(new RenderComponent(new Texture("img/characters/dragon_form.png")));
+		player.add(new CollisionComponent(ColliderType.character));
 		
 		Entity enemy_1 = new Entity();
 		enemy_1.add(new MovementComponent(10,7));
 		enemy_1.add(new RenderComponent(new Texture("img/characters/pig_form.png")));
+		enemy_1.add(new CollisionComponent(ColliderType.character));
 		
 		//Add Entities
 		engine.addEntity(player);
