@@ -36,12 +36,15 @@ public class Play implements Screen {
 		Entity player = new Entity();
 		player.add(new MovementComponent(3,2));
 		player.add(new InputComponent());
-		Texture texture = new Texture("img/characters/dragon_form.png");
-		player.add(new RenderComponent(texture));
+		player.add(new RenderComponent(new Texture("img/characters/dragon_form.png")));
+		
+		Entity enemy_1 = new Entity();
+		enemy_1.add(new MovementComponent(10,7));
+		enemy_1.add(new RenderComponent(new Texture("img/characters/pig_form.png")));
 		
 		//Add Entities
 		engine.addEntity(player);
-		
+		engine.addEntity(enemy_1);
 		
 		//Create Systems
 		createSystems();
