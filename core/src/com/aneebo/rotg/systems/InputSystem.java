@@ -45,6 +45,9 @@ public class InputSystem extends EntitySystem {
 		if(Gdx.input.isKeyJustPressed(Keys.NUMPAD_1)) {
 			if(abilitySlots.get(0).available)
 				abilityComponent.ability = abilitySlots.get(0);
+		}else if(Gdx.input.isKeyJustPressed(Keys.NUMPAD_2)) {
+			if(abilitySlots.get(1).available)
+				abilityComponent.ability = abilitySlots.get(1);
 		}
 		
 		if(!posComponent.isStopped()) return;

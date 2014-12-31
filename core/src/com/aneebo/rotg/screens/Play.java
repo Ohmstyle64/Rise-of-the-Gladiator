@@ -42,13 +42,14 @@ public class Play implements Screen {
 		
 		//Create Entities
 		Entity player = new Entity();
-		player.add(new PositionComponent(3,7));
+		player.add(new PositionComponent(8,7));
 		player.add(new InputComponent());
 		player.add(new RenderComponent(new Texture("img/characters/dragon_form.png")));
 		player.add(new CollisionComponent(ColliderType.character));
 		
 		Array<Ability> abilityList = new Array<Ability>();
 		abilityList.add(Constants.abilityMap.get(Constants.AT_SLASH));
+		abilityList.add(Constants.abilityMap.get(Constants.DF_PARRY));
 		
 		player.add(new AbilityComponent(abilityList));
 		

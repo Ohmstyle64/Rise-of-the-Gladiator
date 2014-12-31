@@ -72,8 +72,6 @@ public class AbilitySystem extends EntitySystem {
 			if(abilityComponent.ability==null) continue;
 			
 			abilityComponent.ability.action(deltaTime);
-			//ONLY 1 ACTIVE ABILITY AT A TIME
-			return;
 		}
 		
 	}
