@@ -1,5 +1,7 @@
 package com.aneebo.rotg.systems;
 
+import com.aneebo.rotg.abilities.Ability;
+import com.aneebo.rotg.components.AbilityComponent;
 import com.aneebo.rotg.components.InputComponent;
 import com.aneebo.rotg.components.MovementComponent;
 import com.badlogic.ashley.core.ComponentMapper;
@@ -10,13 +12,17 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.utils.Array;
 
 public class InputSystem extends EntitySystem {
 
 	private ComponentMapper<MovementComponent> mc = ComponentMapper.getFor(MovementComponent.class);
+	private ComponentMapper<AbilityComponent> ac = ComponentMapper.getFor(AbilityComponent.class);
 	private ImmutableArray<Entity> entities;
 	
-	private MovementComponent move;
+	private Array<Ability> abilitySlots;
+	private AbilityComponent abilityComponent;
+	private MovementComponent moveComponent;
 	private Entity e;
 	
 	public InputSystem() {
@@ -25,25 +31,32 @@ public class InputSystem extends EntitySystem {
 	
 	@Override
 	public void addedToEngine(Engine engine) {
-		entities = engine.getEntitiesFor(Family.getFor(InputComponent.class));
+		entities = engine.getEntitiesFor(Family.getFor(InputComponent.class, AbilityComponent.class));
 	}
 
 	@Override
 	public void update(float deltaTime) {
 		//SINGLEPLAYER ONLY
 		e = entities.first();
-		move = mc.get(e);
+		moveComponent = mc.get(e);
 		
-		if(!move.isStopped()) return;
+		abilityComponent = ac.get(e);
+		abilitySlots = abilityComponent.abilitySlots;
+		if(Gdx.input.isKeyJustPressed(Keys.NUMPAD_1)) {
+			if(abilitySlots.get(0).available)
+				abilityComponent.ability = abilitySlots.get(0);
+		}
+		
+		if(!moveComponent.isStopped()) return;
 		
 		if(Gdx.input.isKeyJustPressed(Keys.A)) {
-			move.nXPos--;
+			moveComponent.nXPos--;
 		}else if(Gdx.input.isKeyJustPressed(Keys.D)) {
-			move.nXPos++;
+			moveComponent.nXPos++;
 		}else if(Gdx.input.isKeyJustPressed(Keys.W)) {
-			move.nYPos++;
+			moveComponent.nYPos++;
 		}else if(Gdx.input.isKeyJustPressed(Keys.S)) {
-			move.nYPos--;
+			moveComponent.nYPos--;
 		}
 	}
 	

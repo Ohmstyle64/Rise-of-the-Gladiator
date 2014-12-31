@@ -1,7 +1,9 @@
 package com.aneebo.rotg.systems;
 
+import com.aneebo.rotg.components.AbilityComponent;
 import com.aneebo.rotg.components.MovementComponent;
 import com.aneebo.rotg.components.RenderComponent;
+import com.aneebo.rotg.utils.Constants;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -16,19 +18,20 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
 public class RenderSystem extends EntitySystem {
 
-	private static final float TILE_WIDTH = 32f;
-	private static final float TILE_HEIGHT = 32f;
-	
 	private OrthographicCamera arenaCam;
 	private OrthogonalTiledMapRenderer renderer;
 	private BitmapFont font;
 	
 	private ImmutableArray<Entity> entities;
+	private ImmutableArray<Entity> abilityEntities;
+	
 	private ComponentMapper<MovementComponent> mc = ComponentMapper.getFor(MovementComponent.class);
 	private ComponentMapper<RenderComponent> rc = ComponentMapper.getFor(RenderComponent.class);
+	private ComponentMapper<AbilityComponent> ac = ComponentMapper.getFor(AbilityComponent.class);
 	
-	private MovementComponent move;
-	private RenderComponent render;
+	private AbilityComponent abilityComponent;
+	private MovementComponent moveComponent;
+	private RenderComponent renderComponent;
 	private Entity e;
 	
 	public RenderSystem(OrthogonalTiledMapRenderer renderer) {
@@ -42,6 +45,7 @@ public class RenderSystem extends EntitySystem {
 	@Override
 	public void addedToEngine(Engine engine) {
 		entities = engine.getEntitiesFor(Family.getFor(RenderComponent.class));
+		abilityEntities = engine.getEntitiesFor(Family.getFor(AbilityComponent.class));
 	}
 	
 	@Override
@@ -57,14 +61,25 @@ public class RenderSystem extends EntitySystem {
 		int size = entities.size();
 		for(int i = 0; i < size; i++) {
 			e = entities.get(i);
-			move = mc.get(e);
-			render = rc.get(e);
-			renderer.getBatch().draw(render.texture, move.curXPos*TILE_WIDTH, move.curYPos*TILE_HEIGHT);
+			moveComponent = mc.get(e);
+			renderComponent = rc.get(e);
+			renderer.getBatch().draw(renderComponent.texture, moveComponent.curXPos*Constants.TILE_WIDTH, 
+					moveComponent.curYPos*Constants.TILE_HEIGHT);
+		}
+		
+		//RENDER ABILITIES
+		size = abilityEntities.size();
+		for(int i = 0; i < size; i++) {
+			e = abilityEntities.get(i);
+			abilityComponent = ac.get(e);
+			if(abilityComponent.ability==null) continue;
+			abilityComponent.ability.render(renderer.getBatch());
 		}
 		
 		//DEV INFO
 		font.draw(renderer.getBatch(), "Mouse Pos (X,Y): ("+Gdx.input.getX()+", "+(Gdx.graphics.getHeight()-Gdx.input.getY())+")"
-				+", ("+(int)(Gdx.input.getX()/TILE_WIDTH)+", "+(int)((Gdx.graphics.getHeight()-Gdx.input.getY())/TILE_HEIGHT)+")", 10, 20);
+				+", ("+(int)(Gdx.input.getX()/Constants.TILE_WIDTH)+", "+
+				(int)((Gdx.graphics.getHeight()-Gdx.input.getY())/Constants.TILE_HEIGHT)+")", 10, 20);
 		font.draw(renderer.getBatch(), "FPS: "+Gdx.graphics.getFramesPerSecond() , 350, 20);
 		renderer.getBatch().end();
 	}
