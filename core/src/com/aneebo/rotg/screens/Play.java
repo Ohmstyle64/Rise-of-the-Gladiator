@@ -93,7 +93,7 @@ public class Play implements Screen {
 	public void resize(int width, int height) {
 		renderSystem.getArenaCam().viewportHeight = height;
 		renderSystem.getArenaCam().viewportWidth = width;
-		renderSystem.getArenaCam().translate(width / 4, height / 4);
+		renderSystem.getArenaCam().position.set(width / 2, height / 2, 0);
 		renderSystem.getArenaCam().update();
 	}
 
