@@ -4,7 +4,7 @@ import com.aneebo.rotg.abilities.Ability;
 import com.aneebo.rotg.components.AbilityComponent;
 import com.aneebo.rotg.components.CollisionComponent;
 import com.aneebo.rotg.components.InputComponent;
-import com.aneebo.rotg.components.MovementComponent;
+import com.aneebo.rotg.components.PositionComponent;
 import com.aneebo.rotg.components.RenderComponent;
 import com.aneebo.rotg.systems.AbilitySystem;
 import com.aneebo.rotg.systems.CollisionSystem;
@@ -42,7 +42,7 @@ public class Play implements Screen {
 		
 		//Create Entities
 		Entity player = new Entity();
-		player.add(new MovementComponent(3,7));
+		player.add(new PositionComponent(3,7));
 		player.add(new InputComponent());
 		player.add(new RenderComponent(new Texture("img/characters/dragon_form.png")));
 		player.add(new CollisionComponent(ColliderType.character));
@@ -53,7 +53,7 @@ public class Play implements Screen {
 		player.add(new AbilityComponent(abilityList));
 		
 		Entity enemy_1 = new Entity();
-		enemy_1.add(new MovementComponent(10,7));
+		enemy_1.add(new PositionComponent(10,7));
 		enemy_1.add(new RenderComponent(new Texture("img/characters/pig_form.png")));
 		enemy_1.add(new CollisionComponent(ColliderType.character));
 		

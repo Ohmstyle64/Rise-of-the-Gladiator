@@ -1,7 +1,7 @@
 package com.aneebo.rotg.systems;
 
 import com.aneebo.rotg.components.AbilityComponent;
-import com.aneebo.rotg.components.MovementComponent;
+import com.aneebo.rotg.components.PositionComponent;
 import com.aneebo.rotg.components.RenderComponent;
 import com.aneebo.rotg.utils.Constants;
 import com.badlogic.ashley.core.ComponentMapper;
@@ -25,12 +25,12 @@ public class RenderSystem extends EntitySystem {
 	private ImmutableArray<Entity> entities;
 	private ImmutableArray<Entity> abilityEntities;
 	
-	private ComponentMapper<MovementComponent> mc = ComponentMapper.getFor(MovementComponent.class);
+	private ComponentMapper<PositionComponent> pc = ComponentMapper.getFor(PositionComponent.class);
 	private ComponentMapper<RenderComponent> rc = ComponentMapper.getFor(RenderComponent.class);
 	private ComponentMapper<AbilityComponent> ac = ComponentMapper.getFor(AbilityComponent.class);
 	
 	private AbilityComponent abilityComponent;
-	private MovementComponent moveComponent;
+	private PositionComponent posComponent;
 	private RenderComponent renderComponent;
 	private Entity e;
 	
@@ -61,10 +61,10 @@ public class RenderSystem extends EntitySystem {
 		int size = entities.size();
 		for(int i = 0; i < size; i++) {
 			e = entities.get(i);
-			moveComponent = mc.get(e);
+			posComponent = pc.get(e);
 			renderComponent = rc.get(e);
-			renderer.getBatch().draw(renderComponent.texture, moveComponent.curXPos*Constants.TILE_WIDTH, 
-					moveComponent.curYPos*Constants.TILE_HEIGHT);
+			renderer.getBatch().draw(renderComponent.texture, posComponent.curXPos*Constants.TILE_WIDTH, 
+					posComponent.curYPos*Constants.TILE_HEIGHT);
 		}
 		
 		//RENDER ABILITIES

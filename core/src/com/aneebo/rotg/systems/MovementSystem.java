@@ -1,6 +1,6 @@
 package com.aneebo.rotg.systems;
 
-import com.aneebo.rotg.components.MovementComponent;
+import com.aneebo.rotg.components.PositionComponent;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -12,10 +12,10 @@ public class MovementSystem extends EntitySystem {
 
 	private static final float SPEED = 1.5f;
 	
-	private ComponentMapper<MovementComponent> mc = ComponentMapper.getFor(MovementComponent.class);
+	private ComponentMapper<PositionComponent> pc = ComponentMapper.getFor(PositionComponent.class);
 	private ImmutableArray<Entity> entities;
 	
-	private MovementComponent move;
+	private PositionComponent pos;
 	private Entity e;
 	
 	public MovementSystem() {
@@ -24,7 +24,7 @@ public class MovementSystem extends EntitySystem {
 	
 	@Override
 	public void addedToEngine(Engine engine) {
-		entities = engine.getEntitiesFor(Family.getFor(MovementComponent.class));
+		entities = engine.getEntitiesFor(Family.getFor(PositionComponent.class));
 	}
 	
 	@Override
@@ -32,22 +32,22 @@ public class MovementSystem extends EntitySystem {
 		int size = entities.size();
 		for(int i = 0; i < size; i++) {
 			e = entities.get(i);
-			move = mc.get(e);
+			pos = pc.get(e);
 			
-			if(move.isStopped()) continue;
+			if(pos.isStopped()) continue;
 			
-			if(move.curXPos < move.nXPos) {
-				move.curXPos += SPEED*deltaTime;
-				if(move.curXPos >= move.nXPos) move.curXPos = move.nXPos;
-			}else if(move.curXPos > move.nXPos) {
-				move.curXPos -=SPEED*deltaTime;
-				if(move.curXPos <= move.nXPos) move.curXPos = move.nXPos;
-			}else if(move.curYPos < move.nYPos) {
-				move.curYPos += SPEED*deltaTime;
-				if(move.curYPos >= move.nYPos) move.curYPos = move.nYPos;
-			}else if(move.curYPos > move.nYPos) {
-				move.curYPos -=SPEED*deltaTime;
-				if(move.curYPos <= move.nYPos) move.curYPos = move.nYPos;
+			if(pos.curXPos < pos.nXPos) {
+				pos.curXPos += SPEED*deltaTime;
+				if(pos.curXPos >= pos.nXPos) pos.curXPos = pos.nXPos;
+			}else if(pos.curXPos > pos.nXPos) {
+				pos.curXPos -=SPEED*deltaTime;
+				if(pos.curXPos <= pos.nXPos) pos.curXPos = pos.nXPos;
+			}else if(pos.curYPos < pos.nYPos) {
+				pos.curYPos += SPEED*deltaTime;
+				if(pos.curYPos >= pos.nYPos) pos.curYPos = pos.nYPos;
+			}else if(pos.curYPos > pos.nYPos) {
+				pos.curYPos -=SPEED*deltaTime;
+				if(pos.curYPos <= pos.nYPos) pos.curYPos = pos.nYPos;
 			}
 		}
 	}

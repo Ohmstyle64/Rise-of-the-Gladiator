@@ -1,7 +1,7 @@
 package com.aneebo.rotg.systems;
 
 import com.aneebo.rotg.components.CollisionComponent;
-import com.aneebo.rotg.components.MovementComponent;
+import com.aneebo.rotg.components.PositionComponent;
 import com.aneebo.rotg.types.ColliderType;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
@@ -14,12 +14,12 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 
 public class CollisionSystem extends EntitySystem {
 	
-	private ComponentMapper<MovementComponent> mc = ComponentMapper.getFor(MovementComponent.class);
+	private ComponentMapper<PositionComponent> pc = ComponentMapper.getFor(PositionComponent.class);
 	private ComponentMapper<CollisionComponent> cc = ComponentMapper.getFor(CollisionComponent.class);
 	private ImmutableArray<Entity> entities;
 	
-	private MovementComponent ent1Move;
-	private MovementComponent ent2Move;
+	private PositionComponent ent1Pos;
+	private PositionComponent ent2Pos;
 	private CollisionComponent ent1Col;
 	private CollisionComponent ent2Col;
 	private Entity e;
@@ -33,7 +33,7 @@ public class CollisionSystem extends EntitySystem {
 
 	@Override
 	public void addedToEngine(Engine engine) {
-		entities = engine.getEntitiesFor(Family.getFor(MovementComponent.class, CollisionComponent.class));
+		entities = engine.getEntitiesFor(Family.getFor(PositionComponent.class, CollisionComponent.class));
 	}
 	
 	@Override
@@ -41,13 +41,13 @@ public class CollisionSystem extends EntitySystem {
 		int size = entities.size();
 		for(int i = 0; i < size; i++) {
 			e = entities.get(i);
-			ent1Move = mc.get(e);
-			if(ent1Move.isStopped()) continue;
+			ent1Pos = pc.get(e);
+			if(ent1Pos.isStopped()) continue;
 			
 			//CHECK IF ENTITIY HIT A WALL
-			if(wallLayer.getCell(ent1Move.nXPos, ent1Move.nYPos) != null) {
-				ent1Move.nXPos = (int)ent1Move.curXPos;
-				ent1Move.nYPos = (int)ent1Move.curYPos;
+			if(wallLayer.getCell(ent1Pos.nXPos, ent1Pos.nYPos) != null) {
+				ent1Pos.nXPos = (int)ent1Pos.curXPos;
+				ent1Pos.nYPos = (int)ent1Pos.curYPos;
 			}
 			
 			ent1Col = cc.get(e);
@@ -58,17 +58,17 @@ public class CollisionSystem extends EntitySystem {
 				
 				e = entities.get(j);
 				
-				ent2Move = mc.get(e);
+				ent2Pos = pc.get(e);
 				//CHECK IF THE ENT2 IS WHERE ENT1 WANTS TO GO
-				if(ent1Move.nXPos==ent2Move.curXPos && ent1Move.nYPos==ent2Move.curYPos) {
+				if(ent1Pos.nXPos==ent2Pos.curXPos && ent1Pos.nYPos==ent2Pos.curYPos) {
 					ent2Col = cc.get(e);
 					//CHECK IF ENT1 IS A CHARACTER
 					if(ent1Col.type==ColliderType.character) {
 						//CHECK THE COLLIDER TYPE OF ENT2
 						switch(ent2Col.type) {
 							case character:
-								ent1Move.nXPos = (int)ent1Move.curXPos;
-								ent1Move.nYPos = (int)ent1Move.curYPos;
+								ent1Pos.nXPos = (int)ent1Pos.curXPos;
+								ent1Pos.nYPos = (int)ent1Pos.curYPos;
 								break;
 							case trap:
 								break;

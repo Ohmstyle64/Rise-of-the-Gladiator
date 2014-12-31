@@ -3,7 +3,7 @@ package com.aneebo.rotg.systems;
 import com.aneebo.rotg.abilities.Ability;
 import com.aneebo.rotg.components.AbilityComponent;
 import com.aneebo.rotg.components.InputComponent;
-import com.aneebo.rotg.components.MovementComponent;
+import com.aneebo.rotg.components.PositionComponent;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -16,13 +16,13 @@ import com.badlogic.gdx.utils.Array;
 
 public class InputSystem extends EntitySystem {
 
-	private ComponentMapper<MovementComponent> mc = ComponentMapper.getFor(MovementComponent.class);
+	private ComponentMapper<PositionComponent> pc = ComponentMapper.getFor(PositionComponent.class);
 	private ComponentMapper<AbilityComponent> ac = ComponentMapper.getFor(AbilityComponent.class);
 	private ImmutableArray<Entity> entities;
 	
 	private Array<Ability> abilitySlots;
 	private AbilityComponent abilityComponent;
-	private MovementComponent moveComponent;
+	private PositionComponent posComponent;
 	private Entity e;
 	
 	public InputSystem() {
@@ -38,7 +38,7 @@ public class InputSystem extends EntitySystem {
 	public void update(float deltaTime) {
 		//SINGLEPLAYER ONLY
 		e = entities.first();
-		moveComponent = mc.get(e);
+		posComponent = pc.get(e);
 		
 		abilityComponent = ac.get(e);
 		abilitySlots = abilityComponent.abilitySlots;
@@ -47,16 +47,16 @@ public class InputSystem extends EntitySystem {
 				abilityComponent.ability = abilitySlots.get(0);
 		}
 		
-		if(!moveComponent.isStopped()) return;
+		if(!posComponent.isStopped()) return;
 		
 		if(Gdx.input.isKeyJustPressed(Keys.A)) {
-			moveComponent.nXPos--;
+			posComponent.nXPos--;
 		}else if(Gdx.input.isKeyJustPressed(Keys.D)) {
-			moveComponent.nXPos++;
+			posComponent.nXPos++;
 		}else if(Gdx.input.isKeyJustPressed(Keys.W)) {
-			moveComponent.nYPos++;
+			posComponent.nYPos++;
 		}else if(Gdx.input.isKeyJustPressed(Keys.S)) {
-			moveComponent.nYPos--;
+			posComponent.nYPos--;
 		}
 	}
 	
