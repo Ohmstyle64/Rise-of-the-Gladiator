@@ -18,6 +18,7 @@ public class AbilityComponent extends Component {
 		for(int i = 0; i < abilityList.size; i++) {
 			this.abilityList.add(new Ability(abilityList.get(i)));
 		}
+		//FILL ABILITY SLOTS WITH ABILITY LIST
 		abilitySlots.addAll(abilityList, 0, Math.min(Constants.MAX_ABILITY_SLOTS,abilityList.size));
 	}
 }

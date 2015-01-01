@@ -62,6 +62,8 @@ public class AbilitySystem extends EntitySystem {
 					}else {
 						//CHECK IF IT IS AN ACTIVATED ABILITY
 						if(abilityComponent.ability != null && abilityComponent.ability == abilitySlots.get(j)) {
+							if(!abilityComponent.ability.isCompleted())
+								abilityComponent.ability.interrupted = true;
 							abilityComponent.ability = null;
 						}
 						abilitySlots.get(j).available = false;
