@@ -13,9 +13,9 @@ public class Ability {
 	protected AbilityType type;
 	protected String name;
 	protected float timer;
-	public boolean available;
-	public boolean justCompleted;
-	public boolean interrupted;
+	public boolean isAvailable;
+	public boolean isCompleted;
+	public boolean isInterrupted;
 	private ProgressBar bar;
 	private Label label;
 	
@@ -25,9 +25,9 @@ public class Ability {
 		this.range = range;
 		this.type = type;
 		this.name = name;
-		available = false;
-		justCompleted = false;
-		interrupted = false;
+		isAvailable = false;
+		isCompleted = false;
+		isInterrupted = false;
 		Skin skin = new Skin(Gdx.files.internal("img/gui/uiskin.json"));
 		bar = new ProgressBar(0f,1f,0.01f,false, skin);
 		label = new Label(name, skin);
@@ -61,18 +61,14 @@ public class Ability {
 	}
 
 	public void action(float delta){
-		if(interrupted) {
+		if(isInterrupted) {
 			timer = 0;
-			interrupted = false;
+			isInterrupted = false;
 		}
 		onLoopStart(delta);
 		if(timer >=castTime) {
 			onLoopEnd();
 		}
-	}
-	
-	public boolean isCompleted() {
-		return timer >= castTime;
 	}
 	
 	public void render(Batch batch){
@@ -91,13 +87,13 @@ public class Ability {
 	
 	protected void onLoopStart(float delta) {
 		timer+=delta;
-		justCompleted = false;
+		isCompleted = false;
 	}
 	
 	protected void onLoopEnd() {
 		timer = 0;
-		available = false;
-		justCompleted = true;
+		isAvailable = false;
+		isCompleted = true;
 	}
 	
 }

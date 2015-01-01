@@ -43,10 +43,10 @@ public class InputSystem extends EntitySystem {
 		abilityComponent = ac.get(e);
 		abilitySlots = abilityComponent.abilitySlots;
 		if(Gdx.input.isKeyJustPressed(Keys.NUMPAD_1)) {
-			if(abilitySlots.get(0).available)
+			if(abilitySlots.get(0).isAvailable)
 				abilityComponent.ability = activateAbility(abilitySlots.get(0));
 		}else if(Gdx.input.isKeyJustPressed(Keys.NUMPAD_2)) {
-			if(abilitySlots.get(1).available)
+			if(abilitySlots.get(1).isAvailable)
 				abilityComponent.ability = activateAbility(abilitySlots.get(1));
 		}
 		

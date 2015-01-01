@@ -53,20 +53,20 @@ public class AbilitySystem extends EntitySystem {
 					//POSITION OF 2 ENTITIES IS WITHIN RANGE OF ABILITY
 					if(Math.abs(ent2Pos.curXPos-ent1Pos.curXPos) <= abilitySlots.get(j).getRange() &&
 							Math.abs(ent2Pos.curYPos-ent1Pos.curYPos) <= abilitySlots.get(j).getRange()) {
-						abilitySlots.get(j).available = true;
+						abilitySlots.get(j).isAvailable = true;
 						//IF THE ABILITY JUST COMPLETED IT'S ACTION THEN STOP
-						if(abilitySlots.get(j).justCompleted) {
+						if(abilitySlots.get(j).isCompleted) {
 							abilityComponent.ability = null;
-							abilitySlots.get(j).justCompleted = false;
+							abilitySlots.get(j).isCompleted = false;
 						}
 					}else {
 						//CHECK IF IT IS AN ACTIVATED ABILITY
 						if(abilityComponent.ability != null && abilityComponent.ability == abilitySlots.get(j)) {
-							if(!abilityComponent.ability.isCompleted())
-								abilityComponent.ability.interrupted = true;
+							if(!abilityComponent.ability.isCompleted)
+								abilityComponent.ability.isInterrupted = true;
 							abilityComponent.ability = null;
 						}
-						abilitySlots.get(j).available = false;
+						abilitySlots.get(j).isAvailable = false;
 					}
 				}
 			}
