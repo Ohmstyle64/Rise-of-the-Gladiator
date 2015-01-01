@@ -8,6 +8,7 @@ public class Slash extends Ability {
 	
 	public Slash(int id, int castTime, int range, AbilityType type, String name) {
 		super(id, castTime, range, type, name);
+
 	}
 	
 	@Override
@@ -26,6 +27,7 @@ public class Slash extends Ability {
 	
 	@Override
 	public void render(Batch batch) {
+		super.render(batch);
 		if(timer >=castTime) {
 			//DO ABILITY EFFECT
 		}

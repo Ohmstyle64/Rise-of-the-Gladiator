@@ -1,8 +1,12 @@
 package com.aneebo.rotg.abilities;
 
 import com.aneebo.rotg.types.AbilityType;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class Ability {
 	protected int id, castTime, range;
@@ -11,6 +15,8 @@ public class Ability {
 	protected float timer;
 	public boolean available;
 	public boolean justCompleted;
+	private ProgressBar bar;
+	private Label label;
 	
 	public Ability(int id, int castTime, int range, AbilityType type, String name) {
 		this.id = id;
@@ -20,6 +26,12 @@ public class Ability {
 		this.name = name;
 		available = false;
 		justCompleted = false;
+		Skin skin = new Skin(Gdx.files.internal("img/gui/uiskin.json"));
+		bar = new ProgressBar(0f,1f,0.01f,false, skin);
+		label = new Label(name, skin);
+		
+		bar.setPosition(Gdx.graphics.getWidth() / 2 - bar.getWidth() / 2, Gdx.graphics.getHeight() * 0.9f);
+		label.setPosition(Gdx.graphics.getWidth() / 2 - label.getWidth() / 2, Gdx.graphics.getHeight() * 0.9f - label.getHeight());
 	}
 	
 	public Ability(Ability ability) {
@@ -52,7 +64,19 @@ public class Ability {
 			onLoopEnd();
 		}
 	}
-	public void render(Batch batch){}
+	public void render(Batch batch){
+		float perc = timer / castTime;
+		bar.setValue(perc);
+		if(perc < 0.1f) {
+			label.getStyle().fontColor = Color.GREEN;
+		}else if(perc < 0.6f) {
+			label.getStyle().fontColor = Color.YELLOW;
+		}else
+			label.getStyle().fontColor = Color.RED;
+		
+		bar.draw(batch, batch.getColor().a);
+		label.draw(batch, batch.getColor().a);
+	}
 	
 	protected void onLoopStart(float delta) {
 		timer+=delta;
