@@ -1,16 +1,19 @@
 package com.aneebo.rotg.screens;
 
 import com.aneebo.rotg.abilities.Ability;
+import com.aneebo.rotg.components.AIComponent;
 import com.aneebo.rotg.components.AbilityComponent;
 import com.aneebo.rotg.components.CollisionComponent;
 import com.aneebo.rotg.components.InputComponent;
 import com.aneebo.rotg.components.PositionComponent;
 import com.aneebo.rotg.components.RenderComponent;
+import com.aneebo.rotg.systems.AISystem;
 import com.aneebo.rotg.systems.AbilitySystem;
 import com.aneebo.rotg.systems.CollisionSystem;
 import com.aneebo.rotg.systems.InputSystem;
 import com.aneebo.rotg.systems.MovementSystem;
 import com.aneebo.rotg.systems.RenderSystem;
+import com.aneebo.rotg.types.AIState;
 import com.aneebo.rotg.types.ColliderType;
 import com.aneebo.rotg.utils.Constants;
 import com.badlogic.ashley.core.Engine;
@@ -29,6 +32,7 @@ public class Play implements Screen {
 	private MovementSystem movementSystem;
 	private RenderSystem renderSystem;
 	private AbilitySystem abilitySystem;
+	private AISystem aiSystem;
 	
 	private Engine engine;
 	
@@ -42,7 +46,7 @@ public class Play implements Screen {
 		
 		//Create Entities
 		Entity player = new Entity();
-		player.add(new PositionComponent(8,7));
+		player.add(new PositionComponent(3,4));
 		player.add(new InputComponent());
 		player.add(new RenderComponent(new Texture("img/characters/dragon_form.png")));
 		player.add(new CollisionComponent(ColliderType.character));
@@ -57,6 +61,7 @@ public class Play implements Screen {
 		enemy_1.add(new PositionComponent(10,7));
 		enemy_1.add(new RenderComponent(new Texture("img/characters/pig_form.png")));
 		enemy_1.add(new CollisionComponent(ColliderType.character));
+		enemy_1.add(new AIComponent(AIState.idle));
 		
 		//Add Entities
 		engine.addEntity(player);
@@ -69,9 +74,10 @@ public class Play implements Screen {
 		//Add Systems
 		engine.addSystem(collisionSystem);
 		engine.addSystem(inputSystem);
-		engine.addSystem(movementSystem);
 		engine.addSystem(renderSystem);
 		engine.addSystem(abilitySystem);
+		engine.addSystem(movementSystem);
+		engine.addSystem(aiSystem);
 		
 	}
 
@@ -81,6 +87,7 @@ public class Play implements Screen {
 		movementSystem = new MovementSystem();
 		renderSystem = new RenderSystem(renderer);
 		abilitySystem = new AbilitySystem();
+		aiSystem = new AISystem();
 	}
 	
 	
@@ -118,6 +125,7 @@ public class Play implements Screen {
 		collisionSystem.dispose();
 		inputSystem.dispose();
 		movementSystem.dispose();
+		aiSystem.dispose();
 	}
 
 }

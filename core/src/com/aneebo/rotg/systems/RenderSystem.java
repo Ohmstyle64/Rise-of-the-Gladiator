@@ -35,7 +35,7 @@ public class RenderSystem extends EntitySystem {
 	private Entity e;
 	
 	public RenderSystem(OrthogonalTiledMapRenderer renderer) {
-		super(3);
+		super(4);
 		this.renderer = renderer;
 		font = new BitmapFont();
 		arenaCam = new OrthographicCamera();
