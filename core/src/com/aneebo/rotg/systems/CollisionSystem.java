@@ -27,7 +27,7 @@ public class CollisionSystem extends EntitySystem {
 	private TiledMapTileLayer wallLayer;
 	
 	public CollisionSystem(TiledMap map) {
-		super(1);
+		super(2);
 		wallLayer = (TiledMapTileLayer) map.getLayers().get("wall");
 	}
 

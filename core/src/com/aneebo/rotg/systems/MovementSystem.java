@@ -37,21 +37,22 @@ public class MovementSystem extends EntitySystem {
 			if(pos.isStopped()) continue;
 			
 			if(pos.curXPos < pos.nXPos) {
-				pos.pXPos = (int)pos.curXPos;
 				pos.curXPos += SPEED*deltaTime;
 				if(pos.curXPos >= pos.nXPos) pos.curXPos = pos.nXPos;
 			}else if(pos.curXPos > pos.nXPos) {
-				pos.pXPos = (int)pos.curXPos;
 				pos.curXPos -=SPEED*deltaTime;
 				if(pos.curXPos <= pos.nXPos) pos.curXPos = pos.nXPos;
 			}else if(pos.curYPos < pos.nYPos) {
-				pos.pYPos = (int)pos.curYPos;
 				pos.curYPos += SPEED*deltaTime;
 				if(pos.curYPos >= pos.nYPos) pos.curYPos = pos.nYPos;
 			}else if(pos.curYPos > pos.nYPos) {
-				pos.pYPos = (int)pos.curYPos;
 				pos.curYPos -=SPEED*deltaTime;
 				if(pos.curYPos <= pos.nYPos) pos.curYPos = pos.nYPos;
+			}
+			
+			if(!pos.isStopped()) {
+				pos.pXPos = (int)pos.curXPos;
+				pos.pYPos = (int)pos.curYPos;
 			}
 		}
 	}
