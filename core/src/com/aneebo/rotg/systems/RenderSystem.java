@@ -1,6 +1,7 @@
 package com.aneebo.rotg.systems;
 
 import com.aneebo.rotg.components.AbilityComponent;
+import com.aneebo.rotg.components.InputComponent;
 import com.aneebo.rotg.components.PositionComponent;
 import com.aneebo.rotg.components.RenderComponent;
 import com.aneebo.rotg.utils.Constants;
@@ -24,6 +25,7 @@ public class RenderSystem extends EntitySystem {
 	
 	private ImmutableArray<Entity> entities;
 	private ImmutableArray<Entity> abilityEntities;
+	private Entity player;
 	
 	private ComponentMapper<PositionComponent> pc = ComponentMapper.getFor(PositionComponent.class);
 	private ComponentMapper<RenderComponent> rc = ComponentMapper.getFor(RenderComponent.class);
@@ -46,6 +48,7 @@ public class RenderSystem extends EntitySystem {
 	public void addedToEngine(Engine engine) {
 		entities = engine.getEntitiesFor(Family.getFor(RenderComponent.class));
 		abilityEntities = engine.getEntitiesFor(Family.getFor(AbilityComponent.class));
+		player = engine.getEntitiesFor(Family.getFor(InputComponent.class)).first();
 	}
 	
 	@Override
@@ -72,8 +75,18 @@ public class RenderSystem extends EntitySystem {
 		for(int i = 0; i < size; i++) {
 			e = abilityEntities.get(i);
 			abilityComponent = ac.get(e);
-			if(abilityComponent.ability==null) continue;
-			abilityComponent.ability.render(renderer.getBatch());
+			int abilSize = abilityComponent.abilitySlots.size;
+			for(int j = 0; j < abilSize; j++) {
+				//TEMP CODE FOR DEV
+				if(e.equals(player)) {
+					font.draw(renderer.getBatch(), 
+							abilityComponent.abilitySlots.get(j).getName()+": "+abilityComponent.abilitySlots.get(j).getCooldownTimer(), 
+							Gdx.graphics.getWidth() - 100, 
+							Gdx.graphics.getHeight() * .9f - j*20f);
+				}
+				if(abilityComponent.abilitySlots.get(j).isActivated) 
+					abilityComponent.abilitySlots.get(j).render(renderer.getBatch());
+			}
 		}
 		
 		//DEV INFO

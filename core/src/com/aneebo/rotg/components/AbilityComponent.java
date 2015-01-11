@@ -1,12 +1,13 @@
 package com.aneebo.rotg.components;
 
 import com.aneebo.rotg.abilities.Ability;
+import com.aneebo.rotg.abilities.Parry;
+import com.aneebo.rotg.abilities.Slash;
 import com.aneebo.rotg.utils.Constants;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.utils.Array;
 
 public class AbilityComponent extends Component {
-	public Ability ability;
 	public Array<Ability> abilityList;
 	public Array<Ability> abilitySlots;
 	
@@ -16,9 +17,13 @@ public class AbilityComponent extends Component {
 		this.abilitySlots = new Array<Ability>();
 		
 		for(int i = 0; i < abilityList.size; i++) {
-			this.abilityList.add(new Ability(abilityList.get(i)));
+			if(abilityList.get(i) instanceof Parry) {
+				this.abilityList.add(new Parry(abilityList.get(i)));
+			}else if(abilityList.get(i) instanceof Slash) {
+				this.abilityList.add(new Slash(abilityList.get(i)));
+			}
 		}
 		//FILL ABILITY SLOTS WITH ABILITY LIST
-		abilitySlots.addAll(abilityList, 0, Math.min(Constants.MAX_ABILITY_SLOTS,abilityList.size));
+		abilitySlots.addAll(this.abilityList, 0, Math.min(Constants.MAX_ABILITY_SLOTS,this.abilityList.size));
 	}
 }

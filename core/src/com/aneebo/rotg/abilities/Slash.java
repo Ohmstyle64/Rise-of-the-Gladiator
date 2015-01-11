@@ -6,31 +6,26 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 
 public class Slash extends Ability {
 	
-	public Slash(int id, int castTime, int range, AbilityType type, String name) {
-		super(id, castTime, range, type, name);
+	public Slash(int id, int castTime, int range, AbilityType type, String name, int cooldown) {
+		super(id, castTime, range, type, name, cooldown);
 
 	}
 	
-	@Override
-	protected void onLoopStart(float delta) {
-		super.onLoopStart(delta);
-		//ANY ADDITIONAL CODE SO START
-		
+	public Slash(Ability ability) {
+		this(ability.getId(), ability.getCastTime(), ability.getRange(), ability.getType(), ability.getName(), ability.getCooldown());
 	}
-	
-	@Override
-	protected void onLoopEnd() {
-		super.onLoopEnd();
-		//ANY ADDITIONAL CODE TO END
-		Gdx.app.log("Ability",getName());
-	}
-	
+
 	@Override
 	public void render(Batch batch) {
 		super.render(batch);
-		if(timer >=castTime) {
+		if(castTimeTimer >=castTime) {
 			//DO ABILITY EFFECT
 		}
+	}
+
+	@Override
+	protected void onAbilityEnd() {
+		Gdx.app.log("Ability",getName());
 	}
 
 }

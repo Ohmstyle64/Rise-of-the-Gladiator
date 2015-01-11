@@ -41,39 +41,39 @@ public class AbilitySystem extends EntitySystem {
 			abilityComponent = ac.get(e);
 			abilitySlots = abilityComponent.abilitySlots;
 			ent1Pos = pc.get(e);
-			
+			int activatedIndex = -1;
 			//CHECK IF ANY ABILITIES CAN BE ACTIVATED
 			int slots = abilitySlots.size;
 			for(int j = 0; j < slots; j++) {
+				//ONLY ONE ABILITY ACTIVE AT A TIME
+				if(activatedIndex == -1 && abilitySlots.get(j).isActivated) {
+					activatedIndex = j;
+				}
+				else if(abilitySlots.get(j).isActivating()) {
+					abilitySlots.get(activatedIndex).isActivated = false;
+					activatedIndex = j;
+				}
+				else
+					abilitySlots.get(j).isActivated = false;
+
 				//CHECK EACH ENTITY
 				for(int k = 0; k < sizeM; k++) {
 					if(e.equals(posEntities.get(k))) continue;
 					e = posEntities.get(k);
 					ent2Pos = pc.get(e);
 					//POSITION OF 2 ENTITIES IS WITHIN RANGE OF ABILITY
-					if(Math.abs(ent2Pos.curXPos-ent1Pos.curXPos) <= abilitySlots.get(j).getRange() &&
-							Math.abs(ent2Pos.curYPos-ent1Pos.curYPos) <= abilitySlots.get(j).getRange()) {
-						abilitySlots.get(j).isAvailable = true;
-						//IF THE ABILITY JUST COMPLETED IT'S ACTION THEN STOP
-						if(abilitySlots.get(j).isCompleted) {
-							abilityComponent.ability = null;
-							abilitySlots.get(j).isCompleted = false;
+					if(Math.abs(ent2Pos.curXPos-ent1Pos.curXPos) > abilitySlots.get(j).getRange() ||
+							Math.abs(ent2Pos.curYPos-ent1Pos.curYPos) > abilitySlots.get(j).getRange()) {
+						if(abilitySlots.get(j).isActivated && abilitySlots.get(j).isActivating()) {
+							abilitySlots.get(j).isInterrupted = true;
+						} else {
+							abilitySlots.get(j).isActivated = false;
 						}
-					}else {
-						//CHECK IF IT IS AN ACTIVATED ABILITY
-						if(abilityComponent.ability != null && abilityComponent.ability == abilitySlots.get(j)) {
-							if(!abilityComponent.ability.isCompleted)
-								abilityComponent.ability.isInterrupted = true;
-							abilityComponent.ability = null;
-						}
-						abilitySlots.get(j).isAvailable = false;
 					}
 				}
+				
+				abilitySlots.get(j).action(deltaTime);
 			}
-			
-			if(abilityComponent.ability==null) continue;
-			
-			abilityComponent.ability.action(deltaTime);
 		}
 		
 	}

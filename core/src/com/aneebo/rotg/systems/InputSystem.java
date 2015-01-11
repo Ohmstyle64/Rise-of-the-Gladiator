@@ -43,11 +43,9 @@ public class InputSystem extends EntitySystem {
 		abilityComponent = ac.get(e);
 		abilitySlots = abilityComponent.abilitySlots;
 		if(Gdx.input.isKeyJustPressed(Keys.NUMPAD_1)) {
-			if(abilitySlots.get(0).isAvailable)
-				abilityComponent.ability = activateAbility(abilitySlots.get(0));
+			abilitySlots.get(0).isActivated = true;
 		}else if(Gdx.input.isKeyJustPressed(Keys.NUMPAD_2)) {
-			if(abilitySlots.get(1).isAvailable)
-				abilityComponent.ability = activateAbility(abilitySlots.get(1));
+			abilitySlots.get(1).isActivated = true;
 		}
 		
 		if(!posComponent.isStopped()) return;
@@ -62,11 +60,11 @@ public class InputSystem extends EntitySystem {
 			posComponent.nYPos--;
 		}
 	}
-	private Ability activateAbility(Ability ability) {
-		if(abilityComponent.ability != null) 
-			return abilityComponent.ability;
-		return ability;
-	}
+//	private Ability activateAbility(Ability ability) {
+//		if(abilityComponent.ability != null) 
+//			return abilityComponent.ability;
+//		return ability;
+//	}
 	public void dispose() {
 		
 	}

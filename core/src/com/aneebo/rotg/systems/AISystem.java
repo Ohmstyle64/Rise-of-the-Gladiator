@@ -13,6 +13,7 @@ import com.aneebo.rotg.components.AbilityComponent;
 import com.aneebo.rotg.components.InputComponent;
 import com.aneebo.rotg.components.PositionComponent;
 import com.aneebo.rotg.types.AIState;
+import com.aneebo.rotg.types.AbilityType;
 import com.aneebo.rotg.utils.Constants;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
@@ -33,13 +34,15 @@ public class AISystem extends EntitySystem {
 	private Entity player;
 	
 	private Ability ab;
-	private AbilityComponent enemAbility;
+	private AbilityComponent eAbilityComponent;
+	private AbilityComponent pAbilityComponent;
 	private AIComponent ai;
 	private PositionComponent playerPos;
 	private PositionComponent enemPos;
 	private Entity e;
 
 	private Vector2 nPos;
+	private Vector2 range;
 	private List<GridCell> path;
 	private NavigationGrid<GridCell> navGrid;
 	private AStarGridFinder<GridCell> finder;
@@ -52,7 +55,7 @@ public class AISystem extends EntitySystem {
 	
 	@Override
 	public void addedToEngine(Engine engine) {
-		entities = engine.getEntitiesFor(Family.getFor(AIComponent.class));
+		entities = engine.getEntitiesFor(Family.getFor(AIComponent.class, AbilityComponent.class));
 		player = engine.getEntitiesFor(Family.getFor(InputComponent.class)).first();
 		GridCell[][] cells = new GridCell[rows][cols];
 		playerPos = pc.get(player);
@@ -69,6 +72,7 @@ public class AISystem extends EntitySystem {
 		opt.allowDiagonal = false;
 		finder = new AStarGridFinder<GridCell>(GridCell.class, opt);
 		nPos = new Vector2();
+		range = new Vector2();
 	}
 	
 	@Override
@@ -102,9 +106,8 @@ public class AISystem extends EntitySystem {
 		
 	}
 	private void chase() {
-		enemAbility = ac.get(e);
-		ab = inAbilityRange(enemAbility);
-		if(ab != null) {
+		eAbilityComponent = ac.get(e);
+		if(inAbilityRange(eAbilityComponent, AbilityType.offense)) {
 			ai.aiState = AIState.fight;
 			return;
 		}
@@ -113,28 +116,54 @@ public class AISystem extends EntitySystem {
 		enemyPathToPoint(enemPos, playerPos);
 	}
 	private void fight() {
-		enemAbility = ac.get(e);
-		ab = inAbilityRange(enemAbility);
-		if(ab == null) {
+		eAbilityComponent = ac.get(e);
+		if(!inAbilityRange(eAbilityComponent, null)) {
 			ai.aiState = AIState.chase;
 			return;
 		}
-		enemAbility.ability = activateAbility(ab);
+		pAbilityComponent = ac.get(player);
+		if(hasActiveAbility(pAbilityComponent)) {
+			int size = eAbilityComponent.abilitySlots.size;
+			for(int i = 0; i < size; i++) {
+				if(eAbilityComponent.abilitySlots.get(i).getType() == AbilityType.counter ||
+						eAbilityComponent.abilitySlots.get(i).getType() == AbilityType.defense) {
+					eAbilityComponent.abilitySlots.get(i).isActivated = true;
+					return;
+				}
+			}
+		}else {
+			int size = eAbilityComponent.abilitySlots.size;
+			for(int i = 0; i < size; i++) {
+				if(eAbilityComponent.abilitySlots.get(i).getType() == AbilityType.offense) {
+					eAbilityComponent.abilitySlots.get(i).isActivated = true;
+					return;
+				}
+			}
+		}
 	}
 	
-	/**
-	 * Checks if any offensive ability can be activated.
-	 * @param abil
-	 * @return offensive ability
-	 */
-	private Ability inAbilityRange(AbilityComponent abil) {
-		return null;
+	private boolean hasActiveAbility(AbilityComponent component) {
+		int size = component.abilitySlots.size;
+		for(int i = 0; i < size; i++) {
+			if(component.abilitySlots.get(i).isActivated) return true;
+		}
+		return false;
 	}
 	
-	private Ability activateAbility(Ability ability) {
-		if(enemAbility.ability != null) 
-			return enemAbility.ability;
-		return ability;
+	private boolean inAbilityRange(AbilityComponent abil, AbilityType type) {
+		int size = abil.abilitySlots.size;
+		enemPos = pc.get(e);
+		playerPos = pc.get(player);
+		
+		range.set(playerPos.curXPos, playerPos.curYPos);
+		float dst = range.dst(enemPos.curXPos, enemPos.curYPos);
+		for(int i = 0; i < size; i++) {
+			if(abil.abilitySlots.get(i).getRange() >= dst) {
+				if(type == null) return true;
+				if(abil.abilitySlots.get(i).getType() == type) return true;
+			}
+		}
+		return false;
 	}
 	
 	private void enemyPathToPoint(PositionComponent mePos, PositionComponent otherPos) {

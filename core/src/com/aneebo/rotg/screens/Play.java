@@ -62,6 +62,7 @@ public class Play implements Screen {
 		enemy_1.add(new RenderComponent(new Texture("img/characters/pig_form.png")));
 		enemy_1.add(new CollisionComponent(ColliderType.character));
 		enemy_1.add(new AIComponent(AIState.idle));
+		enemy_1.add(new AbilityComponent(abilityList));
 		
 		//Add Entities
 		engine.addEntity(player);
