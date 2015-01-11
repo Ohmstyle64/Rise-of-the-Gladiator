@@ -113,6 +113,7 @@ public class AISystem extends EntitySystem {
 		enemyPathToPoint(enemPos, playerPos);
 	}
 	private void fight() {
+		enemAbility = ac.get(e);
 		ab = inAbilityRange(enemAbility);
 		if(ab == null) {
 			ai.aiState = AIState.chase;
