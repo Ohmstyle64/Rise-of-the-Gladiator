@@ -7,6 +7,7 @@ import com.aneebo.rotg.components.CollisionComponent;
 import com.aneebo.rotg.components.InputComponent;
 import com.aneebo.rotg.components.PositionComponent;
 import com.aneebo.rotg.components.RenderComponent;
+import com.aneebo.rotg.components.StatComponent;
 import com.aneebo.rotg.systems.AISystem;
 import com.aneebo.rotg.systems.AbilitySystem;
 import com.aneebo.rotg.systems.CollisionSystem;
@@ -19,6 +20,7 @@ import com.aneebo.rotg.utils.Constants;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -45,17 +47,17 @@ public class Play implements Screen {
 		engine = new Engine();
 		
 		//Create Entities
+		Array<Ability> abilityList = new Array<Ability>();
+		abilityList.add(Constants.abilityMap.get(Constants.AT_SLASH));
+		abilityList.add(Constants.abilityMap.get(Constants.DF_PARRY));
+
 		Entity player = new Entity();
 		player.add(new PositionComponent(3,4));
 		player.add(new InputComponent());
 		player.add(new RenderComponent(new Texture("img/characters/dragon_form.png")));
 		player.add(new CollisionComponent(ColliderType.character));
-		
-		Array<Ability> abilityList = new Array<Ability>();
-		abilityList.add(Constants.abilityMap.get(Constants.AT_SLASH));
-		abilityList.add(Constants.abilityMap.get(Constants.DF_PARRY));
-		
 		player.add(new AbilityComponent(abilityList));
+		player.add(new StatComponent("Kevin",100f, 100f, Color.RED));
 		
 		Entity enemy_1 = new Entity();
 		enemy_1.add(new PositionComponent(10,7));
@@ -63,6 +65,7 @@ public class Play implements Screen {
 		enemy_1.add(new CollisionComponent(ColliderType.character));
 		enemy_1.add(new AIComponent(AIState.idle));
 		enemy_1.add(new AbilityComponent(abilityList));
+		enemy_1.add(new StatComponent("Enemy", 100f, 100f, Color.BLUE));
 		
 		//Add Entities
 		engine.addEntity(player);

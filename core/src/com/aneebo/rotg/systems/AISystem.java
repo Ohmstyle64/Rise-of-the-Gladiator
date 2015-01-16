@@ -48,6 +48,7 @@ public class AISystem extends EntitySystem {
 	private AStarGridFinder<GridCell> finder;
 	private final int rows = (int) (Gdx.graphics.getWidth() / Constants.TILE_WIDTH);
 	private final int cols = (int) (Gdx.graphics.getHeight() / Constants.TILE_WIDTH);
+	private float timer;
 	
 	public AISystem() {
 		super(1);
@@ -121,18 +122,39 @@ public class AISystem extends EntitySystem {
 			ai.aiState = AIState.chase;
 			return;
 		}
+		
+		int size;
 		pAbilityComponent = ac.get(player);
-		if(hasActiveAbility(pAbilityComponent)) {
-			int size = eAbilityComponent.abilitySlots.size;
+		switch(hasActiveAbility(pAbilityComponent)) {
+		case offense:
+			size = eAbilityComponent.abilitySlots.size;
 			for(int i = 0; i < size; i++) {
-				if(eAbilityComponent.abilitySlots.get(i).getType() == AbilityType.counter ||
-						eAbilityComponent.abilitySlots.get(i).getType() == AbilityType.defense) {
+				if(eAbilityComponent.abilitySlots.get(i).getType() == AbilityType.counter) {
 					eAbilityComponent.abilitySlots.get(i).isActivated = true;
 					return;
 				}
 			}
-		}else {
-			int size = eAbilityComponent.abilitySlots.size;
+			break;
+		case counter:
+			size = eAbilityComponent.abilitySlots.size;
+			for(int i = 0; i < size; i++) {
+				if(eAbilityComponent.abilitySlots.get(i).getType() == AbilityType.defense) {
+					eAbilityComponent.abilitySlots.get(i).isActivated = true;
+					return;
+				}
+			}
+			break;
+		case defense:
+			size = eAbilityComponent.abilitySlots.size;
+			for(int i = 0; i < size; i++) {
+				if(eAbilityComponent.abilitySlots.get(i).getType() == AbilityType.offense) {
+					eAbilityComponent.abilitySlots.get(i).isActivated = true;
+					return;
+				}
+			}
+			break;
+		default:
+			size = eAbilityComponent.abilitySlots.size;
 			for(int i = 0; i < size; i++) {
 				if(eAbilityComponent.abilitySlots.get(i).getType() == AbilityType.offense) {
 					eAbilityComponent.abilitySlots.get(i).isActivated = true;
@@ -140,14 +162,16 @@ public class AISystem extends EntitySystem {
 				}
 			}
 		}
+
 	}
 	
-	private boolean hasActiveAbility(AbilityComponent component) {
+	private AbilityType hasActiveAbility(AbilityComponent component) {
 		int size = component.abilitySlots.size;
 		for(int i = 0; i < size; i++) {
-			if(component.abilitySlots.get(i).isActivated) return true;
+			if(component.abilitySlots.get(i).isActivated) 
+				return component.abilitySlots.get(i).getType();
 		}
-		return false;
+		return AbilityType.none;
 	}
 	
 	private boolean inAbilityRange(AbilityComponent abil, AbilityType type) {

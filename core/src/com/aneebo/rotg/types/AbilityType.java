@@ -1,5 +1,5 @@
 package com.aneebo.rotg.types;
 
 public enum AbilityType {
-	offense, defense, counter
+	offense, defense, counter, none
 }

@@ -18,9 +18,10 @@ public abstract class Ability {
 	public boolean isAvailable;
 	public boolean isInterrupted;
 	public boolean isActivated;
-	
+	private boolean justStarted;
 	private ProgressBar bar;
 	private Label label;
+	protected Array<Entity> targets;
 	
 	public Ability(int id, int castTime, int range, AbilityType type, String name, int cooldown) {
 		this.id = id;
@@ -29,12 +30,13 @@ public abstract class Ability {
 		this.type = type;
 		this.name = name;
 		this.cooldown = cooldown;
-		
+		justStarted = true;
 		isAvailable = false;
 		isInterrupted = false;
 		isActivated = false;
 		castTimeTimer = 0;
 		cooldownTimer = cooldown;
+		targets = new Array<Entity>();
 		Skin skin = new Skin(Gdx.files.internal("img/gui/uiskin.json"));
 		bar = new ProgressBar(0f,1f,0.01f,false, skin);
 		label = new Label(name, skin);
@@ -78,8 +80,29 @@ public abstract class Ability {
 	public String getName() {
 		return name;
 	}
-
+	
+	protected float interupt() {
+		float perc = castTimeTimer / castTime;
+		isInterrupted = true;
+		if(perc < 0.05f) {
+			return 0.5f;
+		}else if(perc < 0.25f) {
+			return 0.1f;
+		}else if(perc < 0.75f)
+			return 0f; 
+		else{
+			return -0.25f;
+		}
+	}
+	
 	public void render(Batch batch){
+		if(isAvailable && isActivated) {
+			bar.setVisible(false);
+			label.setVisible(false);
+		}else {
+			bar.setVisible(true);
+			label.setVisible(true);
+		}
 		float perc = castTimeTimer / castTime;
 		bar.setValue(perc);
 		if(perc < 0.1f) {
@@ -88,20 +111,29 @@ public abstract class Ability {
 			label.getStyle().fontColor = Color.YELLOW;
 		}else
 			label.getStyle().fontColor = Color.RED;
-		
 		bar.draw(batch, batch.getColor().a);
 		label.draw(batch, batch.getColor().a);
 	}
 
-	public void action(float delta){
+	public void action(float delta, Entity me){
 		onLoopStart(delta);
+		if(isActivated && justStarted) {
+			onAbilityStart(me);
+			justStarted = false;
+		}
 		if(castTimeTimer >=castTime) {
-			onAbilityEnd();
+			onAbilityEnd(me);
 			cleanUp();
 		}
 	}
 	
-	protected abstract void onAbilityEnd();
+	protected abstract void onAbilityStart(Entity me);
+	
+	protected abstract void onAbilityEnd(Entity me);
+	
+	public abstract void setTargetScheme(Entity me);
+	
+	public abstract Array<Entity> getTargets(Entity me);
 
 	protected void onLoopStart(float delta) {
 		isAvailable = (cooldownTimer >= cooldown);
@@ -127,6 +159,13 @@ public abstract class Ability {
 		cooldownTimer = 0;
 		isActivated = false;
 		isInterrupted = false;
+		justStarted = true;
 	}
+
+	public void setTargets(Array<Entity> targets) {
+		this.targets = targets;
+	}
+	
+	
 	
 }

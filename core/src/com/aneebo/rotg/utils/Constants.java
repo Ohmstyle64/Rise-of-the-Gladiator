@@ -18,8 +18,8 @@ public class Constants {
 	public static final ObjectMap<Integer, Ability> abilityMap = new ObjectMap<Integer, Ability>();
 	static {
 		//Create objects
-		Slash slash = new Slash(AT_SLASH, 2, 1, AbilityType.offense, "Slash", 2);
-		Parry parry = new Parry(DF_PARRY, 2, 1, AbilityType.defense, "Parry", 2);
+		Slash slash = new Slash(AT_SLASH, 2, 2, AbilityType.offense, "Slash", 5);
+		Parry parry = new Parry(DF_PARRY, 2, 3, AbilityType.defense, "Parry", 5);
 		
 		
 		//Add to map
