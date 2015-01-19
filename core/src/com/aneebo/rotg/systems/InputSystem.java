@@ -23,7 +23,7 @@ public class InputSystem extends EntitySystem {
 	private Array<Ability> abilitySlots;
 	private AbilityComponent abilityComponent;
 	private PositionComponent posComponent;
-	private Entity e;
+	private Entity player;
 	
 	public InputSystem() {
 		super(0);
@@ -32,15 +32,14 @@ public class InputSystem extends EntitySystem {
 	@Override
 	public void addedToEngine(Engine engine) {
 		entities = engine.getEntitiesFor(Family.getFor(InputComponent.class, AbilityComponent.class));
+		player = entities.first();
+		posComponent = pc.get(player);
+		abilityComponent = ac.get(player);
 	}
 
 	@Override
 	public void update(float deltaTime) {
 		//SINGLEPLAYER ONLY
-		e = entities.first();
-		posComponent = pc.get(e);
-		
-		abilityComponent = ac.get(e);
 		abilitySlots = abilityComponent.abilitySlots;
 		if(Gdx.input.isKeyJustPressed(Keys.NUMPAD_1)) {
 			abilitySlots.get(0).isActivated = true;

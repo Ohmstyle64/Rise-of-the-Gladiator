@@ -8,6 +8,11 @@ import com.badlogic.gdx.utils.ObjectMap;
 
 public class Constants {
 	
+	public static final boolean DEBUG = false;
+	
+	//GUI
+	public static final int LEFT_BUTTON = 0;
+	
 	public static final int MAX_ABILITY_SLOTS = 6;
 	public static final float TILE_WIDTH = 32f;
 	public static final float TILE_HEIGHT = 32f;

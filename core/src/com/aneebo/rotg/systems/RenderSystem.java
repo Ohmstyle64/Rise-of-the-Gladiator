@@ -19,6 +19,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 
 public class RenderSystem extends EntitySystem {
 
@@ -26,6 +27,7 @@ public class RenderSystem extends EntitySystem {
 	private OrthogonalTiledMapRenderer renderer;
 	private ShapeRenderer shapeRenderer;
 	private BitmapFont font;
+	private Stage stage;
 	
 	private ImmutableArray<Entity> entities;
 	private ImmutableArray<Entity> abilityEntities;
@@ -42,9 +44,10 @@ public class RenderSystem extends EntitySystem {
 	private StatComponent statComponent;
 	private Entity e;
 	
-	public RenderSystem(OrthogonalTiledMapRenderer renderer) {
+	public RenderSystem(OrthogonalTiledMapRenderer renderer, Stage stage) {
 		super(4);
 		this.renderer = renderer;
+		this.stage = stage;
 		font = new BitmapFont();
 		shapeRenderer = new ShapeRenderer();
 		arenaCam = new OrthographicCamera();
@@ -99,12 +102,6 @@ public class RenderSystem extends EntitySystem {
 			int abilSize = abilityComponent.abilitySlots.size;
 			for(int j = 0; j < abilSize; j++) {
 				//TEMP CODE FOR DEV
-				if(e.equals(player)) {
-					font.draw(renderer.getBatch(), 
-							abilityComponent.abilitySlots.get(j).getName()+": "+abilityComponent.abilitySlots.get(j).getCooldownTimer(), 
-							Gdx.graphics.getWidth() - 100, 
-							Gdx.graphics.getHeight() * .9f - j*20f);
-				}
 				if(abilityComponent.abilitySlots.get(j).isActivated && abilityComponent.abilitySlots.get(j).isAvailable) {
 					posComponent = pc.get(e);
 					statComponent = sc.get(e);
@@ -121,15 +118,15 @@ public class RenderSystem extends EntitySystem {
 		//DEV INFO
 		font.draw(renderer.getBatch(), "Mouse Pos (X,Y): ("+Gdx.input.getX()+", "+(Gdx.graphics.getHeight()-Gdx.input.getY())+")"
 				+", ("+(int)(Gdx.input.getX()/Constants.TILE_WIDTH)+", "+
-				(int)((Gdx.graphics.getHeight()-Gdx.input.getY())/Constants.TILE_HEIGHT)+")", 10, 20);
+				(int)((Gdx.graphics.getHeight()-Gdx.input.getY())/Constants.TILE_HEIGHT)+")", 450, 20);
 		font.draw(renderer.getBatch(), "FPS: "+Gdx.graphics.getFramesPerSecond() , 350, 20);
-		statComponent = sc.get(player);
 		
-		font.draw(renderer.getBatch(), "Name "+statComponent.name, 10, Gdx.graphics.getHeight() * 0.9f);
-		font.draw(renderer.getBatch(), "Health "+statComponent.health, 10, Gdx.graphics.getHeight() * 0.9f - 20);
-		font.draw(renderer.getBatch(), "Energy "+statComponent.energy, 10, Gdx.graphics.getHeight() * 0.9f - 40);
 		renderer.getBatch().end();
 		shapeRenderer.end();
+		
+		stage.setDebugAll(Constants.DEBUG);
+		stage.act(deltaTime);
+		stage.draw();
 	}
 	
 
@@ -140,5 +137,6 @@ public class RenderSystem extends EntitySystem {
 	public void dispose() {
 		renderer.dispose();
 		font.dispose();
+		stage.dispose();
 	}
 }

@@ -19,11 +19,24 @@ import com.aneebo.rotg.types.ColliderType;
 import com.aneebo.rotg.utils.Constants;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 
 public class Play implements Screen {
@@ -37,12 +50,32 @@ public class Play implements Screen {
 	private AISystem aiSystem;
 	
 	private Engine engine;
+	private Entity player;
+	private StatComponent stat;
+	private PositionComponent pos;
+	private AbilityComponent ability;
+	
 	
 	private OrthogonalTiledMapRenderer renderer;
+	//UI
+	private Table table;
+	private Skin skin;
+	private Stage stage;
+	private ProgressBar healthBar;
+	private ProgressBar energyBar;
 	
 	@Override
 	public void show() {
 		renderer = new OrthogonalTiledMapRenderer(new TmxMapLoader().load("img/arena/arena_1.tmx"));
+		
+		TextureAtlas atlas = new TextureAtlas("img/gui/uiskin.atlas");
+		skin = new Skin(Gdx.files.internal("img/gui/uiskin.json"),atlas);
+		
+		stage = new Stage();
+		Gdx.input.setInputProcessor(stage);
+		
+		table = new Table(skin);
+		table.setFillParent(true);
 		
 		engine = new Engine();
 		
@@ -51,13 +84,13 @@ public class Play implements Screen {
 		abilityList.add(Constants.abilityMap.get(Constants.AT_SLASH));
 		abilityList.add(Constants.abilityMap.get(Constants.DF_PARRY));
 
-		Entity player = new Entity();
-		player.add(new PositionComponent(3,4));
+		player = new Entity();
+		player.add(pos = new PositionComponent(3,4));
 		player.add(new InputComponent());
 		player.add(new RenderComponent(new Texture("img/characters/dragon_form.png")));
 		player.add(new CollisionComponent(ColliderType.character));
-		player.add(new AbilityComponent(abilityList));
-		player.add(new StatComponent("Kevin",100f, 100f, Color.RED));
+		player.add(ability = new AbilityComponent(abilityList));
+		player.add(stat = new StatComponent("Kevin",100f, 100f, Color.RED));
 		
 		Entity enemy_1 = new Entity();
 		enemy_1.add(new PositionComponent(10,7));
@@ -73,7 +106,9 @@ public class Play implements Screen {
 		
 		//Create Systems
 		createSystems();
-		
+
+		//Build GUI
+		createGUI();
 		
 		//Add Systems
 		engine.addSystem(collisionSystem);
@@ -85,11 +120,169 @@ public class Play implements Screen {
 		
 	}
 
+	private void createGUI() {
+		
+		table.add(createStats()).top().left().row();	
+		table.add(createMovementButtons()).bottom().left().expand();
+		table.add(createAbilitySlots());
+		
+		stage.addActor(table);
+	}
+	
+	private Table createStats() {
+		Table statTable = new Table();
+		
+		Label name = new Label(stat.name, skin);
+		Label health = new Label("Health ", skin);
+		healthBar = new ProgressBar(0, 1f, 0.01f, false, skin);
+		healthBar.setValue(1f);
+		Label energy = new Label("Energy ", skin);
+		energyBar = new ProgressBar(0, 1f, 0.01f, false, skin);
+		energyBar.setValue(1f);
+		
+		statTable.add(name).left().row();
+		statTable.add(health);
+		statTable.add(healthBar).row();
+		statTable.add(energy);
+		statTable.add(energyBar);
+		
+		return statTable;
+	}
+
+	private Table createAbilitySlots() {
+		Table abilityTable = new Table();
+		
+		TextureAtlas atlas = new TextureAtlas("img/gui/guiImg.pack");
+		TextureRegionDrawable region;
+		
+		//Left Button Style
+		ImageButtonStyle abilityImgBtnStyle = new ImageButtonStyle();
+		region = new TextureRegionDrawable(atlas.findRegion("tab_label_spell"));
+		abilityImgBtnStyle.up = region;
+		abilityImgBtnStyle.down = region;
+		
+		for(final Ability a : ability.abilitySlots) {
+			if(a != null) {
+				Label abilityName = new Label(a.getName(), skin);
+				ImageButton abilityBtn = new ImageButton(abilityImgBtnStyle);
+				abilityBtn.addListener(new ClickListener() {
+					@Override
+					public void clicked(InputEvent event, float x, float y) {
+						a.isActivated = true;
+					}
+				});
+				abilityTable.add(abilityName);
+				abilityTable.add(abilityBtn).row();
+			} else {
+				Label abilityName = new Label("Empty", skin);
+				ImageButton abilityBtn = new ImageButton(abilityImgBtnStyle);
+				abilityTable.add(abilityName);
+				abilityTable.add(abilityBtn).row();
+			}
+		}
+		
+		return abilityTable;
+		
+	}
+
+	private Table createMovementButtons() {
+		Table movTable = new Table();
+		
+		TextureAtlas atlas = new TextureAtlas("img/gui/guiImg.pack");
+		TextureRegionDrawable region;
+
+		//Left Button Style
+		ImageButtonStyle leftimgBtnStyle = new ImageButtonStyle();
+		region = new TextureRegionDrawable(atlas.findRegion("tab_unselected"));
+		leftimgBtnStyle.up = region;
+		region = new TextureRegionDrawable(atlas.findRegion("tab_selected"));
+		leftimgBtnStyle.down = region;
+		
+		//Create Left Button
+		ImageButton leftBtn = new ImageButton(leftimgBtnStyle);
+		leftBtn.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				if(pos.isStopped())
+					pos.nXPos--;
+			}
+		});
+		
+		//Right Button Style
+		ImageButtonStyle rightimgBtnStyle = new ImageButtonStyle();
+		TextureRegion tRegionRight = new TextureRegion(atlas.findRegion("tab_unselected"));
+		tRegionRight.flip(true, false);
+		region = new TextureRegionDrawable(tRegionRight);
+		rightimgBtnStyle.up = region;
+		tRegionRight = new TextureRegion(atlas.findRegion("tab_selected"));
+		tRegionRight.flip(true, false);
+		region = new TextureRegionDrawable(tRegionRight);
+		rightimgBtnStyle.down = region;
+		
+		//Create Right Button
+		ImageButton rightBtn = new ImageButton(rightimgBtnStyle);
+		rightBtn.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				if(pos.isStopped())
+					pos.nXPos++;
+			}
+		});
+		
+		//Up Button Style
+		ImageButtonStyle upimgBtnStyle = new ImageButtonStyle();
+		TextureRegion tRegionUp = new TextureRegion(atlas.findRegion("tab_unselected_cw"));
+		region = new TextureRegionDrawable(tRegionUp);
+		upimgBtnStyle.up = region;
+		tRegionUp = new TextureRegion(atlas.findRegion("tab_selected_cw"));
+		tRegionUp.flip(true, false);
+		region = new TextureRegionDrawable(tRegionUp);
+		upimgBtnStyle.down = region;
+		
+		//Create Up Button
+		ImageButton upBtn = new ImageButton(upimgBtnStyle);
+		upBtn.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				if(pos.isStopped())
+					pos.nYPos++;
+			}
+		});
+		
+		//Down Button Style
+		ImageButtonStyle downimgBtnStyle = new ImageButtonStyle();
+		TextureRegion tRegionDown = new TextureRegion(atlas.findRegion("tab_unselected_cw"));
+		tRegionDown.flip(false, true);
+		region = new TextureRegionDrawable(tRegionDown);
+		downimgBtnStyle.up = region;
+		tRegionDown = new TextureRegion(atlas.findRegion("tab_selected_cw"));
+		tRegionDown.flip(true, false);
+		region = new TextureRegionDrawable(tRegionDown);
+		downimgBtnStyle.down = region;
+		
+		//Create Down Button
+		ImageButton downBtn = new ImageButton(downimgBtnStyle);
+		downBtn.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				if(pos.isStopped())
+					pos.nYPos--;
+			}
+		});
+		movTable.add(upBtn).colspan(3).row();
+		movTable.add(leftBtn);
+		movTable.add().pad(10);
+		movTable.add(rightBtn).row();
+		movTable.add(downBtn).colspan(3);
+		
+		return movTable;
+	}
+
 	private void createSystems() {
 		collisionSystem = new CollisionSystem(renderer.getMap());
 		inputSystem = new InputSystem();
 		movementSystem = new MovementSystem();
-		renderSystem = new RenderSystem(renderer);
+		renderSystem = new RenderSystem(renderer, stage);
 		abilitySystem = new AbilitySystem();
 		aiSystem = new AISystem();
 	}
@@ -98,6 +291,12 @@ public class Play implements Screen {
 	@Override
 	public void render(float delta) {
 		engine.update(delta);
+		UIUpdates();
+	}
+
+	private void UIUpdates() {
+		healthBar.setValue(stat.health / stat.max_health);
+		energyBar.setValue(stat.energy / stat.max_energy);
 	}
 
 	@Override
@@ -130,6 +329,7 @@ public class Play implements Screen {
 		inputSystem.dispose();
 		movementSystem.dispose();
 		aiSystem.dispose();
+		abilitySystem.dispose();
 	}
 
 }
