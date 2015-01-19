@@ -70,7 +70,6 @@ project(":core") {
         compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
         compile "com.badlogicgames.ashley:ashley:$ashleyVersion"
         compile "com.badlogicgames.gdx:gdx-ai:$aiVersion"
-        compile "com.github.xaguzman:pathfinding:0.2.4"
     }
 }
 

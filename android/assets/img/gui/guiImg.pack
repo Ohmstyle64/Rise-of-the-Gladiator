@@ -1,0 +1,40 @@
+
+guiImg.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+tab_label_spell
+  rotate: false
+  xy: 1, 23
+  size: 20, 20
+  orig: 20, 20
+  offset: 0, 0
+  index: -1
+tab_selected
+  rotate: false
+  xy: 1, 1
+  size: 20, 20
+  orig: 20, 20
+  offset: 0, 0
+  index: -1
+tab_selected_cw
+  rotate: false
+  xy: 23, 23
+  size: 20, 20
+  orig: 20, 20
+  offset: 0, 0
+  index: -1
+tab_unselected
+  rotate: false
+  xy: 23, 1
+  size: 20, 20
+  orig: 20, 20
+  offset: 0, 0
+  index: -1
+tab_unselected_cw
+  rotate: false
+  xy: 45, 23
+  size: 20, 20
+  orig: 20, 20
+  offset: 0, 0
+  index: -1

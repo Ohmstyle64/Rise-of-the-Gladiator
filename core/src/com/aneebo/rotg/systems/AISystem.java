@@ -1,19 +1,14 @@
 package com.aneebo.rotg.systems;
 
-import java.util.List;
-
-import org.xguzm.pathfinding.grid.GridCell;
-import org.xguzm.pathfinding.grid.NavigationGrid;
-import org.xguzm.pathfinding.grid.finders.AStarGridFinder;
-import org.xguzm.pathfinding.grid.finders.GridFinderOptions;
-
 import com.aneebo.rotg.abilities.Ability;
 import com.aneebo.rotg.components.AIComponent;
 import com.aneebo.rotg.components.AbilityComponent;
 import com.aneebo.rotg.components.InputComponent;
 import com.aneebo.rotg.components.PositionComponent;
+import com.aneebo.rotg.components.RenderComponent;
 import com.aneebo.rotg.types.AIState;
 import com.aneebo.rotg.types.AbilityType;
+import com.aneebo.rotg.utils.Astar;
 import com.aneebo.rotg.utils.Constants;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
@@ -22,10 +17,14 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.IntArray;
 
 public class AISystem extends EntitySystem {
+	
+	private Engine engine;
 	
 	private ComponentMapper<PositionComponent> pc = ComponentMapper.getFor(PositionComponent.class);
 	private ComponentMapper<AbilityComponent> ac = ComponentMapper.getFor(AbilityComponent.class);
@@ -43,11 +42,9 @@ public class AISystem extends EntitySystem {
 
 	private Vector2 nPos;
 	private Vector2 range;
-	private List<GridCell> path;
-	private NavigationGrid<GridCell> navGrid;
-	private AStarGridFinder<GridCell> finder;
-	private final int rows = (int) (Gdx.graphics.getWidth() / Constants.TILE_WIDTH);
-	private final int cols = (int) (Gdx.graphics.getHeight() / Constants.TILE_WIDTH);
+	private Astar astar;
+	private final int rows = (int) (Gdx.graphics.getHeight() / Constants.TILE_WIDTH);
+	private final int cols = (int) (Gdx.graphics.getWidth() / Constants.TILE_WIDTH);
 	private float timer;
 	
 	public AISystem() {
@@ -56,22 +53,18 @@ public class AISystem extends EntitySystem {
 	
 	@Override
 	public void addedToEngine(Engine engine) {
+		this.engine = engine;
 		entities = engine.getEntitiesFor(Family.getFor(AIComponent.class, AbilityComponent.class));
 		player = engine.getEntitiesFor(Family.getFor(InputComponent.class)).first();
-		GridCell[][] cells = new GridCell[rows][cols];
-		playerPos = pc.get(player);
-		for(int i = 0; i < rows; i++) {
-			for(int j = 0; j < cols; j++) {
-				cells[i][j] = new GridCell(i,j);
-				if(playerPos.curXPos == i && playerPos.curYPos == j) {
-					cells[i][j].setWalkable(false);
-				}
-			}
+		
+		boolean[] validityMap = new boolean[cols*rows];
+				
+		for(int i = 0; i < rows * cols; i++) {
+			validityMap[i] = false;
 		}
-		navGrid = new NavigationGrid<GridCell>(cells);
-		GridFinderOptions opt = new GridFinderOptions();
-		opt.allowDiagonal = false;
-		finder = new AStarGridFinder<GridCell>(GridCell.class, opt);
+		
+		astar = new Astar(cols, rows, validityMap);
+		
 		nPos = new Vector2();
 		range = new Vector2();
 	}
@@ -79,6 +72,16 @@ public class AISystem extends EntitySystem {
 	@Override
 	public void update(float deltaTime) {
 		updateGridPositions();
+		
+//		Entity e = new Entity();
+//		for(int i = 0; i < astar.getValidityMap().length; i++) {
+//			if(astar.isValidPosition(i)) {
+//				e.add(new RenderComponent(new Texture("img/characters/bat_form.png")));
+//				e.add(new PositionComponent(i % cols, (i - i%cols) / cols));
+//				engine.addEntity(e);
+//			}
+//		}
+		
 		int size = entities.size();
 		for(int i = 0; i < size; i++) {
 			e = entities.get(i);
@@ -118,7 +121,7 @@ public class AISystem extends EntitySystem {
 	}
 	private void fight() {
 		eAbilityComponent = ac.get(e);
-		if(!inAbilityRange(eAbilityComponent, null)) {
+		if(!inAbilityRange(eAbilityComponent, AbilityType.offense)) {
 			ai.aiState = AIState.chase;
 			return;
 		}
@@ -194,31 +197,31 @@ public class AISystem extends EntitySystem {
 		//Used to add a position buffer
 		nPos.set(mePos.curXPos, mePos.curYPos);
 		nPos.sub(otherPos.curXPos, otherPos.curYPos).nor();
-		
-		path = finder.findPath(
-				(int)mePos.curXPos, 
+		IntArray pathToPt = astar.getPath((int)mePos.curXPos, 
 				(int)mePos.curYPos, 
 				(int)MathUtils.round(otherPos.curXPos+nPos.x), 
-				(int)MathUtils.round(otherPos.curYPos+nPos.y), 
-				navGrid);
-		if(path==null || path.size() == 0) return;
-		mePos.nXPos = path.get(0).x;
-		mePos.nYPos = path.get(0).y;
+				(int)MathUtils.round(otherPos.curYPos+nPos.y));
+		if(pathToPt==null || pathToPt.size == 0) return;
+		mePos.nXPos = pathToPt.get(pathToPt.size - 2);
+		mePos.nYPos = pathToPt.get(pathToPt.size - 1);
 	}
 	
 	private void updateGridPositions() {
 		//update player grid pos
 		playerPos = pc.get(player);
-		navGrid.setWalkable(playerPos.pXPos, playerPos.pYPos, true);
-		navGrid.setWalkable((int)playerPos.curXPos, (int)playerPos.curYPos, false);
+		
+		astar.setPositionValidity(playerPos.pXPos, playerPos.pYPos, true);
+		astar.setPositionValidity((int)playerPos.curXPos, (int)playerPos.curYPos, false);
+		
 		
 		//update other entities grid pos
 		int size = entities.size();
 		for(int i = 0; i < size; i++) {
 			e = entities.get(i);
 			enemPos = pc.get(e);
-			navGrid.setWalkable(enemPos.pXPos, enemPos.pYPos, true);
-			navGrid.setWalkable((int)enemPos.curXPos, (int)enemPos.curYPos, false);
+			
+			astar.setPositionValidity(enemPos.pXPos, enemPos.pYPos, true);
+			astar.setPositionValidity((int)enemPos.curXPos, (int)enemPos.curYPos, false);
 		}
 		
 		//update other grid pos

@@ -98,11 +98,20 @@ public class Play implements Screen {
 		enemy_1.add(new CollisionComponent(ColliderType.character));
 		enemy_1.add(new AIComponent(AIState.idle));
 		enemy_1.add(new AbilityComponent(abilityList));
-		enemy_1.add(new StatComponent("Enemy", 100f, 100f, Color.BLUE));
+		enemy_1.add(new StatComponent("Enemy_1", 25f, 25f, Color.BLUE));
+
+		Entity enemy_2 = new Entity();
+		enemy_2.add(new PositionComponent(15,7));
+		enemy_2.add(new RenderComponent(new Texture("img/characters/pig_form.png")));
+		enemy_2.add(new CollisionComponent(ColliderType.character));
+		enemy_2.add(new AIComponent(AIState.idle));
+		enemy_2.add(new AbilityComponent(abilityList));
+		enemy_2.add(new StatComponent("Enemy_2", 25f, 25f, Color.ORANGE));
 		
 		//Add Entities
 		engine.addEntity(player);
 		engine.addEntity(enemy_1);
+		engine.addEntity(enemy_2);
 		
 		//Create Systems
 		createSystems();
@@ -117,6 +126,8 @@ public class Play implements Screen {
 		engine.addSystem(abilitySystem);
 		engine.addSystem(movementSystem);
 		engine.addSystem(aiSystem);
+		
+		engine.addEntityListener(renderSystem);
 		
 	}
 
@@ -282,7 +293,7 @@ public class Play implements Screen {
 		collisionSystem = new CollisionSystem(renderer.getMap());
 		inputSystem = new InputSystem();
 		movementSystem = new MovementSystem();
-		renderSystem = new RenderSystem(renderer, stage);
+		renderSystem = new RenderSystem(renderer);
 		abilitySystem = new AbilitySystem();
 		aiSystem = new AISystem();
 	}
@@ -290,8 +301,14 @@ public class Play implements Screen {
 	
 	@Override
 	public void render(float delta) {
+		
+		stage.setDebugAll(Constants.DEBUG);
+		stage.act(delta);
 		engine.update(delta);
 		UIUpdates();
+
+		stage.draw();
+		
 	}
 
 	private void UIUpdates() {
@@ -330,6 +347,7 @@ public class Play implements Screen {
 		movementSystem.dispose();
 		aiSystem.dispose();
 		abilitySystem.dispose();
+		stage.dispose();
 	}
 
 }

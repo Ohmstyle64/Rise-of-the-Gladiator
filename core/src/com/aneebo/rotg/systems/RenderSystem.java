@@ -1,5 +1,6 @@
 package com.aneebo.rotg.systems;
 
+import com.aneebo.rotg.components.AIComponent;
 import com.aneebo.rotg.components.AbilityComponent;
 import com.aneebo.rotg.components.InputComponent;
 import com.aneebo.rotg.components.PositionComponent;
@@ -9,6 +10,7 @@ import com.aneebo.rotg.utils.Constants;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
@@ -19,15 +21,13 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 
-public class RenderSystem extends EntitySystem {
+public class RenderSystem extends EntitySystem implements EntityListener {
 
 	private OrthographicCamera arenaCam;
 	private OrthogonalTiledMapRenderer renderer;
 	private ShapeRenderer shapeRenderer;
 	private BitmapFont font;
-	private Stage stage;
 	
 	private ImmutableArray<Entity> entities;
 	private ImmutableArray<Entity> abilityEntities;
@@ -37,17 +37,20 @@ public class RenderSystem extends EntitySystem {
 	private ComponentMapper<RenderComponent> rc = ComponentMapper.getFor(RenderComponent.class);
 	private ComponentMapper<AbilityComponent> ac = ComponentMapper.getFor(AbilityComponent.class);
 	private ComponentMapper<StatComponent> sc = ComponentMapper.getFor(StatComponent.class);
+	private ComponentMapper<AIComponent> aic = ComponentMapper.getFor(AIComponent.class);
 	
 	private AbilityComponent abilityComponent;
 	private PositionComponent posComponent;
 	private RenderComponent renderComponent;
 	private StatComponent statComponent;
+	private AIComponent aiComponent;
 	private Entity e;
 	
-	public RenderSystem(OrthogonalTiledMapRenderer renderer, Stage stage) {
+	private Engine engine;
+	
+	public RenderSystem(OrthogonalTiledMapRenderer renderer) {
 		super(4);
 		this.renderer = renderer;
-		this.stage = stage;
 		font = new BitmapFont();
 		shapeRenderer = new ShapeRenderer();
 		arenaCam = new OrthographicCamera();
@@ -56,6 +59,7 @@ public class RenderSystem extends EntitySystem {
 	
 	@Override
 	public void addedToEngine(Engine engine) {
+		this.engine = engine;
 		entities = engine.getEntitiesFor(Family.getFor(RenderComponent.class));
 		abilityEntities = engine.getEntitiesFor(Family.getFor(AbilityComponent.class));
 		player = engine.getEntitiesFor(Family.getFor(InputComponent.class)).first();
@@ -78,10 +82,12 @@ public class RenderSystem extends EntitySystem {
 			posComponent = pc.get(e);
 			renderComponent = rc.get(e);
 			statComponent = sc.get(e);
+			aiComponent = aic.get(e);
+			if(statComponent==null) continue;
 			renderer.getBatch().draw(renderComponent.texture,
 					posComponent.curXPos*Constants.TILE_WIDTH, 
 					posComponent.curYPos*Constants.TILE_HEIGHT);
-			font.draw(renderer.getBatch(), statComponent.name,
+			font.draw(renderer.getBatch(), statComponent.name + (aiComponent == null ? "" : aiComponent.aiState.toString()),
 					posComponent.curXPos*Constants.TILE_WIDTH,
 					posComponent.curYPos*Constants.TILE_HEIGHT + 70);
 			font.draw(renderer.getBatch(), statComponent.health+"",
@@ -124,9 +130,7 @@ public class RenderSystem extends EntitySystem {
 		renderer.getBatch().end();
 		shapeRenderer.end();
 		
-		stage.setDebugAll(Constants.DEBUG);
-		stage.act(deltaTime);
-		stage.draw();
+
 	}
 	
 
@@ -137,6 +141,17 @@ public class RenderSystem extends EntitySystem {
 	public void dispose() {
 		renderer.dispose();
 		font.dispose();
-		stage.dispose();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void entityAdded(Entity entity) {
+		entities = engine.getEntitiesFor(Family.getFor(RenderComponent.class));	
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void entityRemoved(Entity entity) {
+		entities = engine.getEntitiesFor(Family.getFor(RenderComponent.class));
 	}
 }

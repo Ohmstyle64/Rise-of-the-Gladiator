@@ -60,7 +60,7 @@ public class CollisionSystem extends EntitySystem {
 				
 				ent2Pos = pc.get(e);
 				//CHECK IF THE ENT2 IS WHERE ENT1 WANTS TO GO
-				if(ent1Pos.nXPos==ent2Pos.curXPos && ent1Pos.nYPos==ent2Pos.curYPos) {
+				if(ent1Pos.nXPos==(int)ent2Pos.curXPos && ent1Pos.nYPos==(int)ent2Pos.curYPos) {
 					ent2Col = cc.get(e);
 					//CHECK IF ENT1 IS A CHARACTER
 					if(ent1Col.type==ColliderType.character) {

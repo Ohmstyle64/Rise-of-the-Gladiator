@@ -21,6 +21,7 @@ public abstract class Ability {
 	private boolean justStarted;
 	private ProgressBar bar;
 	private Label label;
+	private Skin skin;
 	protected Array<Entity> targets;
 	
 	public Ability(int id, int castTime, int range, AbilityType type, String name, int cooldown) {
@@ -37,10 +38,9 @@ public abstract class Ability {
 		castTimeTimer = 0;
 		cooldownTimer = cooldown;
 		targets = new Array<Entity>();
-		Skin skin = new Skin(Gdx.files.internal("img/gui/uiskin.json"));
+		skin = new Skin(Gdx.files.internal("img/gui/uiskin.json"));
 		bar = new ProgressBar(0f,1f,0.01f,false, skin);
 		label = new Label(name, skin);
-		
 		bar.setPosition(Gdx.graphics.getWidth() / 2 - bar.getWidth() / 2, Gdx.graphics.getHeight() * 0.9f);
 		label.setPosition(Gdx.graphics.getWidth() / 2 - label.getWidth() / 2, Gdx.graphics.getHeight() * 0.9f - label.getHeight());
 	}
@@ -88,9 +88,9 @@ public abstract class Ability {
 			return 0.5f;
 		}else if(perc < 0.25f) {
 			return 0.1f;
-		}else if(perc < 0.75f)
+		}else if(perc < 0.75f) {
 			return 0f; 
-		else{
+		}else {
 			return -0.25f;
 		}
 	}
