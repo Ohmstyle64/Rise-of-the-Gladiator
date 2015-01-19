@@ -10,7 +10,6 @@ import com.aneebo.rotg.utils.Constants;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
@@ -22,7 +21,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
-public class RenderSystem extends EntitySystem implements EntityListener {
+public class RenderSystem extends EntitySystem {
 
 	private OrthographicCamera arenaCam;
 	private OrthogonalTiledMapRenderer renderer;
@@ -87,7 +86,8 @@ public class RenderSystem extends EntitySystem implements EntityListener {
 			renderer.getBatch().draw(renderComponent.texture,
 					posComponent.curXPos*Constants.TILE_WIDTH, 
 					posComponent.curYPos*Constants.TILE_HEIGHT);
-			font.draw(renderer.getBatch(), statComponent.name + (aiComponent == null ? "" : aiComponent.aiState.toString()),
+			font.draw(renderer.getBatch(), 
+					statComponent.name,
 					posComponent.curXPos*Constants.TILE_WIDTH,
 					posComponent.curYPos*Constants.TILE_HEIGHT + 70);
 			font.draw(renderer.getBatch(), statComponent.health+"",
@@ -141,17 +141,5 @@ public class RenderSystem extends EntitySystem implements EntityListener {
 	public void dispose() {
 		renderer.dispose();
 		font.dispose();
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public void entityAdded(Entity entity) {
-		entities = engine.getEntitiesFor(Family.getFor(RenderComponent.class));	
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public void entityRemoved(Entity entity) {
-		entities = engine.getEntitiesFor(Family.getFor(RenderComponent.class));
 	}
 }

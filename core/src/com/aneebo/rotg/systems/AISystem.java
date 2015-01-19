@@ -5,7 +5,6 @@ import com.aneebo.rotg.components.AIComponent;
 import com.aneebo.rotg.components.AbilityComponent;
 import com.aneebo.rotg.components.InputComponent;
 import com.aneebo.rotg.components.PositionComponent;
-import com.aneebo.rotg.components.RenderComponent;
 import com.aneebo.rotg.types.AIState;
 import com.aneebo.rotg.types.AbilityType;
 import com.aneebo.rotg.utils.Astar;
@@ -17,14 +16,10 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.IntArray;
 
 public class AISystem extends EntitySystem {
-	
-	private Engine engine;
 	
 	private ComponentMapper<PositionComponent> pc = ComponentMapper.getFor(PositionComponent.class);
 	private ComponentMapper<AbilityComponent> ac = ComponentMapper.getFor(AbilityComponent.class);
@@ -40,12 +35,11 @@ public class AISystem extends EntitySystem {
 	private PositionComponent enemPos;
 	private Entity e;
 
-	private Vector2 nPos;
 	private Vector2 range;
 	private Astar astar;
-	private final int rows = (int) (Gdx.graphics.getHeight() / Constants.TILE_WIDTH);
-	private final int cols = (int) (Gdx.graphics.getWidth() / Constants.TILE_WIDTH);
-	private float timer;
+	private static final int ROWS = (int) (Gdx.graphics.getHeight() / Constants.TILE_WIDTH);
+	private static final int COLS = (int) (Gdx.graphics.getWidth() / Constants.TILE_WIDTH);
+	private static final int MAP_SIZE = ROWS * COLS;
 	
 	public AISystem() {
 		super(1);
@@ -53,35 +47,24 @@ public class AISystem extends EntitySystem {
 	
 	@Override
 	public void addedToEngine(Engine engine) {
-		this.engine = engine;
 		entities = engine.getEntitiesFor(Family.getFor(AIComponent.class, AbilityComponent.class));
 		player = engine.getEntitiesFor(Family.getFor(InputComponent.class)).first();
 		
-		boolean[] validityMap = new boolean[cols*rows];
+		boolean[] validityMap = new boolean[COLS*ROWS];
 				
-		for(int i = 0; i < rows * cols; i++) {
+		for(int i = 0; i < ROWS * COLS; i++) {
 			validityMap[i] = false;
 		}
 		
-		astar = new Astar(cols, rows, validityMap);
+		astar = new Astar(COLS, ROWS, validityMap);
 		
-		nPos = new Vector2();
 		range = new Vector2();
 	}
 	
 	@Override
 	public void update(float deltaTime) {
 		updateGridPositions();
-		
-//		Entity e = new Entity();
-//		for(int i = 0; i < astar.getValidityMap().length; i++) {
-//			if(astar.isValidPosition(i)) {
-//				e.add(new RenderComponent(new Texture("img/characters/bat_form.png")));
-//				e.add(new PositionComponent(i % cols, (i - i%cols) / cols));
-//				engine.addEntity(e);
-//			}
-//		}
-		
+
 		int size = entities.size();
 		for(int i = 0; i < size; i++) {
 			e = entities.get(i);
@@ -194,38 +177,39 @@ public class AISystem extends EntitySystem {
 	}
 	
 	private void enemyPathToPoint(PositionComponent mePos, PositionComponent otherPos) {
-		//Used to add a position buffer
-		nPos.set(mePos.curXPos, mePos.curYPos);
-		nPos.sub(otherPos.curXPos, otherPos.curYPos).nor();
 		IntArray pathToPt = astar.getPath((int)mePos.curXPos, 
 				(int)mePos.curYPos, 
-				(int)MathUtils.round(otherPos.curXPos+nPos.x), 
-				(int)MathUtils.round(otherPos.curYPos+nPos.y));
+				(int)otherPos.curXPos, 
+				(int)otherPos.curYPos);
 		if(pathToPt==null || pathToPt.size == 0) return;
 		mePos.nXPos = pathToPt.get(pathToPt.size - 2);
 		mePos.nYPos = pathToPt.get(pathToPt.size - 1);
 	}
 	
 	private void updateGridPositions() {
-		//update player grid pos
-		playerPos = pc.get(player);
-		
-		astar.setPositionValidity(playerPos.pXPos, playerPos.pYPos, true);
-		astar.setPositionValidity((int)playerPos.curXPos, (int)playerPos.curYPos, false);
-		
-		
-		//update other entities grid pos
-		int size = entities.size();
-		for(int i = 0; i < size; i++) {
-			e = entities.get(i);
-			enemPos = pc.get(e);
+		boolean occupied = false;
+		for(int i = 0; i < MAP_SIZE; i++) {
+			occupied = false;
+			int x = i % COLS;
+			int y = (i - x) / COLS;
 			
-			astar.setPositionValidity(enemPos.pXPos, enemPos.pYPos, true);
-			astar.setPositionValidity((int)enemPos.curXPos, (int)enemPos.curYPos, false);
+			//update other entities grid pos
+			int size = entities.size();
+			for(int j = 0; j < size; j++) {
+				e = entities.get(j);
+				enemPos = pc.get(e);
+				if(enemPos.curXPos==x && enemPos.curYPos==y) {
+					occupied = true;
+					break;
+				}
+			}
+			
+			//update other grid pos
+			//TODO:Add grid position updates for other arena elements
+			
+			astar.setPositionValidity(x, y, occupied);
 		}
 		
-		//update other grid pos
-		//TODO:Add grid position updates for other arena elements
 	}
 	
 	public void dispose() {

@@ -98,7 +98,7 @@ public class Play implements Screen {
 		enemy_1.add(new CollisionComponent(ColliderType.character));
 		enemy_1.add(new AIComponent(AIState.idle));
 		enemy_1.add(new AbilityComponent(abilityList));
-		enemy_1.add(new StatComponent("Enemy_1", 25f, 25f, Color.BLUE));
+		enemy_1.add(new StatComponent("Enemy_1", 25f, 100f, Color.BLUE));
 
 		Entity enemy_2 = new Entity();
 		enemy_2.add(new PositionComponent(15,7));
@@ -106,7 +106,7 @@ public class Play implements Screen {
 		enemy_2.add(new CollisionComponent(ColliderType.character));
 		enemy_2.add(new AIComponent(AIState.idle));
 		enemy_2.add(new AbilityComponent(abilityList));
-		enemy_2.add(new StatComponent("Enemy_2", 25f, 25f, Color.ORANGE));
+		enemy_2.add(new StatComponent("Enemy_2", 25f, 100f, Color.ORANGE));
 		
 		//Add Entities
 		engine.addEntity(player);
@@ -126,8 +126,6 @@ public class Play implements Screen {
 		engine.addSystem(abilitySystem);
 		engine.addSystem(movementSystem);
 		engine.addSystem(aiSystem);
-		
-		engine.addEntityListener(renderSystem);
 		
 	}
 
