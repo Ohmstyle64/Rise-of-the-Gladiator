@@ -43,7 +43,7 @@ public class Slash extends Ability {
 	protected void onAbilityEnd(Entity me) {
 		for(Entity e : targets) {
 			stat = sc.get(e);
-			stat.health -= (sc.get(me).eValue+1)*DAMAGE;
+			stat.health -= (1-(sc.get(e).eValue+sc.get(me).eValue))*DAMAGE;
 			sc.get(me).eValue = 0;
 		}
 		
@@ -90,11 +90,11 @@ public class Slash extends Ability {
 					break;
 				case Left:
 					pos = pc.get(e);
-					if(pos.curXPos > mX) targets.add(e);
+					if(pos.curXPos < mX) targets.add(e);
 					break;
 				case Right:
 					pos = pc.get(e);
-					if(pos.curXPos < mX) targets.add(e);
+					if(pos.curXPos > mX) targets.add(e);
 					break;
 				}
 			}

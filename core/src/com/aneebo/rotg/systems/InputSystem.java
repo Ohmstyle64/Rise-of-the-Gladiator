@@ -4,6 +4,7 @@ import com.aneebo.rotg.abilities.Ability;
 import com.aneebo.rotg.components.AbilityComponent;
 import com.aneebo.rotg.components.InputComponent;
 import com.aneebo.rotg.components.PositionComponent;
+import com.aneebo.rotg.types.Direction;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -51,12 +52,16 @@ public class InputSystem extends EntitySystem {
 		
 		if(Gdx.input.isKeyJustPressed(Keys.A)) {
 			posComponent.nXPos--;
+			posComponent.direction = Direction.Left;
 		}else if(Gdx.input.isKeyJustPressed(Keys.D)) {
 			posComponent.nXPos++;
+			posComponent.direction = Direction.Right;
 		}else if(Gdx.input.isKeyJustPressed(Keys.W)) {
 			posComponent.nYPos++;
+			posComponent.direction = Direction.Up;
 		}else if(Gdx.input.isKeyJustPressed(Keys.S)) {
 			posComponent.nYPos--;
+			posComponent.direction = Direction.Down;
 		}
 	}
 //	private Ability activateAbility(Ability ability) {

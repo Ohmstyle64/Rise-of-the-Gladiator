@@ -81,17 +81,17 @@ public abstract class Ability {
 		return name;
 	}
 	
-	protected float interupt() {
+	protected float interrupt() {
 		float perc = castTimeTimer / castTime;
 		isInterrupted = true;
-		if(perc < 0.05f) {
+		if(perc < 0.15f) {
 			return 0.5f;
 		}else if(perc < 0.25f) {
-			return 0.1f;
+			return 0.25f;
 		}else if(perc < 0.75f) {
-			return 0f; 
+			return 0.1f; 
 		}else {
-			return -0.25f;
+			return 0f;
 		}
 	}
 	
@@ -105,12 +105,15 @@ public abstract class Ability {
 		}
 		float perc = castTimeTimer / castTime;
 		bar.setValue(perc);
-		if(perc < 0.1f) {
+		if(perc < 0.15f) {
 			label.getStyle().fontColor = Color.GREEN;
-		}else if(perc < 0.6f) {
+		}else if(perc < 0.25f) {
+			label.getStyle().fontColor = Color.CYAN;
+		}else if(perc < 0.75f)
 			label.getStyle().fontColor = Color.YELLOW;
-		}else
+		else
 			label.getStyle().fontColor = Color.RED;
+			
 		bar.draw(batch, batch.getColor().a);
 		label.draw(batch, batch.getColor().a);
 	}

@@ -21,7 +21,7 @@ public class Parry extends Ability {
 	private Entity e;
 	
 	private Vector2 abilityDst;
-	
+	//TODO: This needs to be a field in the constructor
 	private static final float ENERGY_COST = 20f;
 	
 	public Parry(int id, int castTime, int range, AbilityType type, String name, int cooldown) {
@@ -46,6 +46,7 @@ public class Parry extends Ability {
 	protected void onAbilityStart(Entity me) {
 		stat = sc.get(me);
 		if(stat.energy - ENERGY_COST < 0) {
+			//TODO:This needs to be an alert in the GUI
 			Gdx.app.log(stat.name, "Not enough energy!");
 			stat.energy = 0;
 			isInterrupted = true;
@@ -58,7 +59,7 @@ public class Parry extends Ability {
 			ab = ac.get(e);
 			for(Ability a : ab.abilitySlots) {
 				if(a.isActivated) {
-					stat.eValue = a.interupt();
+					stat.eValue = a.interrupt();
 					a.onAbilityEnd(e);
 					break;
 				}

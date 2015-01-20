@@ -3,7 +3,6 @@ package com.aneebo.rotg.systems;
 import com.aneebo.rotg.abilities.Ability;
 import com.aneebo.rotg.components.AbilityComponent;
 import com.aneebo.rotg.components.PositionComponent;
-import com.aneebo.rotg.components.StatComponent;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -17,7 +16,6 @@ public class AbilitySystem extends EntitySystem {
 	
 	private ComponentMapper<AbilityComponent> ac = ComponentMapper.getFor(AbilityComponent.class);
 	private ComponentMapper<PositionComponent> pc = ComponentMapper.getFor(PositionComponent.class);
-	private ComponentMapper<StatComponent> sc = ComponentMapper.getFor(StatComponent.class);
 	private ImmutableArray<Entity> abilityEntities;
 	private ImmutableArray<Entity> posEntities;
 	
@@ -26,7 +24,6 @@ public class AbilitySystem extends EntitySystem {
 	private AbilityComponent abilityComponent;
 	private PositionComponent ent1Pos;
 	private PositionComponent ent2Pos;
-	private StatComponent stat;
 	private Entity e;
 	private Entity abe;
 	
@@ -47,7 +44,6 @@ public class AbilitySystem extends EntitySystem {
 		int sizeM = posEntities.size();
 		for(int i = 0; i < sizeA; i++) {
 			abe = abilityEntities.get(i);
-			stat = sc.get(abe);
 			abilityComponent = ac.get(abe);
 			abilitySlots = abilityComponent.abilitySlots;
 			ent1Pos = pc.get(abe);

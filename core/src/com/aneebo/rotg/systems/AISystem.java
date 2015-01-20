@@ -7,6 +7,7 @@ import com.aneebo.rotg.components.InputComponent;
 import com.aneebo.rotg.components.PositionComponent;
 import com.aneebo.rotg.types.AIState;
 import com.aneebo.rotg.types.AbilityType;
+import com.aneebo.rotg.types.Direction;
 import com.aneebo.rotg.utils.Astar;
 import com.aneebo.rotg.utils.Constants;
 import com.badlogic.ashley.core.ComponentMapper;
@@ -35,7 +36,7 @@ public class AISystem extends EntitySystem {
 	private PositionComponent enemPos;
 	private Entity e;
 
-	private Vector2 range;
+	private Vector2 dir;
 	private Astar astar;
 	private static final int ROWS = (int) (Gdx.graphics.getHeight() / Constants.TILE_WIDTH);
 	private static final int COLS = (int) (Gdx.graphics.getWidth() / Constants.TILE_WIDTH);
@@ -58,7 +59,7 @@ public class AISystem extends EntitySystem {
 		
 		astar = new Astar(COLS, ROWS, validityMap);
 		
-		range = new Vector2();
+		dir = new Vector2();
 	}
 	
 	@Override
@@ -93,6 +94,11 @@ public class AISystem extends EntitySystem {
 		
 	}
 	private void chase() {
+		//Check facing
+		enemPos = pc.get(e);
+		playerPos = pc.get(player);
+		correctFacing(enemPos, playerPos);
+		
 		eAbilityComponent = ac.get(e);
 		if(inAbilityRange(eAbilityComponent, AbilityType.offense)) {
 			ai.aiState = AIState.fight;
@@ -101,14 +107,20 @@ public class AISystem extends EntitySystem {
 		playerPos = pc.get(player);
 		
 		enemyPathToPoint(enemPos, playerPos);
+		
+		
 	}
 	private void fight() {
+		//Check facing
+		enemPos = pc.get(e);
+		playerPos = pc.get(player);
+		correctFacing(enemPos, playerPos);
+		//Check ability
 		eAbilityComponent = ac.get(e);
 		if(!inAbilityRange(eAbilityComponent, AbilityType.offense)) {
 			ai.aiState = AIState.chase;
 			return;
 		}
-		
 		int size;
 		pAbilityComponent = ac.get(player);
 		switch(hasActiveAbility(pAbilityComponent)) {
@@ -162,13 +174,8 @@ public class AISystem extends EntitySystem {
 	
 	private boolean inAbilityRange(AbilityComponent abil, AbilityType type) {
 		int size = abil.abilitySlots.size;
-		enemPos = pc.get(e);
-		playerPos = pc.get(player);
-		
-		range.set(playerPos.curXPos, playerPos.curYPos);
-		float dst = range.dst(enemPos.curXPos, enemPos.curYPos);
 		for(int i = 0; i < size; i++) {
-			if(abil.abilitySlots.get(i).getRange() >= dst) {
+			if(abil.abilitySlots.get(i).getTargets(e, new Entity[] {player}).size > 0) {
 				if(type == null) return true;
 				if(abil.abilitySlots.get(i).getType() == type) return true;
 			}
@@ -176,12 +183,28 @@ public class AISystem extends EntitySystem {
 		return false;
 	}
 	
+	private void correctFacing(PositionComponent mePos, PositionComponent otherPos) {
+		//Check if 1 space away
+		float d = dir.set(otherPos.curXPos, otherPos.curYPos).sub(mePos.curXPos, mePos.curYPos).cpy().len();
+		if(d <= 1f) {
+			if(dir.x < 0) {
+				mePos.direction = Direction.Left;
+			}else if(dir.x > 0) {
+				mePos.direction = Direction.Right;
+			}else if(dir.y < 0) {
+				mePos.direction = Direction.Down;
+			}else if(dir.y > 0){
+				mePos.direction = Direction.Up;
+			}
+		}
+	}
+	
 	private void enemyPathToPoint(PositionComponent mePos, PositionComponent otherPos) {
 		IntArray pathToPt = astar.getPath((int)mePos.curXPos, 
 				(int)mePos.curYPos, 
 				(int)otherPos.curXPos, 
 				(int)otherPos.curYPos);
-		if(pathToPt==null || pathToPt.size == 0) return;
+
 		mePos.nXPos = pathToPt.get(pathToPt.size - 2);
 		mePos.nYPos = pathToPt.get(pathToPt.size - 1);
 	}

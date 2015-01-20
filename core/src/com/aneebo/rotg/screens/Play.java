@@ -13,6 +13,7 @@ import com.aneebo.rotg.systems.AbilitySystem;
 import com.aneebo.rotg.systems.CollisionSystem;
 import com.aneebo.rotg.systems.InputSystem;
 import com.aneebo.rotg.systems.MovementSystem;
+import com.aneebo.rotg.systems.RegenSystem;
 import com.aneebo.rotg.systems.RenderSystem;
 import com.aneebo.rotg.types.AIState;
 import com.aneebo.rotg.types.ColliderType;
@@ -49,6 +50,7 @@ public class Play implements Screen {
 	private RenderSystem renderSystem;
 	private AbilitySystem abilitySystem;
 	private AISystem aiSystem;
+	private RegenSystem regenSystem;
 	
 	private Engine engine;
 	private Entity player;
@@ -91,7 +93,7 @@ public class Play implements Screen {
 		player.add(new RenderComponent(new Texture("img/characters/dragon_form.png")));
 		player.add(new CollisionComponent(ColliderType.character));
 		player.add(ability = new AbilityComponent(abilityList));
-		player.add(stat = new StatComponent("Kevin",100f, 100f, Color.RED));
+		player.add(stat = new StatComponent("Kevin", 25f, 40f, Color.RED, 5, 5));
 		
 		Entity enemy_1 = new Entity();
 		enemy_1.add(new PositionComponent(10,7, Direction.Left));
@@ -99,20 +101,11 @@ public class Play implements Screen {
 		enemy_1.add(new CollisionComponent(ColliderType.character));
 		enemy_1.add(new AIComponent(AIState.idle));
 		enemy_1.add(new AbilityComponent(abilityList));
-		enemy_1.add(new StatComponent("Enemy_1", 25f, 100f, Color.BLUE));
+		enemy_1.add(new StatComponent("Enemy_1", 25f, 30f, Color.BLUE, 5, 5));
 
-		Entity enemy_2 = new Entity();
-		enemy_2.add(new PositionComponent(15,7, Direction.Left));
-		enemy_2.add(new RenderComponent(new Texture("img/characters/pig_form.png")));
-		enemy_2.add(new CollisionComponent(ColliderType.character));
-		enemy_2.add(new AIComponent(AIState.idle));
-		enemy_2.add(new AbilityComponent(abilityList));
-		enemy_2.add(new StatComponent("Enemy_2", 25f, 100f, Color.ORANGE));
-		
 		//Add Entities
 		engine.addEntity(player);
 		engine.addEntity(enemy_1);
-		engine.addEntity(enemy_2);
 		
 		//Create Systems
 		createSystems();
@@ -127,6 +120,7 @@ public class Play implements Screen {
 		engine.addSystem(abilitySystem);
 		engine.addSystem(movementSystem);
 		engine.addSystem(aiSystem);
+		engine.addSystem(regenSystem);
 		
 	}
 
@@ -213,8 +207,10 @@ public class Play implements Screen {
 		leftBtn.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				if(pos.isStopped())
+				if(pos.isStopped()) {
 					pos.nXPos--;
+					pos.direction = Direction.Left;
+				}
 			}
 		});
 		
@@ -234,8 +230,10 @@ public class Play implements Screen {
 		rightBtn.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				if(pos.isStopped())
+				if(pos.isStopped()) {
 					pos.nXPos++;
+					pos.direction = Direction.Right;
+				}
 			}
 		});
 		
@@ -254,8 +252,10 @@ public class Play implements Screen {
 		upBtn.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				if(pos.isStopped())
+				if(pos.isStopped()) {
 					pos.nYPos++;
+					pos.direction = Direction.Up;
+				}
 			}
 		});
 		
@@ -275,8 +275,10 @@ public class Play implements Screen {
 		downBtn.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				if(pos.isStopped())
+				if(pos.isStopped()) {
 					pos.nYPos--;
+					pos.direction = Direction.Down;
+				}
 			}
 		});
 		movTable.add(upBtn).colspan(3).row();
@@ -295,6 +297,7 @@ public class Play implements Screen {
 		renderSystem = new RenderSystem(renderer);
 		abilitySystem = new AbilitySystem();
 		aiSystem = new AISystem();
+		regenSystem = new RegenSystem();
 	}
 	
 	
@@ -346,6 +349,7 @@ public class Play implements Screen {
 		movementSystem.dispose();
 		aiSystem.dispose();
 		abilitySystem.dispose();
+		regenSystem.dispose();
 		stage.dispose();
 	}
 
