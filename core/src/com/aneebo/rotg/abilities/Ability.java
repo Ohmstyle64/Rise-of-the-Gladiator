@@ -131,9 +131,7 @@ public abstract class Ability {
 	
 	protected abstract void onAbilityEnd(Entity me);
 	
-	public abstract void setTargetScheme(Entity me);
-	
-	public abstract Array<Entity> getTargets(Entity me);
+	public abstract Array<Entity> getTargets(Entity me, Entity[] entities);
 
 	protected void onLoopStart(float delta) {
 		isAvailable = (cooldownTimer >= cooldown);
@@ -165,7 +163,4 @@ public abstract class Ability {
 	public void setTargets(Array<Entity> targets) {
 		this.targets = targets;
 	}
-	
-	
-	
 }

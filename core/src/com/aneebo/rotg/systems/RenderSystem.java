@@ -1,6 +1,5 @@
 package com.aneebo.rotg.systems;
 
-import com.aneebo.rotg.components.AIComponent;
 import com.aneebo.rotg.components.AbilityComponent;
 import com.aneebo.rotg.components.InputComponent;
 import com.aneebo.rotg.components.PositionComponent;
@@ -36,16 +35,12 @@ public class RenderSystem extends EntitySystem {
 	private ComponentMapper<RenderComponent> rc = ComponentMapper.getFor(RenderComponent.class);
 	private ComponentMapper<AbilityComponent> ac = ComponentMapper.getFor(AbilityComponent.class);
 	private ComponentMapper<StatComponent> sc = ComponentMapper.getFor(StatComponent.class);
-	private ComponentMapper<AIComponent> aic = ComponentMapper.getFor(AIComponent.class);
 	
 	private AbilityComponent abilityComponent;
 	private PositionComponent posComponent;
 	private RenderComponent renderComponent;
 	private StatComponent statComponent;
-	private AIComponent aiComponent;
 	private Entity e;
-	
-	private Engine engine;
 	
 	public RenderSystem(OrthogonalTiledMapRenderer renderer) {
 		super(4);
@@ -58,7 +53,6 @@ public class RenderSystem extends EntitySystem {
 	
 	@Override
 	public void addedToEngine(Engine engine) {
-		this.engine = engine;
 		entities = engine.getEntitiesFor(Family.getFor(RenderComponent.class));
 		abilityEntities = engine.getEntitiesFor(Family.getFor(AbilityComponent.class));
 		player = engine.getEntitiesFor(Family.getFor(InputComponent.class)).first();
@@ -81,8 +75,6 @@ public class RenderSystem extends EntitySystem {
 			posComponent = pc.get(e);
 			renderComponent = rc.get(e);
 			statComponent = sc.get(e);
-			aiComponent = aic.get(e);
-			if(statComponent==null) continue;
 			renderer.getBatch().draw(renderComponent.texture,
 					posComponent.curXPos*Constants.TILE_WIDTH, 
 					posComponent.curYPos*Constants.TILE_HEIGHT);
@@ -116,7 +108,6 @@ public class RenderSystem extends EntitySystem {
 							posComponent.curYPos*Constants.TILE_HEIGHT+Constants.TILE_HEIGHT / 2, 
 							abilityComponent.abilitySlots.get(j).getRange()*Constants.TILE_WIDTH);
 					abilityComponent.abilitySlots.get(j).render(renderer.getBatch());
-					
 				}
 			}
 		}

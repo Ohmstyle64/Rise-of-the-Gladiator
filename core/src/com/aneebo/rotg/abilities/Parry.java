@@ -1,25 +1,33 @@
 package com.aneebo.rotg.abilities;
 
 import com.aneebo.rotg.components.AbilityComponent;
+import com.aneebo.rotg.components.PositionComponent;
 import com.aneebo.rotg.components.StatComponent;
 import com.aneebo.rotg.types.AbilityType;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 public class Parry extends Ability {
 
 	private ComponentMapper<StatComponent> sc = ComponentMapper.getFor(StatComponent.class);
 	private ComponentMapper<AbilityComponent> ac = ComponentMapper.getFor(AbilityComponent.class);
+	private ComponentMapper<PositionComponent> pc = ComponentMapper.getFor(PositionComponent.class);
 	private StatComponent stat;
 	private AbilityComponent ab;
+	private PositionComponent pos;
 	private Entity e;
+	
+	private Vector2 abilityDst;
 	
 	private static final float ENERGY_COST = 20f;
 	
 	public Parry(int id, int castTime, int range, AbilityType type, String name, int cooldown) {
 		super(id, castTime, range, type, name, cooldown);
+		
+		abilityDst = new Vector2();
 	}
 
 	
@@ -60,13 +68,42 @@ public class Parry extends Ability {
 
 
 	@Override
-	public void setTargetScheme(Entity me) {
+	public Array<Entity> getTargets(Entity me, Entity[] allEnemies) {
+		targets.clear();
+
+		//Only Target entities in same direction and in range
+		pos = pc.get(me);
+		float mX = pos.curXPos;
+		float mY = pos.curYPos;
 		
+		//Grab all enemies within range
+		for(Entity e : allEnemies) {
+			pos = pc.get(e);
+			abilityDst.set(pos.curXPos, pos.curYPos);
+			pos = pc.get(me);
+			if(abilityDst.dst(pos.curXPos, pos.curYPos) <= getRange()) {
+				switch(pos.direction) {
+				case Down:
+					pos = pc.get(e);
+					if(pos.curYPos < mY) targets.add(e);
+					break;
+				case Up:
+					pos = pc.get(e);
+					if(pos.curYPos > mY) targets.add(e);
+					break;
+				case Left:
+					pos = pc.get(e);
+					if(pos.curXPos > mX) targets.add(e);
+					break;
+				case Right:
+					pos = pc.get(e);
+					if(pos.curXPos < mX) targets.add(e);
+					break;
+				}
+			}
+		}
+		
+		return targets;
 	}
 
-
-	@Override
-	public Array<Entity> getTargets(Entity me) {
-		return null;
-	}
 }

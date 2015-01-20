@@ -17,6 +17,7 @@ public class Constants {
 	public static final float TILE_WIDTH = 32f;
 	public static final float TILE_HEIGHT = 32f;
 	
+	//ABILITY
 	public static final int AT_SLASH = 0;
 	public static final int DF_PARRY = 1;
 	

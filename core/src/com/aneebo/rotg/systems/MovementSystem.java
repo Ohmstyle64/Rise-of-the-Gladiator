@@ -1,6 +1,7 @@
 package com.aneebo.rotg.systems;
 
 import com.aneebo.rotg.components.PositionComponent;
+import com.aneebo.rotg.types.Direction;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -38,21 +39,20 @@ public class MovementSystem extends EntitySystem {
 			
 			if(pos.curXPos < pos.nXPos) {
 				pos.curXPos += SPEED*deltaTime;
+				pos.direction = Direction.Right;
 				if(pos.curXPos >= pos.nXPos) pos.curXPos = pos.nXPos;
 			}else if(pos.curXPos > pos.nXPos) {
 				pos.curXPos -=SPEED*deltaTime;
+				pos.direction = Direction.Left;
 				if(pos.curXPos <= pos.nXPos) pos.curXPos = pos.nXPos;
 			}else if(pos.curYPos < pos.nYPos) {
 				pos.curYPos += SPEED*deltaTime;
+				pos.direction = Direction.Up;
 				if(pos.curYPos >= pos.nYPos) pos.curYPos = pos.nYPos;
 			}else if(pos.curYPos > pos.nYPos) {
 				pos.curYPos -=SPEED*deltaTime;
+				pos.direction = Direction.Down;
 				if(pos.curYPos <= pos.nYPos) pos.curYPos = pos.nYPos;
-			}
-			
-			if(!pos.isStopped()) {
-				pos.pXPos = (int)pos.curXPos;
-				pos.pYPos = (int)pos.curYPos;
 			}
 		}
 	}

@@ -16,6 +16,7 @@ import com.aneebo.rotg.systems.MovementSystem;
 import com.aneebo.rotg.systems.RenderSystem;
 import com.aneebo.rotg.types.AIState;
 import com.aneebo.rotg.types.ColliderType;
+import com.aneebo.rotg.types.Direction;
 import com.aneebo.rotg.utils.Constants;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -85,7 +86,7 @@ public class Play implements Screen {
 		abilityList.add(Constants.abilityMap.get(Constants.DF_PARRY));
 
 		player = new Entity();
-		player.add(pos = new PositionComponent(3,4));
+		player.add(pos = new PositionComponent(3,4, Direction.Right));
 		player.add(new InputComponent());
 		player.add(new RenderComponent(new Texture("img/characters/dragon_form.png")));
 		player.add(new CollisionComponent(ColliderType.character));
@@ -93,7 +94,7 @@ public class Play implements Screen {
 		player.add(stat = new StatComponent("Kevin",100f, 100f, Color.RED));
 		
 		Entity enemy_1 = new Entity();
-		enemy_1.add(new PositionComponent(10,7));
+		enemy_1.add(new PositionComponent(10,7, Direction.Left));
 		enemy_1.add(new RenderComponent(new Texture("img/characters/pig_form.png")));
 		enemy_1.add(new CollisionComponent(ColliderType.character));
 		enemy_1.add(new AIComponent(AIState.idle));
@@ -101,7 +102,7 @@ public class Play implements Screen {
 		enemy_1.add(new StatComponent("Enemy_1", 25f, 100f, Color.BLUE));
 
 		Entity enemy_2 = new Entity();
-		enemy_2.add(new PositionComponent(15,7));
+		enemy_2.add(new PositionComponent(15,7, Direction.Left));
 		enemy_2.add(new RenderComponent(new Texture("img/characters/pig_form.png")));
 		enemy_2.add(new CollisionComponent(ColliderType.character));
 		enemy_2.add(new AIComponent(AIState.idle));
