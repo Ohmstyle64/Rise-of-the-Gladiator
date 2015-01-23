@@ -51,24 +51,24 @@ public class InputSystem extends EntitySystem {
 		if(!posComponent.isStopped()) return;
 		
 		if(Gdx.input.isKeyJustPressed(Keys.A)) {
-			posComponent.nXPos--;
 			posComponent.direction = Direction.Left;
+			if(posComponent.isMoveable)
+				posComponent.nXPos--;
 		}else if(Gdx.input.isKeyJustPressed(Keys.D)) {
-			posComponent.nXPos++;
 			posComponent.direction = Direction.Right;
+			if(posComponent.isMoveable)
+				posComponent.nXPos++;
 		}else if(Gdx.input.isKeyJustPressed(Keys.W)) {
-			posComponent.nYPos++;
 			posComponent.direction = Direction.Up;
+			if(posComponent.isMoveable)
+				posComponent.nYPos++;
 		}else if(Gdx.input.isKeyJustPressed(Keys.S)) {
-			posComponent.nYPos--;
 			posComponent.direction = Direction.Down;
+			if(posComponent.isMoveable)
+				posComponent.nYPos--;
 		}
 	}
-//	private Ability activateAbility(Ability ability) {
-//		if(abilityComponent.ability != null) 
-//			return abilityComponent.ability;
-//		return ability;
-//	}
+
 	public void dispose() {
 		
 	}

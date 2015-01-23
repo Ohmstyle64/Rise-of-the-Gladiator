@@ -134,7 +134,7 @@ public abstract class Ability {
 	
 	protected abstract void onAbilityEnd(Entity me);
 	
-	public abstract Array<Entity> getTargets(Entity me, Entity[] entities);
+	public abstract Array<Entity> getTargets(Entity me, Entity[] allEnemies);
 
 	protected void onLoopStart(float delta) {
 		isAvailable = (cooldownTimer >= cooldown);

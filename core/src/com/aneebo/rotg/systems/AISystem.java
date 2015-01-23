@@ -100,7 +100,7 @@ public class AISystem extends EntitySystem {
 		correctFacing(enemPos, playerPos);
 		
 		eAbilityComponent = ac.get(e);
-		if(inAbilityRange(eAbilityComponent, AbilityType.offense)) {
+		if(inAbilityRange(eAbilityComponent, Constants.AT_SLASH)) {
 			ai.aiState = AIState.fight;
 			return;
 		}
@@ -117,7 +117,7 @@ public class AISystem extends EntitySystem {
 		correctFacing(enemPos, playerPos);
 		//Check ability
 		eAbilityComponent = ac.get(e);
-		if(!inAbilityRange(eAbilityComponent, AbilityType.offense)) {
+		if(!inAbilityRange(eAbilityComponent, Constants.AT_SLASH)) {
 			ai.aiState = AIState.chase;
 			return;
 		}
@@ -172,12 +172,11 @@ public class AISystem extends EntitySystem {
 		return AbilityType.none;
 	}
 	
-	private boolean inAbilityRange(AbilityComponent abil, AbilityType type) {
+	private boolean inAbilityRange(AbilityComponent abil, int abilityId) {
 		int size = abil.abilitySlots.size;
 		for(int i = 0; i < size; i++) {
 			if(abil.abilitySlots.get(i).getTargets(e, new Entity[] {player}).size > 0) {
-				if(type == null) return true;
-				if(abil.abilitySlots.get(i).getType() == type) return true;
+				if(abil.abilitySlots.get(i).getId() == abilityId) return true;
 			}
 		}
 		return false;
@@ -185,7 +184,7 @@ public class AISystem extends EntitySystem {
 	
 	private void correctFacing(PositionComponent mePos, PositionComponent otherPos) {
 		//Check if 1 space away
-		float d = dir.set(otherPos.curXPos, otherPos.curYPos).sub(mePos.curXPos, mePos.curYPos).cpy().len();
+		float d = dir.set(otherPos.curXPos, otherPos.curYPos).sub(mePos.curXPos, mePos.curYPos).len();
 		if(d <= 1f) {
 			if(dir.x < 0) {
 				mePos.direction = Direction.Left;

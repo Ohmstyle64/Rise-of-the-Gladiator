@@ -41,6 +41,7 @@ public class RenderSystem extends EntitySystem {
 	private RenderComponent renderComponent;
 	private StatComponent statComponent;
 	private Entity e;
+	private Engine engine;
 	
 	public RenderSystem(OrthogonalTiledMapRenderer renderer) {
 		super(4);
@@ -56,6 +57,7 @@ public class RenderSystem extends EntitySystem {
 		entities = engine.getEntitiesFor(Family.getFor(RenderComponent.class));
 		abilityEntities = engine.getEntitiesFor(Family.getFor(AbilityComponent.class));
 		player = engine.getEntitiesFor(Family.getFor(InputComponent.class)).first();
+		this.engine = engine;
 	}
 	
 	@Override
@@ -78,6 +80,7 @@ public class RenderSystem extends EntitySystem {
 			renderer.getBatch().draw(renderComponent.texture,
 					posComponent.curXPos*Constants.TILE_WIDTH, 
 					posComponent.curYPos*Constants.TILE_HEIGHT);
+			if(statComponent== null) continue;
 			font.draw(renderer.getBatch(), 
 					statComponent.name,
 					posComponent.curXPos*Constants.TILE_WIDTH,

@@ -13,6 +13,7 @@ import com.aneebo.rotg.systems.AbilitySystem;
 import com.aneebo.rotg.systems.CollisionSystem;
 import com.aneebo.rotg.systems.InputSystem;
 import com.aneebo.rotg.systems.MovementSystem;
+import com.aneebo.rotg.systems.ProjectileSystem;
 import com.aneebo.rotg.systems.RegenSystem;
 import com.aneebo.rotg.systems.RenderSystem;
 import com.aneebo.rotg.types.AIState;
@@ -51,6 +52,7 @@ public class Play implements Screen {
 	private AbilitySystem abilitySystem;
 	private AISystem aiSystem;
 	private RegenSystem regenSystem;
+	private ProjectileSystem projectileSystem;
 	
 	private Engine engine;
 	private Entity player;
@@ -86,22 +88,23 @@ public class Play implements Screen {
 		Array<Ability> abilityList = new Array<Ability>();
 		abilityList.add(Constants.abilityMap.get(Constants.AT_SLASH));
 		abilityList.add(Constants.abilityMap.get(Constants.DF_PARRY));
+		abilityList.add(Constants.abilityMap.get(Constants.AT_FIREBLAST));
 
 		player = new Entity();
 		player.add(pos = new PositionComponent(3,4, Direction.Right));
 		player.add(new InputComponent());
 		player.add(new RenderComponent(new Texture("img/characters/dragon_form.png")));
 		player.add(new CollisionComponent(ColliderType.character));
-		player.add(ability = new AbilityComponent(abilityList));
-		player.add(stat = new StatComponent("Kevin", 25f, 40f, Color.RED, 5, 5));
+		player.add(ability = new AbilityComponent(abilityList, engine));
+		player.add(stat = new StatComponent("Kevin", 25f, 40f, Color.RED, 5, 5, 1.5f));
 		
 		Entity enemy_1 = new Entity();
 		enemy_1.add(new PositionComponent(10,7, Direction.Left));
 		enemy_1.add(new RenderComponent(new Texture("img/characters/pig_form.png")));
 		enemy_1.add(new CollisionComponent(ColliderType.character));
 		enemy_1.add(new AIComponent(AIState.idle));
-		enemy_1.add(new AbilityComponent(abilityList));
-		enemy_1.add(new StatComponent("Enemy_1", 25f, 30f, Color.BLUE, 5, 5));
+		enemy_1.add(new AbilityComponent(abilityList, engine));
+		enemy_1.add(new StatComponent("Enemy_1", 25f, 30f, Color.BLUE, 5, 5, 0));
 
 		//Add Entities
 		engine.addEntity(player);
@@ -121,6 +124,7 @@ public class Play implements Screen {
 		engine.addSystem(movementSystem);
 		engine.addSystem(aiSystem);
 		engine.addSystem(regenSystem);
+		engine.addSystem(projectileSystem);
 		
 	}
 
@@ -208,8 +212,9 @@ public class Play implements Screen {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				if(pos.isStopped()) {
-					pos.nXPos--;
 					pos.direction = Direction.Left;
+					if(pos.isMoveable)
+						pos.nXPos--;
 				}
 			}
 		});
@@ -231,8 +236,9 @@ public class Play implements Screen {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				if(pos.isStopped()) {
-					pos.nXPos++;
 					pos.direction = Direction.Right;
+					if(pos.isMoveable)
+						pos.nXPos++;
 				}
 			}
 		});
@@ -253,8 +259,9 @@ public class Play implements Screen {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				if(pos.isStopped()) {
-					pos.nYPos++;
 					pos.direction = Direction.Up;
+					if(pos.isMoveable)
+						pos.nYPos++;
 				}
 			}
 		});
@@ -276,8 +283,9 @@ public class Play implements Screen {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				if(pos.isStopped()) {
-					pos.nYPos--;
 					pos.direction = Direction.Down;
+					if(pos.isMoveable)
+						pos.nYPos--;
 				}
 			}
 		});
@@ -298,6 +306,7 @@ public class Play implements Screen {
 		abilitySystem = new AbilitySystem();
 		aiSystem = new AISystem();
 		regenSystem = new RegenSystem();
+		projectileSystem = new ProjectileSystem();
 	}
 	
 	
@@ -350,6 +359,7 @@ public class Play implements Screen {
 		aiSystem.dispose();
 		abilitySystem.dispose();
 		regenSystem.dispose();
+		projectileSystem.dipose();
 		stage.dispose();
 	}
 

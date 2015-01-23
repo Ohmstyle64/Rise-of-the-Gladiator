@@ -24,6 +24,8 @@ public class CollisionSystem extends EntitySystem {
 	private CollisionComponent ent2Col;
 	private Entity e;
 	
+	private Engine engine;
+	
 	private TiledMapTileLayer wallLayer;
 	
 	public CollisionSystem(TiledMap map) {
@@ -34,6 +36,7 @@ public class CollisionSystem extends EntitySystem {
 	@Override
 	public void addedToEngine(Engine engine) {
 		entities = engine.getEntitiesFor(Family.getFor(PositionComponent.class, CollisionComponent.class));
+		this.engine = engine;
 	}
 	
 	@Override
@@ -71,6 +74,9 @@ public class CollisionSystem extends EntitySystem {
 								ent1Pos.nYPos = (int)ent1Pos.curYPos;
 								break;
 							case trap:
+								break;
+							case projectile:
+//								engine.removeEntity(e);
 								break;
 						}
 					}
