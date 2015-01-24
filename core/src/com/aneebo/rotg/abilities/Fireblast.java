@@ -98,8 +98,7 @@ public class Fireblast extends RangeAbility {
 		eFireBlast.add(new RenderComponent(this.texture));
 		eFireBlast.add(projPos);
 		eFireBlast.add(new CollisionComponent(ColliderType.projectile));
-		eFireBlast.add(new StatComponent("fireball"+id_Count++, 0f, 0f, stat.color, 0f, 0f, 3f));
-		eFireBlast.add(new ProjectileComponent(me, this, path));
+		eFireBlast.add(new ProjectileComponent(me, this, path, 3f));
 		this.engine.addEntity(eFireBlast);
 		pos.isMoveable = true;
 	}

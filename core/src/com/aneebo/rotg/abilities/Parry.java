@@ -37,10 +37,7 @@ public class Parry extends Ability {
 	}
 
 	@Override
-	protected void onAbilityEnd(Entity me) {
-		stat = sc.get(me);
-		Gdx.app.log(stat.name+" activates ability ",getName());
-	}
+	protected void onAbilityEnd(Entity me) {}
 
 
 	@Override

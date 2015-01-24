@@ -12,11 +12,13 @@ public class ProjectileComponent extends Component {
 	public Array<Vector2> path;
 	public Entity hit;
 	public boolean hitInAnimmate;
+	public float speed;
 	
-	public ProjectileComponent(Entity from, RangeAbility rangeAbility, Array<Vector2> path) {
+	public ProjectileComponent(Entity from, RangeAbility rangeAbility, Array<Vector2> path, float speed) {
 		this.from = from;
 		this.rangeAbility = rangeAbility;
 		this.path = path;
+		this.speed = speed;
 		this.hitInAnimmate = false;
 	}
 	

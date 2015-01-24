@@ -33,23 +33,12 @@ public class Slash extends Ability {
 	}
 
 	@Override
-	public void render(Batch batch) {
-		super.render(batch);
-		if(castTimeTimer >=castTime) {
-			//DO ABILITY EFFECT
-		}
-	}
-
-	@Override
 	protected void onAbilityEnd(Entity me) {
 		for(Entity e : targets) {
 			stat = sc.get(e);
 			stat.health -= (1-(sc.get(e).eValue+sc.get(me).eValue))*DAMAGE;
 			sc.get(me).eValue = 0;
 		}
-		
-		stat = sc.get(me);
-		Gdx.app.log(stat.name+" activates ability ",getName());
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package com.aneebo.rotg.abilities;
 
+import com.aneebo.rotg.components.Mappers;
 import com.aneebo.rotg.types.AbilityType;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
@@ -121,6 +122,7 @@ public abstract class Ability {
 	public void action(float delta, Entity me){
 		onLoopStart(delta);
 		if(isActivated && justStarted) {
+			Gdx.app.log(Mappers.staMap.get(me).name+" activates ability ",getName());
 			onAbilityStart(me);
 			justStarted = false;
 		}

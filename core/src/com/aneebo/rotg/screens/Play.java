@@ -11,6 +11,7 @@ import com.aneebo.rotg.components.StatComponent;
 import com.aneebo.rotg.systems.AISystem;
 import com.aneebo.rotg.systems.AbilitySystem;
 import com.aneebo.rotg.systems.CollisionSystem;
+import com.aneebo.rotg.systems.DeathSystem;
 import com.aneebo.rotg.systems.InputSystem;
 import com.aneebo.rotg.systems.MovementSystem;
 import com.aneebo.rotg.systems.ProjectileSystem;
@@ -53,6 +54,7 @@ public class Play implements Screen {
 	private AISystem aiSystem;
 	private RegenSystem regenSystem;
 	private ProjectileSystem projectileSystem;
+	private DeathSystem deathSystem;
 	
 	private Engine engine;
 	private Entity player;
@@ -125,7 +127,7 @@ public class Play implements Screen {
 		engine.addSystem(aiSystem);
 		engine.addSystem(regenSystem);
 		engine.addSystem(projectileSystem);
-		
+		engine.addSystem(deathSystem);		
 	}
 
 	private void createGUI() {
@@ -307,6 +309,7 @@ public class Play implements Screen {
 		aiSystem = new AISystem();
 		regenSystem = new RegenSystem();
 		projectileSystem = new ProjectileSystem();
+		deathSystem = new DeathSystem();
 	}
 	
 	
@@ -360,6 +363,7 @@ public class Play implements Screen {
 		abilitySystem.dispose();
 		regenSystem.dispose();
 		projectileSystem.dipose();
+		deathSystem.dipose();
 		stage.dispose();
 	}
 
