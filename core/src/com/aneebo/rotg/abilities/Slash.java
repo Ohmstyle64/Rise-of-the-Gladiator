@@ -1,9 +1,9 @@
 package com.aneebo.rotg.abilities;
 
+import com.aneebo.rotg.abilities.util.Target;
 import com.aneebo.rotg.components.PositionComponent;
 import com.aneebo.rotg.components.StatComponent;
 import com.aneebo.rotg.types.AbilityType;
-import com.aneebo.rotg.utils.Target;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;

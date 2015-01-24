@@ -1,9 +1,9 @@
 package com.aneebo.rotg.components;
 
 import com.aneebo.rotg.abilities.Ability;
-import com.aneebo.rotg.abilities.Fireblast;
 import com.aneebo.rotg.abilities.Parry;
 import com.aneebo.rotg.abilities.Slash;
+import com.aneebo.rotg.abilities.range.Fireblast;
 import com.aneebo.rotg.utils.Constants;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Engine;

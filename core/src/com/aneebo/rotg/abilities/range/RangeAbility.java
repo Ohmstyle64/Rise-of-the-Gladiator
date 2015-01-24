@@ -1,5 +1,6 @@
-package com.aneebo.rotg.abilities;
+package com.aneebo.rotg.abilities.range;
 
+import com.aneebo.rotg.abilities.Ability;
 import com.aneebo.rotg.types.AbilityType;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;

@@ -1,9 +1,9 @@
 package com.aneebo.rotg.utils;
 
 import com.aneebo.rotg.abilities.Ability;
-import com.aneebo.rotg.abilities.Fireblast;
 import com.aneebo.rotg.abilities.Parry;
 import com.aneebo.rotg.abilities.Slash;
+import com.aneebo.rotg.abilities.range.Fireblast;
 import com.aneebo.rotg.types.AbilityType;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.ObjectMap;

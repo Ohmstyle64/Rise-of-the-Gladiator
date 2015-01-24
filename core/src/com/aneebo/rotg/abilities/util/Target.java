@@ -1,4 +1,4 @@
-package com.aneebo.rotg.utils;
+package com.aneebo.rotg.abilities.util;
 import com.aneebo.rotg.components.Mappers;
 import com.aneebo.rotg.components.PositionComponent;
 import com.badlogic.ashley.core.Entity;

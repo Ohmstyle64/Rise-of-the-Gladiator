@@ -1,5 +1,6 @@
-package com.aneebo.rotg.abilities;
+package com.aneebo.rotg.abilities.range;
 
+import com.aneebo.rotg.abilities.util.Target;
 import com.aneebo.rotg.components.CollisionComponent;
 import com.aneebo.rotg.components.Mappers;
 import com.aneebo.rotg.components.PositionComponent;
@@ -8,7 +9,6 @@ import com.aneebo.rotg.components.RenderComponent;
 import com.aneebo.rotg.components.StatComponent;
 import com.aneebo.rotg.types.AbilityType;
 import com.aneebo.rotg.types.ColliderType;
-import com.aneebo.rotg.utils.Target;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;

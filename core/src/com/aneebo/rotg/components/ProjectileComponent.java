@@ -1,6 +1,6 @@
 package com.aneebo.rotg.components;
 
-import com.aneebo.rotg.abilities.RangeAbility;
+import com.aneebo.rotg.abilities.range.RangeAbility;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
