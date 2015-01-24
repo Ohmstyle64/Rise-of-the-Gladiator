@@ -11,6 +11,7 @@ import com.aneebo.rotg.types.ColliderType;
 import com.aneebo.rotg.utils.Target;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -18,15 +19,19 @@ import com.badlogic.gdx.utils.Array;
 public class Fireblast extends RangeAbility {
 	
 	private static int id_Count = 0;
+	private static final float DAMAGE = 25f;
+	private static final float ENERGY_COST = 25f;
+	
 	private PositionComponent pos;
 	private StatComponent stat;
+	private StatComponent fromStat;
 	private PositionComponent projPos;
 
 	public Fireblast(int id, int castTime, int range, AbilityType type,
 			String name, int cooldown, Texture texture,
 			Engine engine) {
 		super(id, castTime, range, type, name, cooldown, texture, engine);
-		
+
 	}
 
 	public Fireblast(Fireblast fireblast, Engine engine) {
@@ -36,6 +41,14 @@ public class Fireblast extends RangeAbility {
 
 	@Override
 	protected void onAbilityStart(Entity me) {
+		stat = Mappers.staMap.get(me);
+		if(stat.energy - ENERGY_COST < 0) {
+			Gdx.app.log(stat.name, "Not enough energy!");
+			stat.energy = 0;
+			isInterrupted = true;
+			return;
+		}
+		stat.energy -= ENERGY_COST;
 		pos = Mappers.posMap.get(me);
 		pos.isMoveable = false;
 	}
@@ -51,38 +64,37 @@ public class Fireblast extends RangeAbility {
 		
 		switch(pos.direction) {
 		case Down:
-			projPos.nYPos -= this.range;
 			projPos.curYPos--;
-			for(int i = (int) projPos.curYPos; i >= projPos.nYPos; i--) {
+			for(int i = (int) projPos.curYPos; i >= projPos.nYPos-this.range; i--) {
 				Vector2 cell = new Vector2(projPos.curXPos, i);
 				path.add(cell);
 			}
 			break;
 		case Up:
-			projPos.nYPos += this.range;
 			projPos.curYPos++;
-			for(int i = (int) projPos.curYPos; i <= projPos.nYPos; i++) {
+			for(int i = (int) projPos.curYPos; i <= projPos.nYPos+this.range; i++) {
 				Vector2 cell = new Vector2(projPos.curXPos, i);
 				path.add(cell);
 			}
 			break;
 		case Left:
-			projPos.nXPos -= this.range;
 			projPos.curXPos--;
-			for(int i = (int) projPos.curXPos; i >= projPos.nXPos; i--) {
+			for(int i = (int) projPos.curXPos; i >= projPos.nXPos-this.range; i--) {
 				Vector2 cell = new Vector2(i, projPos.curYPos);
 				path.add(cell);
 			}
 			break;
 		case Right:
-			projPos.nXPos += this.range;
 			projPos.curXPos++;
-			for(int i = (int) projPos.curXPos; i <= projPos.nXPos; i++) {
+			for(int i = (int) projPos.curXPos; i <= projPos.nXPos+this.range; i++) {
 				Vector2 cell = new Vector2(i, projPos.curYPos);
 				path.add(cell);
 			}
 			break;
 		}
+		projPos.nXPos = (int) path.get(0).x;
+		projPos.nYPos = (int) path.get(0).y;
+		path.removeIndex(0);
 		eFireBlast.add(new RenderComponent(this.texture));
 		eFireBlast.add(projPos);
 		eFireBlast.add(new CollisionComponent(ColliderType.projectile));
@@ -98,6 +110,17 @@ public class Fireblast extends RangeAbility {
 		targets.addAll(Target.oneDirectional(me, allEnemies, getRange()));
 		
 		return targets;
+	}
+
+	@Override
+	public void hit(Entity from, Entity hit) {
+		stat = Mappers.staMap.get(hit);
+		fromStat = Mappers.staMap.get(from);
+		if(stat != null) {
+			stat.health -= (1-(stat.eValue + fromStat.eValue))*DAMAGE;
+			fromStat.eValue = 0;
+		}
+		
 	}
 
 }

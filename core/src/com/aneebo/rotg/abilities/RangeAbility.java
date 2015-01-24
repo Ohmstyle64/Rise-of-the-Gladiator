@@ -23,6 +23,8 @@ public abstract class RangeAbility extends Ability {
 	protected abstract void onAbilityEnd(Entity me);
 
 	public abstract Array<Entity> getTargets(Entity me, Entity[] entities);
+	
+	public abstract void hit(Entity from, Entity hit);
 
 	protected Texture getTexture() {
 		return texture;

@@ -18,6 +18,10 @@ public class ProjectileSystem extends EntitySystem {
 	
 	private Engine engine;
 	
+	public ProjectileSystem() {
+		super(1);
+	}
+	
 	@Override
 	public void addedToEngine(Engine engine) {
 		entities = engine.getEntitiesFor(Family.getFor(ProjectileComponent.class));
@@ -31,7 +35,19 @@ public class ProjectileSystem extends EntitySystem {
 			e = entities.get(i);
 			pos = Mappers.posMap.get(e);
 			proj = Mappers.projMap.get(e);
-			if(pos.isStopped()) {
+			if(proj.path.size > 0) {
+				
+				if(pos.isStopped()) {
+					if(proj.isCollided()) {
+						proj.rangeAbility.hit(proj.from, proj.hit);
+						engine.removeEntity(e);
+					}else {
+						pos.nXPos = (int)proj.path.first().x;
+						pos.nYPos = (int)proj.path.first().y;
+						proj.path.removeIndex(0);
+					}
+				}
+			}else {
 				engine.removeEntity(e);
 			}
 		}
