@@ -13,17 +13,11 @@ public abstract class RangeAbility extends Ability {
 	protected Texture texture;
 	
 	public RangeAbility(int id, int castTime, int range, AbilityType type,
-			String name, int cooldown, Texture texture, Engine engine) {
-		super(id, castTime, range, type, name, cooldown);
+			String name, int cooldown,float damage, float energy_cost, Texture texture, Engine engine) {
+		super(id, castTime, range, type, name, cooldown, damage, energy_cost);
 		this.engine = engine;
 		this.texture = texture;
 	}
-	
-	protected abstract void onAbilityStart(Entity me);
-	
-	protected abstract void onAbilityEnd(Entity me);
-
-	public abstract Array<Entity> getTargets(Entity me, Entity[] entities);
 	
 	public abstract void hit(Entity from, Entity hit);
 

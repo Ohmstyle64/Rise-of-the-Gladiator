@@ -20,6 +20,7 @@ import com.aneebo.rotg.systems.RenderSystem;
 import com.aneebo.rotg.types.AIState;
 import com.aneebo.rotg.types.ColliderType;
 import com.aneebo.rotg.types.Direction;
+import com.aneebo.rotg.utils.Assets;
 import com.aneebo.rotg.utils.Constants;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -75,6 +76,8 @@ public class Play implements Screen {
 	public void show() {
 		renderer = new OrthogonalTiledMapRenderer(new TmxMapLoader().load("img/arena/arena_1.tmx"));
 		
+		Assets.load();
+		
 		TextureAtlas atlas = new TextureAtlas("img/gui/uiskin.atlas");
 		skin = new Skin(Gdx.files.internal("img/gui/uiskin.json"),atlas);
 		
@@ -95,18 +98,18 @@ public class Play implements Screen {
 		player = new Entity();
 		player.add(pos = new PositionComponent(3,4, Direction.Right));
 		player.add(new InputComponent());
-		player.add(new RenderComponent(new Texture("img/characters/dragon_form.png")));
+		player.add(new RenderComponent(Assets.assetManager.get(Constants.DRAGON_FORM, Texture.class)));
 		player.add(new CollisionComponent(ColliderType.character));
 		player.add(ability = new AbilityComponent(abilityList, engine));
 		player.add(stat = new StatComponent("Kevin", 25f, 40f, Color.RED, 5, 5, 1.5f));
 		
 		Entity enemy_1 = new Entity();
 		enemy_1.add(new PositionComponent(10,7, Direction.Left));
-		enemy_1.add(new RenderComponent(new Texture("img/characters/pig_form.png")));
+		enemy_1.add(new RenderComponent(Assets.assetManager.get(Constants.PIG_FORM, Texture.class)));
 		enemy_1.add(new CollisionComponent(ColliderType.character));
 		enemy_1.add(new AIComponent(AIState.idle));
 		enemy_1.add(new AbilityComponent(abilityList, engine));
-		enemy_1.add(new StatComponent("Enemy_1", 25f, 30f, Color.BLUE, 5, 5, 0));
+		enemy_1.add(new StatComponent("Enemy_1", 25f, 30f, Color.BLUE, 5, 5, 1.0f));
 
 		//Add Entities
 		engine.addEntity(player);
@@ -365,6 +368,7 @@ public class Play implements Screen {
 		projectileSystem.dipose();
 		deathSystem.dipose();
 		stage.dispose();
+		Assets.dispose();
 	}
 
 }

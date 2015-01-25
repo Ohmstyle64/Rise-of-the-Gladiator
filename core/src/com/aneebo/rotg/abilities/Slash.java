@@ -20,23 +20,20 @@ public class Slash extends Ability {
 	
 	private Vector2 abilityDst;
 	
-	private static final float DAMAGE = 10f;
-	private static final float ENERGY_COST = 10f;
-	
-	public Slash(int id, int castTime, int range, AbilityType type, String name, int cooldown) {
-		super(id, castTime, range, type, name, cooldown);
+	public Slash(int id, int castTime, int range, AbilityType type, String name, int cooldown, float damage, float energy_cost) {
+		super(id, castTime, range, type, name, cooldown, damage, energy_cost);
 		abilityDst = new Vector2();
 	}
 	
 	public Slash(Ability ability) {
-		this(ability.getId(), ability.getCastTime(), ability.getRange(), ability.getType(), ability.getName(), ability.getCooldown());
+		this(ability.getId(), ability.getCastTime(), ability.getRange(), ability.getType(), ability.getName(), ability.getCooldown(), ability.getDamage(), ability.getEnergy_cost());
 	}
 
 	@Override
 	protected void onAbilityEnd(Entity me) {
 		for(Entity e : targets) {
 			stat = sc.get(e);
-			stat.health -= (1-(sc.get(e).eValue+sc.get(me).eValue))*DAMAGE;
+			stat.health -= (1-(sc.get(e).eValue+sc.get(me).eValue))*damage;
 			sc.get(me).eValue = 0;
 		}
 	}
@@ -44,13 +41,13 @@ public class Slash extends Ability {
 	@Override
 	protected void onAbilityStart(Entity me) {
 		stat = sc.get(me);
-		if(stat.energy - ENERGY_COST < 0) {
+		if(stat.energy - energy_cost < 0) {
 			Gdx.app.log(stat.name, "Not enough energy!");
 			stat.energy = 0;
 			isInterrupted = true;
 			return;
 		}
-		stat.energy -= ENERGY_COST;
+		stat.energy -= energy_cost;
 	}
 
 	@Override
@@ -60,5 +57,23 @@ public class Slash extends Ability {
 		targets.addAll(Target.oneDirectional(me, allEnemies, getRange()));
 		
 		return targets;
+	}
+
+	@Override
+	public void activateTier1() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void activateTier2() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void activateTier3() {
+		// TODO Auto-generated method stub
+		
 	}
 }

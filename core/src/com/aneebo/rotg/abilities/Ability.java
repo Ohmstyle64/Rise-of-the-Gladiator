@@ -12,10 +12,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 
 public abstract class Ability {
-	protected int id, castTime, range, cooldown;
+	protected int id, castTime, range, cooldown, tier;
 	protected AbilityType type;
 	protected String name;
-	protected float castTimeTimer, cooldownTimer;
+	protected float castTimeTimer, cooldownTimer, damage, energy_cost;
 	public boolean isAvailable;
 	public boolean isInterrupted;
 	public boolean isActivated;
@@ -25,19 +25,22 @@ public abstract class Ability {
 	private Skin skin;
 	protected Array<Entity> targets;
 	
-	public Ability(int id, int castTime, int range, AbilityType type, String name, int cooldown) {
+	public Ability(int id, int castTime, int range, AbilityType type, String name, int cooldown, float damage, float energy_cost) {
 		this.id = id;
 		this.castTime = castTime;
 		this.range = range;
 		this.type = type;
 		this.name = name;
 		this.cooldown = cooldown;
+		this.damage = damage;
+		this.energy_cost = energy_cost;
 		justStarted = true;
 		isAvailable = false;
 		isInterrupted = false;
 		isActivated = false;
 		castTimeTimer = 0;
 		cooldownTimer = cooldown;
+		tier = 0;
 		targets = new Array<Entity>();
 		skin = new Skin(Gdx.files.internal("img/gui/uiskin.json"));
 		bar = new ProgressBar(0f,1f,0.01f,false, skin);
@@ -82,6 +85,15 @@ public abstract class Ability {
 		return name;
 	}
 	
+	
+	public float getDamage() {
+		return damage;
+	}
+
+	public float getEnergy_cost() {
+		return energy_cost;
+	}
+
 	protected float interrupt() {
 		float perc = castTimeTimer / castTime;
 		isInterrupted = true;
@@ -137,6 +149,12 @@ public abstract class Ability {
 	protected abstract void onAbilityEnd(Entity me);
 	
 	public abstract Array<Entity> getTargets(Entity me, Entity[] allEnemies);
+	
+	public abstract void activateTier1();
+	
+	public abstract void activateTier2();
+	
+	public abstract void activateTier3();
 
 	protected void onLoopStart(float delta) {
 		isAvailable = (cooldownTimer >= cooldown);

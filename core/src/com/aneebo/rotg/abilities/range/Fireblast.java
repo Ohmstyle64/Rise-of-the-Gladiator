@@ -19,8 +19,6 @@ import com.badlogic.gdx.utils.Array;
 public class Fireblast extends RangeAbility {
 	
 	private static int id_Count = 0;
-	private static final float DAMAGE = 25f;
-	private static final float ENERGY_COST = 25f;
 	
 	private PositionComponent pos;
 	private StatComponent stat;
@@ -28,27 +26,27 @@ public class Fireblast extends RangeAbility {
 	private PositionComponent projPos;
 
 	public Fireblast(int id, int castTime, int range, AbilityType type,
-			String name, int cooldown, Texture texture,
+			String name, int cooldown, float damage, float energy_cost,Texture texture,
 			Engine engine) {
-		super(id, castTime, range, type, name, cooldown, texture, engine);
+		super(id, castTime, range, type, name, cooldown, damage, energy_cost,texture, engine);
 
 	}
 
 	public Fireblast(Fireblast fireblast, Engine engine) {
 		this(fireblast.id, fireblast.castTime, fireblast.range, fireblast.type,
-				fireblast.name, fireblast.cooldown, fireblast.texture, engine);
+				fireblast.name, fireblast.cooldown,fireblast.damage, fireblast.energy_cost,fireblast.texture, engine);
 	}
 
 	@Override
 	protected void onAbilityStart(Entity me) {
 		stat = Mappers.staMap.get(me);
-		if(stat.energy - ENERGY_COST < 0) {
+		if(stat.energy - energy_cost < 0) {
 			Gdx.app.log(stat.name, "Not enough energy!");
 			stat.energy = 0;
 			isInterrupted = true;
 			return;
 		}
-		stat.energy -= ENERGY_COST;
+		stat.energy -= energy_cost;
 		pos = Mappers.posMap.get(me);
 		pos.isMoveable = false;
 	}
@@ -116,9 +114,27 @@ public class Fireblast extends RangeAbility {
 		stat = Mappers.staMap.get(hit);
 		fromStat = Mappers.staMap.get(from);
 		if(stat != null) {
-			stat.health -= (1-(stat.eValue + fromStat.eValue))*DAMAGE;
+			stat.health -= (1-(stat.eValue + fromStat.eValue))*damage;
 			fromStat.eValue = 0;
 		}
+		
+	}
+
+	@Override
+	public void activateTier1() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void activateTier2() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void activateTier3() {
+		// TODO Auto-generated method stub
 		
 	}
 
