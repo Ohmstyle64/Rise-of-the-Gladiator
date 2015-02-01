@@ -10,6 +10,8 @@ public class Assets {
 		assetManager.load(Constants.DRAGON_FORM, Texture.class);
 		assetManager.load(Constants.PIG_FORM, Texture.class);
 		assetManager.load(Constants.FIREBALL_EFFECT, Texture.class);
+		assetManager.load(Constants.ICE_FORM, Texture.class);
+		assetManager.load(Constants.EMPTY_CELL, Texture.class);
 		assetManager.finishLoading();
 	}
 	

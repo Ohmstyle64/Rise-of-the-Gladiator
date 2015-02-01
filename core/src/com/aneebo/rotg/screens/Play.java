@@ -5,9 +5,14 @@ import com.aneebo.rotg.components.AIComponent;
 import com.aneebo.rotg.components.AbilityComponent;
 import com.aneebo.rotg.components.CollisionComponent;
 import com.aneebo.rotg.components.InputComponent;
+import com.aneebo.rotg.components.InventoryComponent;
 import com.aneebo.rotg.components.PositionComponent;
 import com.aneebo.rotg.components.RenderComponent;
 import com.aneebo.rotg.components.StatComponent;
+import com.aneebo.rotg.inventory.Inventory;
+import com.aneebo.rotg.inventory.Item;
+import com.aneebo.rotg.inventory.items.ChestP1;
+import com.aneebo.rotg.inventory.items.HeadP1;
 import com.aneebo.rotg.systems.AISystem;
 import com.aneebo.rotg.systems.AbilitySystem;
 import com.aneebo.rotg.systems.CollisionSystem;
@@ -43,6 +48,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectMap;
 
 public class Play implements Screen {
 
@@ -102,6 +108,14 @@ public class Play implements Screen {
 		player.add(new CollisionComponent(ColliderType.character));
 		player.add(ability = new AbilityComponent(abilityList, engine));
 		player.add(stat = new StatComponent("Kevin", 25f, 40f, Color.RED, 5, 5, 1.5f));
+		ObjectMap<Integer, Item> equipped = new ObjectMap<Integer, Item>();
+		ChestP1 cp1 = new ChestP1();
+		HeadP1 hp1 =  new HeadP1();
+		equipped.put(cp1.slot, cp1);
+		equipped.put(hp1.slot, hp1);
+		Array<Item> iList = new Array<Item>(Constants.INVENTORY_SIZE);
+		iList.add(new ChestP1());
+		player.add(new InventoryComponent(new Inventory(equipped, iList)));
 		
 		Entity enemy_1 = new Entity();
 		enemy_1.add(new PositionComponent(10,7, Direction.Left));
@@ -109,7 +123,7 @@ public class Play implements Screen {
 		enemy_1.add(new CollisionComponent(ColliderType.character));
 		enemy_1.add(new AIComponent(AIState.idle));
 		enemy_1.add(new AbilityComponent(abilityList, engine));
-		enemy_1.add(new StatComponent("Enemy_1", 25f, 30f, Color.BLUE, 5, 5, 1.0f));
+		enemy_1.add(new StatComponent("Enemy_1", 25f, 30f, Color.BLUE, 5, 5, 0.0f));
 
 		//Add Entities
 		engine.addEntity(player);
@@ -305,7 +319,7 @@ public class Play implements Screen {
 
 	private void createSystems() {
 		collisionSystem = new CollisionSystem(renderer.getMap());
-		inputSystem = new InputSystem();
+		inputSystem = new InputSystem(stage, skin);
 		movementSystem = new MovementSystem();
 		renderSystem = new RenderSystem(renderer);
 		abilitySystem = new AbilitySystem();

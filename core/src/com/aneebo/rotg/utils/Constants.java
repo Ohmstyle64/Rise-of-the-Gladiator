@@ -11,11 +11,15 @@ import com.badlogic.gdx.utils.ObjectMap;
 public class Constants {
 	
 	public static final boolean DEBUG = false;
+	public static final int WIDTH = 800;
+	public static final int HEIGHT = 480;
 	
 	//ASSET PATHS
 	public static final String DRAGON_FORM = "img/characters/dragon_form.png";
 	public static final String PIG_FORM = "img/characters/pig_form.png";
+	public static final String ICE_FORM = "img/characters/ice_form.png";
 	public static final String FIREBALL_EFFECT = "img/effects/fireball.png";
+	public static final String EMPTY_CELL = "img/gui/empty.png";
 	
 	public static final int MAX_ABILITY_SLOTS = 6;
 	public static final float TILE_WIDTH = 32f;
@@ -29,6 +33,8 @@ public class Constants {
 	public static final int HANDS = 4;
 	public static final int PRIMARY = 5;
 	public static final int SECONDARY = 6;
+	
+	public static final int INVENTORY_SIZE = 20;
 	
 	//ABILITY
 	public static final int AT_SLASH = 0;
