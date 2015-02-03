@@ -5,6 +5,7 @@ import com.aneebo.rotg.abilities.Parry;
 import com.aneebo.rotg.abilities.Slash;
 import com.aneebo.rotg.abilities.range.Fireblast;
 import com.aneebo.rotg.types.AbilityType;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.ObjectMap;
 
@@ -45,7 +46,7 @@ public class Constants {
 	public static final int AT_SLASH = 0;
 	public static final int DF_PARRY = 1;
 	public static final int AT_FIREBLAST = 2;
-	
+
 	public static final ObjectMap<Integer, Ability> abilityMap = new ObjectMap<Integer, Ability>();
 	static {
 		//Create abilities

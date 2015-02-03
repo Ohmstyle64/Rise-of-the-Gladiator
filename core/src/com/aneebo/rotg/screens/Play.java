@@ -53,6 +53,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 public class Play implements Screen {
 
@@ -84,6 +86,7 @@ public class Play implements Screen {
 	
 	@Override
 	public void show() {
+
 		renderer = new OrthogonalTiledMapRenderer(new TmxMapLoader().load("img/arena/arena_1.tmx"));
 		
 		Assets.load();
@@ -92,6 +95,8 @@ public class Play implements Screen {
 		skin = new Skin(Gdx.files.internal("img/gui/uiskin.json"),atlas);
 		
 		stage = new Stage();
+		stage.setViewport(new StretchViewport(Constants.WIDTH, Constants.HEIGHT));
+
 		Gdx.input.setInputProcessor(stage);
 		
 		table = new Table(skin);
@@ -308,7 +313,7 @@ public class Play implements Screen {
 		region = new TextureRegionDrawable(tRegionDown);
 		downimgBtnStyle.up = region;
 		tRegionDown = new TextureRegion(atlas.findRegion("tab_selected_cw"));
-		tRegionDown.flip(true, false);
+		tRegionDown.flip(true, true);
 		region = new TextureRegionDrawable(tRegionDown);
 		downimgBtnStyle.down = region;
 		
@@ -365,15 +370,13 @@ public class Play implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
-		renderSystem.getArenaCam().viewportHeight = height;
-		renderSystem.getArenaCam().viewportWidth = width;
-		renderSystem.getArenaCam().position.set(width / 2, height / 2, 0);
-		renderSystem.getArenaCam().update();
+		renderSystem.getViewport().update(width, height, true);
+		stage.getViewport().update(width, height, true);
 	}
 
 	@Override
 	public void pause() {
-		
+
 	}
 
 	@Override

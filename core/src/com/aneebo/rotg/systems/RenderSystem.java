@@ -19,10 +19,13 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class RenderSystem extends EntitySystem {
 
 	private OrthographicCamera arenaCam;
+	private FitViewport arenaViewPort;
 	private OrthogonalTiledMapRenderer renderer;
 	private ShapeRenderer shapeRenderer;
 	private BitmapFont font;
@@ -43,12 +46,14 @@ public class RenderSystem extends EntitySystem {
 	private Entity e;
 	private Engine engine;
 	
+	
 	public RenderSystem(OrthogonalTiledMapRenderer renderer) {
 		super(4);
 		this.renderer = renderer;
 		font = new BitmapFont();
 		shapeRenderer = new ShapeRenderer();
 		arenaCam = new OrthographicCamera();
+		arenaViewPort = new FitViewport(Constants.WIDTH, Constants.HEIGHT, arenaCam);
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 	}
 	
@@ -65,8 +70,10 @@ public class RenderSystem extends EntitySystem {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		//RENDER MAP
-		renderer.setView(arenaCam);
+		renderer.setView((OrthographicCamera) arenaViewPort.getCamera());
 		renderer.render();
+		
+		shapeRenderer.setProjectionMatrix(arenaViewPort.getCamera().combined);
 		
 		//RENDER CHARACTERS
 		shapeRenderer.begin(ShapeType.Line);
@@ -128,8 +135,8 @@ public class RenderSystem extends EntitySystem {
 	}
 	
 
-	public OrthographicCamera getArenaCam() {
-		return arenaCam;
+	public FitViewport getViewport() {
+		return arenaViewPort;
 	}
 
 	public void dispose() {

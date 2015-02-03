@@ -2,9 +2,9 @@ package com.aneebo.rotg.android;
 
 import android.os.Bundle;
 
+import com.aneebo.rotg.RotG;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import com.aneebo.rotg.RotG;
 
 public class AndroidLauncher extends AndroidApplication {
 	@Override
@@ -13,6 +13,7 @@ public class AndroidLauncher extends AndroidApplication {
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		config.hideStatusBar = true;
 		config.useWakelock = true;
+		config.useImmersiveMode = true;
 		initialize(new RotG(), config);
 	}
 }
