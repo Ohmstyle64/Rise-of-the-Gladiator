@@ -17,4 +17,15 @@ public abstract class Item {
 		this.slot = slot;
 		isSelected = false;
 	}
+	
+	public abstract float getDamageMitigation();
+	
+	public abstract float getMagicResist();
+	
+	public abstract float getIncreaseToRange();
+
+	public abstract float getAttackSpeed();
+	
+	public abstract float getDamage();
+	
 }

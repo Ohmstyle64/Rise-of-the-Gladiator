@@ -11,4 +11,29 @@ public class PrimP2 extends Item {
 		super("PrimP2", Assets.assetManager.get(Constants.SPEAR_1, Texture.class), Constants.PRIMARY);
 	}
 
+	@Override
+	public float getDamageMitigation() {
+		return 0;
+	}
+
+	@Override
+	public float getMagicResist() {
+		return 0;
+	}
+
+	@Override
+	public float getIncreaseToRange() {
+		return 1f;
+	}
+
+	@Override
+	public float getAttackSpeed() {
+		return 0.1f;
+	}
+
+	@Override
+	public float getDamage() {
+		return 3f;
+	}
+
 }

@@ -15,4 +15,29 @@ public class EmptyItem extends Item {
 		super("Empty", Assets.assetManager.get(Constants.EMPTY_CELL, Texture.class), location);
 	}
 
+	@Override
+	public float getDamageMitigation() {
+		return 0;
+	}
+
+	@Override
+	public float getMagicResist() {
+		return 0;
+	}
+
+	@Override
+	public float getIncreaseToRange() {
+		return 0;
+	}
+
+	@Override
+	public float getAttackSpeed() {
+		return 0;
+	}
+
+	@Override
+	public float getDamage() {
+		return 0;
+	}
+
 }

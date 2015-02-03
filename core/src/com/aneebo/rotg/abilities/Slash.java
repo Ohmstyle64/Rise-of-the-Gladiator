@@ -7,7 +7,6 @@ import com.aneebo.rotg.types.AbilityType;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
@@ -15,9 +14,10 @@ public class Slash extends Ability {
 	
 	private ComponentMapper<StatComponent> sc = ComponentMapper.getFor(StatComponent.class);
 	private ComponentMapper<PositionComponent> pc = ComponentMapper.getFor(PositionComponent.class);
+
 	private StatComponent stat;
 	private PositionComponent pos;
-	
+
 	private Vector2 abilityDst;
 	
 	public Slash(int id, int castTime, int range, AbilityType type, String name, int cooldown, float damage, float energy_cost) {
@@ -41,6 +41,7 @@ public class Slash extends Ability {
 	@Override
 	protected void onAbilityStart(Entity me) {
 		stat = sc.get(me);
+		
 		if(stat.energy - energy_cost < 0) {
 			Gdx.app.log(stat.name, "Not enough energy!");
 			stat.energy = 0;

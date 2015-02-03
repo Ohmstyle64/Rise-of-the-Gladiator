@@ -11,4 +11,29 @@ public class HeadP1 extends Item {
 		super("HeadP1", Assets.assetManager.get(Constants.HELMET_1, Texture.class), Constants.HEAD);
 	}
 
+	@Override
+	public float getDamageMitigation() {
+		return 0.05f;
+	}
+
+	@Override
+	public float getMagicResist() {
+		return 00.07f;
+	}
+
+	@Override
+	public float getIncreaseToRange() {
+		return 2.0f;
+	}
+
+	@Override
+	public float getAttackSpeed() {
+		return 0;
+	}
+
+	@Override
+	public float getDamage() {
+		return 0;
+	}
+
 }
