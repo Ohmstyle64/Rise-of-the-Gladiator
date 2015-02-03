@@ -9,6 +9,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.ObjectMap;
 
 public class Constants {
+	//SLOTDATA
+	public static final int INVENTORY = 0;
+	public static final int EQUIPPED = 1;
 	
 	public static final boolean DEBUG = false;
 	public static final int WIDTH = 800;
@@ -20,6 +23,11 @@ public class Constants {
 	public static final String ICE_FORM = "img/characters/ice_form.png";
 	public static final String FIREBALL_EFFECT = "img/effects/fireball.png";
 	public static final String EMPTY_CELL = "img/gui/empty.png";
+	public static final String HELMET_1 = "img/item/armor/helmet2_etched.png";
+	public static final String PLATE_MAIL_1 = "img/item/armor/plate_mail1.png";
+	public static final String ELVEN_SCALEMAIL_1 = "img/item/armor/elven_scalemail.png";
+	public static final String SHORTSWORD_1 = "img/item/weapon/short_sword2.png";
+	public static final String SPEAR_1 = "img/item/weapon/spear2.png";
 	
 	public static final int MAX_ABILITY_SLOTS = 6;
 	public static final float TILE_WIDTH = 32f;
@@ -27,14 +35,11 @@ public class Constants {
 	
 	//INVENTORY SLOTS
 	public static final int HEAD = 0;
-	public static final int CHEST = 1;
-	public static final int LEGS = 2;
-	public static final int FEET = 3;
-	public static final int HANDS = 4;
-	public static final int PRIMARY = 5;
-	public static final int SECONDARY = 6;
+	public static final int BODY = 1;
+	public static final int PRIMARY = 3;
+	public static final int BLANK = 4;
 	
-	public static final int INVENTORY_SIZE = 20;
+	public static final int INVENTORY_SIZE = 12;
 	
 	//ABILITY
 	public static final int AT_SLASH = 0;

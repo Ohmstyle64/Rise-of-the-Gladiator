@@ -12,7 +12,11 @@ import com.aneebo.rotg.components.StatComponent;
 import com.aneebo.rotg.inventory.Inventory;
 import com.aneebo.rotg.inventory.Item;
 import com.aneebo.rotg.inventory.items.ChestP1;
+import com.aneebo.rotg.inventory.items.ChestP2;
+import com.aneebo.rotg.inventory.items.EmptyItem;
 import com.aneebo.rotg.inventory.items.HeadP1;
+import com.aneebo.rotg.inventory.items.PrimP1;
+import com.aneebo.rotg.inventory.items.PrimP2;
 import com.aneebo.rotg.systems.AISystem;
 import com.aneebo.rotg.systems.AbilitySystem;
 import com.aneebo.rotg.systems.CollisionSystem;
@@ -111,11 +115,14 @@ public class Play implements Screen {
 		ObjectMap<Integer, Item> equipped = new ObjectMap<Integer, Item>();
 		ChestP1 cp1 = new ChestP1();
 		HeadP1 hp1 =  new HeadP1();
+		PrimP1 pp1 = new PrimP1();
 		equipped.put(cp1.slot, cp1);
 		equipped.put(hp1.slot, hp1);
-		Array<Item> iList = new Array<Item>(Constants.INVENTORY_SIZE);
-		iList.add(new ChestP1());
-		player.add(new InventoryComponent(new Inventory(equipped, iList)));
+//		equipped.put(pp1.slot, pp1);
+		Array<Item> iList = new Array<Item>(true, Constants.INVENTORY_SIZE, Item.class);
+		iList.add(new ChestP2());
+		iList.add(new PrimP2());
+		player.add(new InventoryComponent(new Inventory(equipped, fillRest(iList))));
 		
 		Entity enemy_1 = new Entity();
 		enemy_1.add(new PositionComponent(10,7, Direction.Left));
@@ -146,7 +153,16 @@ public class Play implements Screen {
 		engine.addSystem(projectileSystem);
 		engine.addSystem(deathSystem);		
 	}
-
+	
+	private Array<Item> fillRest(Array<Item> array) {
+		int size = array.items.length;
+		for(int i = array.size; i < size; i++) {
+			array.add(new EmptyItem());
+		}
+		
+		return array;
+	}
+	
 	private void createGUI() {
 		
 		table.add(createStats()).top().left().row();	

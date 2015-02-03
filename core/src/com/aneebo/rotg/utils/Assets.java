@@ -12,6 +12,11 @@ public class Assets {
 		assetManager.load(Constants.FIREBALL_EFFECT, Texture.class);
 		assetManager.load(Constants.ICE_FORM, Texture.class);
 		assetManager.load(Constants.EMPTY_CELL, Texture.class);
+		assetManager.load(Constants.PLATE_MAIL_1, Texture.class);
+		assetManager.load(Constants.HELMET_1, Texture.class);
+		assetManager.load(Constants.ELVEN_SCALEMAIL_1, Texture.class);
+		assetManager.load(Constants.SHORTSWORD_1, Texture.class);
+		assetManager.load(Constants.SPEAR_1, Texture.class);
 		assetManager.finishLoading();
 	}
 	

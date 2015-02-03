@@ -1,7 +1,5 @@
 package com.aneebo.rotg.systems;
 
-import java.util.Iterator;
-
 import com.aneebo.rotg.abilities.Ability;
 import com.aneebo.rotg.components.AbilityComponent;
 import com.aneebo.rotg.components.InputComponent;
@@ -11,6 +9,7 @@ import com.aneebo.rotg.components.StatComponent;
 import com.aneebo.rotg.inventory.Item;
 import com.aneebo.rotg.inventory.ItemSlotListener;
 import com.aneebo.rotg.inventory.SlotData;
+import com.aneebo.rotg.inventory.items.EmptyItem;
 import com.aneebo.rotg.types.Direction;
 import com.aneebo.rotg.utils.Assets;
 import com.aneebo.rotg.utils.Constants;
@@ -36,7 +35,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ObjectMap.Entry;
+import com.badlogic.gdx.utils.ObjectMap;
 
 public class InputSystem extends EntitySystem {
 
@@ -49,8 +48,10 @@ public class InputSystem extends EntitySystem {
 	private Array<Ability> abilitySlots;
 	private AbilityComponent abilityComponent;
 	private PositionComponent posComponent;
-	private InventoryComponent invC; 
+	private InventoryComponent invC;
 	private Entity player;
+	
+	private ItemSlotListener itemSlotListener;
 	
 	private Stage stage;
 	private Skin skin;
@@ -64,6 +65,7 @@ public class InputSystem extends EntitySystem {
 		super(0);
 		this.stage = stage;
 		this.skin = skin;
+		itemSlotListener = new ItemSlotListener();
 	}
 	
 	private void createInventoryWindow() {
@@ -92,18 +94,11 @@ public class InputSystem extends EntitySystem {
 	private Table createInventory() {
 		Table table = new Table();
 		int cols = 4;
-		int rows = MathUtils.ceil(Constants.INVENTORY_SIZE / cols);
-		int size = cols * rows;
 		Array<Item> iList = invC.inventory.inventoryList;
-		for(int i = 0; i < size; i++) {
-			ImageButton btn;
-			if(iList.size <= i ) {
-				btn = new ImageButton(emptyRegion);
-			}else {
-				btn = new ImageButton(iList.get(i).icon);
-			}
-			btn.addListener(new ItemSlotListener());
-			btn.setUserObject(new SlotData(invC.inventory,((i >= iList.size ? null : iList.get(i)))));
+		for(int i = 0; i < Constants.INVENTORY_SIZE; i++) {
+			ImageButton btn = new ImageButton(iList.get(i).icon);
+			btn.addListener(itemSlotListener);
+			btn.setUserObject(new SlotData(invC.inventory,iList.get(i),Constants.INVENTORY));
 			table.add(btn);
 			if(i % cols == cols - 1) table.row();
 		}
@@ -114,17 +109,49 @@ public class InputSystem extends EntitySystem {
 	private Table createEquipped() {
 		Table table = new Table();
 		
-		
-		Iterator<Entry<Integer, Item>> it = invC.inventory.equipped.iterator();
-		while(it.hasNext()) {
-			Entry<Integer, Item> ent = it.next();
-			TextureRegionDrawable region = invC.inventory.equipped.get(ent.key).icon;
-			ImageButton btn = new ImageButton(region);
-			btn.addListener(new ItemSlotListener());
-			btn.setUserObject(new SlotData(invC.inventory,ent.value));
-			table.add(btn).row();
+		ObjectMap<Integer, Item> eq = invC.inventory.equipped;
+		ImageButton headBtn;
+		//Head Slot
+		if(eq.containsKey(Constants.HEAD)) {
+			headBtn = new ImageButton(eq.get(Constants.HEAD).icon);
+			headBtn.setUserObject(new SlotData(invC.inventory, eq.get(Constants.HEAD), Constants.EQUIPPED));
+		}else {
+			EmptyItem empty = new EmptyItem(Constants.HEAD);
+			eq.put(empty.slot, empty);
+			headBtn = new ImageButton(empty.icon);
+			headBtn.setUserObject(new SlotData(invC.inventory, empty, Constants.EQUIPPED));
 		}
+		headBtn.addListener(itemSlotListener);
 		
+		//Body Slot
+		ImageButton bodyBtn;
+		if(eq.containsKey(Constants.BODY)) {
+			bodyBtn = new ImageButton(eq.get(Constants.BODY).icon);
+			bodyBtn.setUserObject(new SlotData(invC.inventory, eq.get(Constants.BODY), Constants.EQUIPPED));
+		}else {
+			EmptyItem empty = new EmptyItem(Constants.HEAD);
+			eq.put(empty.slot, empty);
+			bodyBtn = new ImageButton(empty.icon);
+			bodyBtn.setUserObject(new SlotData(invC.inventory, empty, Constants.EQUIPPED));
+		}
+		bodyBtn.addListener(itemSlotListener);
+		
+		//Primary Slot
+		ImageButton primBtn;
+		if(eq.containsKey(Constants.PRIMARY)) {
+			primBtn = new ImageButton(eq.get(Constants.PRIMARY).icon);
+			primBtn.setUserObject(new SlotData(invC.inventory, eq.get(Constants.PRIMARY), Constants.EQUIPPED));
+		}else {
+			EmptyItem empty = new EmptyItem(Constants.PRIMARY);
+			eq.put(empty.slot, empty);
+			primBtn = new ImageButton(empty.icon);
+			primBtn.setUserObject(new SlotData(invC.inventory, empty, Constants.EQUIPPED));
+		}
+		primBtn.addListener(itemSlotListener);
+		
+		table.add(headBtn).row();
+		table.add(bodyBtn).row();
+		table.add(primBtn);
 		return table;
 	}
 
