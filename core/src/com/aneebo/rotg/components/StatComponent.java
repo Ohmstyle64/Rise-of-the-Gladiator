@@ -14,6 +14,8 @@ public class StatComponent extends Component {
 	public float eValue;
 	public Color color;
 	public float speed;
+	public int skillPoints;
+	public int currency;
 	
 	public StatComponent(String name, float health, float energy, Color color, float health_regen, float energy_regen, float speed) {
 		this.name = name;
@@ -26,5 +28,7 @@ public class StatComponent extends Component {
 		this.energy_regen = energy_regen;
 		this.speed = speed;
 		this.eValue = 0;
+		skillPoints = 0;
+		currency = 0;
 	}
 }

@@ -13,9 +13,11 @@ public class DeathSystem extends EntitySystem {
 	private ImmutableArray<Entity> entities;
 	private Entity e;
 	private StatComponent stat;
+	private Engine engine;
 	
 	@Override
 	public void addedToEngine(Engine engine) {
+		this.engine = engine;
 		entities = engine.getEntitiesFor(Family.getFor(StatComponent.class));
 	}
 	
@@ -26,8 +28,7 @@ public class DeathSystem extends EntitySystem {
 			e = entities.get(i);
 			stat = Mappers.staMap.get(e);
 			if(stat.health <= 0) {
-				stat.name = "Dead!";
-				
+				engine.removeEntity(e);
 			}
 		}
 	}

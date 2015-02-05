@@ -9,6 +9,7 @@ import com.aneebo.rotg.components.RenderComponent;
 import com.aneebo.rotg.components.StatComponent;
 import com.aneebo.rotg.types.AbilityType;
 import com.aneebo.rotg.types.ColliderType;
+import com.aneebo.rotg.utils.Constants;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
@@ -26,15 +27,15 @@ public class Fireblast extends RangeAbility {
 	private PositionComponent projPos;
 
 	public Fireblast(int id, int castTime, int range, AbilityType type,
-			String name, int cooldown, float damage, float energy_cost,Texture texture,
+			String name, int cooldown, float damage, float energy_cost,String textureName,
 			Engine engine) {
-		super(id, castTime, range, type, name, cooldown, damage, energy_cost,texture, engine);
+		super(id, castTime, range, type, name, cooldown, damage, energy_cost,textureName, engine);
 
 	}
 
 	public Fireblast(Fireblast fireblast, Engine engine) {
 		this(fireblast.id, fireblast.castTime, fireblast.range, fireblast.type,
-				fireblast.name, fireblast.cooldown,fireblast.damage, fireblast.energy_cost,fireblast.texture, engine);
+				fireblast.name, fireblast.cooldown,fireblast.damage, fireblast.energy_cost,fireblast.textureName, engine);
 	}
 
 	@Override
@@ -93,7 +94,7 @@ public class Fireblast extends RangeAbility {
 		projPos.nXPos = (int) path.get(0).x;
 		projPos.nYPos = (int) path.get(0).y;
 		path.removeIndex(0);
-		eFireBlast.add(new RenderComponent(this.texture));
+		eFireBlast.add(new RenderComponent(textureName));
 		eFireBlast.add(projPos);
 		eFireBlast.add(new CollisionComponent(ColliderType.projectile));
 		eFireBlast.add(new ProjectileComponent(me, this, path, 3f));

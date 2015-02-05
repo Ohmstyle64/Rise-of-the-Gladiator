@@ -5,6 +5,7 @@ import com.aneebo.rotg.components.InputComponent;
 import com.aneebo.rotg.components.PositionComponent;
 import com.aneebo.rotg.components.RenderComponent;
 import com.aneebo.rotg.components.StatComponent;
+import com.aneebo.rotg.utils.Assets;
 import com.aneebo.rotg.utils.Constants;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
@@ -15,6 +16,7 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -83,7 +85,7 @@ public class RenderSystem extends EntitySystem {
 			posComponent = pc.get(e);
 			renderComponent = rc.get(e);
 			statComponent = sc.get(e);
-			renderer.getBatch().draw(renderComponent.texture,
+			renderer.getBatch().draw(Assets.assetManager.get(renderComponent.textureName, Texture.class),
 					posComponent.curXPos*Constants.TILE_WIDTH, 
 					posComponent.curYPos*Constants.TILE_HEIGHT);
 			if(statComponent== null) continue;

@@ -4,7 +4,9 @@ import com.aneebo.rotg.abilities.Ability;
 import com.aneebo.rotg.components.AIComponent;
 import com.aneebo.rotg.components.AbilityComponent;
 import com.aneebo.rotg.components.InputComponent;
+import com.aneebo.rotg.components.Mappers;
 import com.aneebo.rotg.components.PositionComponent;
+import com.aneebo.rotg.components.StatComponent;
 import com.aneebo.rotg.types.AIState;
 import com.aneebo.rotg.types.AbilityType;
 import com.aneebo.rotg.types.Direction;
@@ -34,6 +36,7 @@ public class AISystem extends EntitySystem {
 	private AIComponent ai;
 	private PositionComponent playerPos;
 	private PositionComponent enemPos;
+	private StatComponent enemStat;
 	private Entity e;
 
 	private Vector2 dir;
@@ -123,38 +126,48 @@ public class AISystem extends EntitySystem {
 		}
 		int size;
 		pAbilityComponent = ac.get(player);
+		enemStat = Mappers.staMap.get(e);
+		size = eAbilityComponent.abilitySlots.size;
 		switch(hasActiveAbility(pAbilityComponent)) {
 		case offense:
-			size = eAbilityComponent.abilitySlots.size;
 			for(int i = 0; i < size; i++) {
+				if(eAbilityComponent.abilitySlots.get(i).getEnergy_cost() > enemStat.energy) continue;
+
 				if(eAbilityComponent.abilitySlots.get(i).getType() == AbilityType.counter) {
+					
 					eAbilityComponent.abilitySlots.get(i).isActivated = true;
 					return;
 				}
 			}
 			break;
 		case counter:
-			size = eAbilityComponent.abilitySlots.size;
 			for(int i = 0; i < size; i++) {
+				if(eAbilityComponent.abilitySlots.get(i).getEnergy_cost() > enemStat.energy) continue;
+
 				if(eAbilityComponent.abilitySlots.get(i).getType() == AbilityType.defense) {
+
 					eAbilityComponent.abilitySlots.get(i).isActivated = true;
 					return;
 				}
 			}
 			break;
 		case defense:
-			size = eAbilityComponent.abilitySlots.size;
 			for(int i = 0; i < size; i++) {
+				if(eAbilityComponent.abilitySlots.get(i).getEnergy_cost() > enemStat.energy) continue;
+
 				if(eAbilityComponent.abilitySlots.get(i).getType() == AbilityType.offense) {
+					
 					eAbilityComponent.abilitySlots.get(i).isActivated = true;
 					return;
 				}
 			}
 			break;
 		default:
-			size = eAbilityComponent.abilitySlots.size;
 			for(int i = 0; i < size; i++) {
+				if(eAbilityComponent.abilitySlots.get(i).getEnergy_cost() > enemStat.energy) continue;
+				
 				if(eAbilityComponent.abilitySlots.get(i).getType() == AbilityType.offense) {
+					
 					eAbilityComponent.abilitySlots.get(i).isActivated = true;
 					return;
 				}

@@ -28,4 +28,12 @@ public abstract class Item {
 	
 	public abstract float getDamage();
 	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof Item) {
+			return ((Item)obj).slot == slot;
+		}
+		return super.equals(obj);
+	}
+	
 }

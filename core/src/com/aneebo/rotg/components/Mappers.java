@@ -11,4 +11,5 @@ public class Mappers {
 	public static final ComponentMapper<RenderComponent> renMap = ComponentMapper.getFor(RenderComponent.class);
 	public static final ComponentMapper<StatComponent> staMap = ComponentMapper.getFor(StatComponent.class);
 	public static final ComponentMapper<ProjectileComponent> projMap = ComponentMapper.getFor(ProjectileComponent.class);
+	public static final ComponentMapper<InventoryComponent> invMap = ComponentMapper.getFor(InventoryComponent.class);
 }

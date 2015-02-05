@@ -17,6 +17,7 @@ import com.aneebo.rotg.inventory.items.EmptyItem;
 import com.aneebo.rotg.inventory.items.HeadP1;
 import com.aneebo.rotg.inventory.items.PrimP1;
 import com.aneebo.rotg.inventory.items.PrimP2;
+import com.aneebo.rotg.level.arena.TestLevel;
 import com.aneebo.rotg.systems.AISystem;
 import com.aneebo.rotg.systems.AbilitySystem;
 import com.aneebo.rotg.systems.CollisionSystem;
@@ -36,7 +37,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -53,7 +53,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 public class Play implements Screen {
@@ -103,43 +102,12 @@ public class Play implements Screen {
 		table.setFillParent(true);
 		
 		engine = new Engine();
-		
+
 		//Create Entities
-		Array<Ability> abilityList = new Array<Ability>();
-		abilityList.add(Constants.abilityMap.get(Constants.AT_SLASH));
-		abilityList.add(Constants.abilityMap.get(Constants.DF_PARRY));
-		abilityList.add(Constants.abilityMap.get(Constants.AT_FIREBLAST));
-
-		player = new Entity();
-		player.add(pos = new PositionComponent(3,4, Direction.Right));
-		player.add(new InputComponent());
-		player.add(new RenderComponent(Assets.assetManager.get(Constants.DRAGON_FORM, Texture.class)));
-		player.add(new CollisionComponent(ColliderType.character));
-		player.add(ability = new AbilityComponent(abilityList, engine));
-		player.add(stat = new StatComponent("Kevin", 25f, 40f, Color.RED, 5, 5, 1.5f));
-		ObjectMap<Integer, Item> equipped = new ObjectMap<Integer, Item>();
-		ChestP1 cp1 = new ChestP1();
-		HeadP1 hp1 =  new HeadP1();
-		PrimP1 pp1 = new PrimP1();
-		equipped.put(cp1.slot, cp1);
-		equipped.put(hp1.slot, hp1);
-//		equipped.put(pp1.slot, pp1);
-		Array<Item> iList = new Array<Item>(true, Constants.INVENTORY_SIZE, Item.class);
-		iList.add(new ChestP2());
-		iList.add(new PrimP2());
-		player.add(new InventoryComponent(new Inventory(equipped, fillRest(iList))));
+		createPlayer();
 		
-		Entity enemy_1 = new Entity();
-		enemy_1.add(new PositionComponent(10,7, Direction.Left));
-		enemy_1.add(new RenderComponent(Assets.assetManager.get(Constants.PIG_FORM, Texture.class)));
-		enemy_1.add(new CollisionComponent(ColliderType.character));
-		enemy_1.add(new AIComponent(AIState.idle));
-		enemy_1.add(new AbilityComponent(abilityList, engine));
-		enemy_1.add(new StatComponent("Enemy_1", 25f, 30f, Color.BLUE, 5, 5, 0.0f));
-
-		//Add Entities
-		engine.addEntity(player);
-		engine.addEntity(enemy_1);
+		TestLevel testLevel = new TestLevel(engine, player);
+		testLevel.addEntities();
 		
 		//Create Systems
 		createSystems();
@@ -159,12 +127,39 @@ public class Play implements Screen {
 		engine.addSystem(deathSystem);		
 	}
 	
+	private void createPlayer() {
+		Array<Ability> abilityList = new Array<Ability>();
+		abilityList.add(Constants.abilityMap.get(Constants.AT_SLASH));
+		abilityList.add(Constants.abilityMap.get(Constants.DF_PARRY));
+		abilityList.add(Constants.abilityMap.get(Constants.AT_FIREBLAST));
+		
+		
+		
+		player = new Entity();
+		player.add(pos = new PositionComponent(3,4, Direction.Right));
+		player.add(new InputComponent());
+		player.add(new RenderComponent(Constants.DRAGON_FORM));
+		player.add(new CollisionComponent(ColliderType.character));
+		player.add(ability = new AbilityComponent(abilityList, engine));
+		player.add(stat = new StatComponent("Kevin", 35f, 60f, Color.RED, 5, 5, 1.5f));
+		ObjectMap<Integer, Item> equipped = new ObjectMap<Integer, Item>();
+		ChestP1 cp1 = new ChestP1();
+		HeadP1 hp1 =  new HeadP1();
+		PrimP1 pp1 = new PrimP1();
+		equipped.put(cp1.slot, cp1);
+		equipped.put(hp1.slot, hp1);
+//		equipped.put(pp1.slot, pp1);
+		Array<Item> iList = new Array<Item>(true, Constants.INVENTORY_SIZE, Item.class);
+		player.add(new InventoryComponent(new Inventory(equipped, fillRest(iList))));
+		
+		engine.addEntity(player);
+	}
+		
 	private Array<Item> fillRest(Array<Item> array) {
 		int size = array.items.length;
 		for(int i = array.size; i < size; i++) {
 			array.add(new EmptyItem());
 		}
-		
 		return array;
 	}
 	

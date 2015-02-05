@@ -52,7 +52,7 @@ public class Constants {
 		//Create abilities
 		Slash slash = new Slash(AT_SLASH, 2, 2, AbilityType.offense, "Slash", 5, 10f, 20f);
 		Parry parry = new Parry(DF_PARRY, 2, 3, AbilityType.defense, "Parry", 5, 0f, 10f);
-		Fireblast fireBlast = new Fireblast(AT_FIREBLAST, 2, 5, AbilityType.offense, "Fireblast", 7, 20f, 20f, new Texture("img/effects/fireball.png"), null);
+		Fireblast fireBlast = new Fireblast(AT_FIREBLAST, 2, 5, AbilityType.offense, "Fireblast", 2, 20f, 20f, FIREBALL_EFFECT, null);
 		
 		//Add to map
 		abilityMap.put(slash.getId(), slash);

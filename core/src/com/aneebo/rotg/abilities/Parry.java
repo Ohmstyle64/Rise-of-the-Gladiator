@@ -2,6 +2,7 @@ package com.aneebo.rotg.abilities;
 
 import com.aneebo.rotg.abilities.util.Target;
 import com.aneebo.rotg.components.AbilityComponent;
+import com.aneebo.rotg.components.Mappers;
 import com.aneebo.rotg.components.PositionComponent;
 import com.aneebo.rotg.components.StatComponent;
 import com.aneebo.rotg.types.AbilityType;
@@ -21,6 +22,8 @@ public class Parry extends Ability {
 	private PositionComponent pos;
 	private Entity e;
 	
+	private static final float ENERGY_BOOST = 10f;
+	
 	private Vector2 abilityDst;
 	
 	public Parry(int id, int castTime, int range, AbilityType type, String name, int cooldown, float damage, float energy_cost) {
@@ -35,7 +38,14 @@ public class Parry extends Ability {
 	}
 
 	@Override
-	protected void onAbilityEnd(Entity me) {}
+	protected void onAbilityEnd(Entity me) {
+		stat = Mappers.staMap.get(me);
+		if(stat.energy + ENERGY_BOOST > stat.max_energy) {
+			stat.energy = stat.max_energy;
+		}else {
+			stat.energy += ENERGY_BOOST;
+		}
+	}
 
 
 	@Override

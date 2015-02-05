@@ -18,6 +18,10 @@ public class PositionComponent extends Component {
 		this.direction = direction;
 	}
 	
+	public PositionComponent() {
+		isMoveable = true;
+	}
+	
 	public boolean isStopped() {
 		return curXPos==nXPos && curYPos==nYPos;
 	}
