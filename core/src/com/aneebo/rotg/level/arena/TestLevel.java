@@ -1,6 +1,7 @@
 package com.aneebo.rotg.level.arena;
 
 import com.aneebo.rotg.abilities.Ability;
+import com.aneebo.rotg.ai.CloseBasicE1;
 import com.aneebo.rotg.components.AIComponent;
 import com.aneebo.rotg.components.AbilityComponent;
 import com.aneebo.rotg.components.CollisionComponent;
@@ -16,7 +17,6 @@ import com.aneebo.rotg.inventory.items.PrimP2;
 import com.aneebo.rotg.level.Level;
 import com.aneebo.rotg.level.Prize;
 import com.aneebo.rotg.screens.Play;
-import com.aneebo.rotg.types.AIState;
 import com.aneebo.rotg.types.ColliderType;
 import com.aneebo.rotg.types.Direction;
 import com.aneebo.rotg.utils.Constants;
@@ -58,7 +58,7 @@ public class TestLevel extends Level implements EntityListener {
 		e1.add(new PositionComponent(11, 5, Direction.Left));
 		e1.add(new RenderComponent(Constants.ICE_FORM));
 		e1.add(new CollisionComponent(ColliderType.character));
-		e1.add(new AIComponent(AIState.idle));
+		e1.add(new AIComponent(new CloseBasicE1(engine)));
 		Array<Ability> abilities1 = new Array<Ability>();
 		abilities1.add(Constants.abilityMap.get(Constants.AT_SLASH));
 		e1.add(new AbilityComponent(abilities1, engine));
@@ -75,7 +75,7 @@ public class TestLevel extends Level implements EntityListener {
 		e2.add(new PositionComponent(11, 5, Direction.Left));
 		e2.add(new RenderComponent(Constants.ICE_FORM));
 		e2.add(new CollisionComponent(ColliderType.character));
-		e2.add(new AIComponent(AIState.idle));
+		e2.add(new AIComponent(new CloseBasicE1(engine)));
 		Array<Ability> abilities2 = new Array<Ability>();
 		abilities2.add(Constants.abilityMap.get(Constants.AT_SLASH));
 		e2.add(new AbilityComponent(abilities2, engine));
@@ -92,7 +92,7 @@ public class TestLevel extends Level implements EntityListener {
 		e3.add(new PositionComponent(11, 5, Direction.Left));
 		e3.add(new RenderComponent(Constants.ICE_FORM));
 		e3.add(new CollisionComponent(ColliderType.character));
-		e3.add(new AIComponent(AIState.idle));
+		e3.add(new AIComponent(new CloseBasicE1(engine)));
 		Array<Ability> abilities3 = new Array<Ability>();
 		abilities3.add(Constants.abilityMap.get(Constants.AT_SLASH));
 		e3.add(new AbilityComponent(abilities3, engine));

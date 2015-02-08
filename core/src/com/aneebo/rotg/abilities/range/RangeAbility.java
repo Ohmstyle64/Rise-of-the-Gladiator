@@ -17,10 +17,18 @@ public abstract class RangeAbility extends Ability {
 		this.textureName = textureName;
 	}
 	
+	public RangeAbility(RangeAbility rangeAbility) {
+		super(rangeAbility);
+	}
+	
 	public abstract void hit(Entity from, Entity hit);
 
 	protected String getTexture() {
 		return textureName;
+	}
+	
+	public Engine getEngine() {
+		return engine;
 	}
 	
 }

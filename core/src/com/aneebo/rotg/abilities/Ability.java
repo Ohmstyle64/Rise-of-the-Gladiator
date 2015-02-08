@@ -65,6 +65,10 @@ public abstract class Ability {
 		label.setPosition(Gdx.graphics.getWidth() / 2 - label.getWidth() / 2, Gdx.graphics.getHeight() * 0.9f - label.getHeight());
 	}
 	
+	public Ability(Ability ability) {
+		this(ability.getId(), ability.getCastTime(), ability.getRange(), ability.getType(), ability.getName(), ability.getCooldown(), ability.getDamage(), ability.getEnergy_cost());
+	}
+	
 	private void resetStats() {
 		increaseToAttackSpeed = 0;
 		increaseToDamage = 0;

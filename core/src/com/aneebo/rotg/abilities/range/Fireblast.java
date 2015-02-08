@@ -33,9 +33,8 @@ public class Fireblast extends RangeAbility {
 
 	}
 
-	public Fireblast(Fireblast fireblast, Engine engine) {
-		this(fireblast.id, fireblast.castTime, fireblast.range, fireblast.type,
-				fireblast.name, fireblast.cooldown,fireblast.damage, fireblast.energy_cost,fireblast.textureName, engine);
+	public Fireblast(RangeAbility rangeAbility) {
+		super(rangeAbility);
 	}
 
 	@Override

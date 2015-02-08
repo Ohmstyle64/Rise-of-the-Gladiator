@@ -34,7 +34,7 @@ public class Parry extends Ability {
 
 	
 	public Parry(Ability ability) {
-		this(ability.getId(), ability.getCastTime(), ability.getRange(), ability.getType(), ability.getName(), ability.getCooldown(), ability.getDamage(), ability.getEnergy_cost());
+		super(ability);
 	}
 
 	@Override
