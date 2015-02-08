@@ -5,7 +5,6 @@ import com.aneebo.rotg.components.PositionComponent;
 import com.aneebo.rotg.components.ProjectileComponent;
 import com.aneebo.rotg.components.StatComponent;
 import com.aneebo.rotg.types.Direction;
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
@@ -19,6 +18,8 @@ public class MovementSystem extends EntitySystem {
 	private ProjectileComponent proj;
 	private StatComponent stat;
 	private Entity e;
+	
+	private static final float ACCEL_FACTOR = 9.6f;
 	
 	public MovementSystem() {
 		super(3);
@@ -38,6 +39,7 @@ public class MovementSystem extends EntitySystem {
 			stat = Mappers.staMap.get(e);
 			proj = Mappers.projMap.get(e);
 			float speed = (proj != null ? proj.speed : stat.speed);
+//			speed += ACCEL_FACTOR * deltaTime;
 			if(pos.isStopped()) continue;
 			if(!pos.isMoveable) continue;
 			if(pos.curXPos < pos.nXPos) {

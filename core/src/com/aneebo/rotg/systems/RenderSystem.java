@@ -1,7 +1,9 @@
 package com.aneebo.rotg.systems;
 
 import com.aneebo.rotg.components.AbilityComponent;
+import com.aneebo.rotg.components.AnimationComponent;
 import com.aneebo.rotg.components.InputComponent;
+import com.aneebo.rotg.components.Mappers;
 import com.aneebo.rotg.components.PositionComponent;
 import com.aneebo.rotg.components.RenderComponent;
 import com.aneebo.rotg.components.StatComponent;
@@ -17,6 +19,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -33,6 +36,7 @@ public class RenderSystem extends EntitySystem {
 	
 	private ImmutableArray<Entity> entities;
 	private ImmutableArray<Entity> abilityEntities;
+	private ImmutableArray<Entity> animEntities;
 	private Entity player;
 	
 	private ComponentMapper<PositionComponent> pc = ComponentMapper.getFor(PositionComponent.class);
@@ -44,6 +48,8 @@ public class RenderSystem extends EntitySystem {
 	private PositionComponent posComponent;
 	private RenderComponent renderComponent;
 	private StatComponent statComponent;
+	private AnimationComponent animComponent;
+	private Animation anim;
 	private Entity e;
 	private Engine engine;
 	
@@ -61,6 +67,7 @@ public class RenderSystem extends EntitySystem {
 	@Override
 	public void addedToEngine(Engine engine) {
 		entities = engine.getEntitiesFor(Family.getFor(RenderComponent.class));
+		animEntities = engine.getEntitiesFor(Family.getFor(AnimationComponent.class));
 		abilityEntities = engine.getEntitiesFor(Family.getFor(AbilityComponent.class));
 		player = engine.getEntitiesFor(Family.getFor(InputComponent.class)).first();
 		this.engine = engine;
@@ -71,12 +78,12 @@ public class RenderSystem extends EntitySystem {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		//RENDER MAP
-		renderer.setView((OrthographicCamera) arenaViewPort.getCamera());
+		renderer.setView(arenaCam);
 		renderer.render();
 		
-		shapeRenderer.setProjectionMatrix(arenaViewPort.getCamera().combined);
+		shapeRenderer.setProjectionMatrix(arenaCam.combined);
 		
-		//RENDER CHARACTERS
+		//RENDER STATIC CHARACTERS
 		shapeRenderer.begin(ShapeType.Line);
 		renderer.getBatch().begin();
 		int size = entities.size();
@@ -103,6 +110,32 @@ public class RenderSystem extends EntitySystem {
 					Constants.TILE_HEIGHT);
 		}
 		
+		//RENDER ANIMATIONS
+		size = animEntities.size();
+		for(int i = 0; i < size; i++) {
+			e = animEntities.get(i);
+			posComponent = Mappers.posMap.get(e);
+			animComponent = Mappers.animMap.get(e);
+			statComponent = Mappers.staMap.get(e);
+			
+			if(posComponent.isStopped()) {
+				renderer.getBatch().draw(animComponent.idle[posComponent.direction.getVal()],
+						posComponent.curXPos * Constants.TILE_WIDTH,
+						posComponent.curYPos * Constants.TILE_HEIGHT);
+				animComponent.stateTime = 0;
+			}else {
+				animComponent.stateTime += deltaTime;
+				anim = animComponent.animations[posComponent.direction.getVal()];
+				renderer.getBatch().draw(anim.getKeyFrame(animComponent.stateTime),
+						posComponent.curXPos * Constants.TILE_WIDTH,
+						posComponent.curYPos * Constants.TILE_HEIGHT);
+				if(anim.isAnimationFinished(animComponent.stateTime)) {
+					animComponent.stateTime = 0;
+				}
+			}
+			
+		}
+		
 		//RENDER ABILITIES
 		size = abilityEntities.size();
 		for(int i = 0; i < size; i++) {
@@ -126,8 +159,8 @@ public class RenderSystem extends EntitySystem {
 		//DEV INFO
 		font.draw(renderer.getBatch(), "Mouse Pos (X,Y): ("+Gdx.input.getX()+", "+(Gdx.graphics.getHeight()-Gdx.input.getY())+")"
 				+", ("+(int)(Gdx.input.getX()/Constants.TILE_WIDTH)+", "+
-				(int)((Gdx.graphics.getHeight()-Gdx.input.getY())/Constants.TILE_HEIGHT)+")", 450, 20);
-		font.draw(renderer.getBatch(), "FPS: "+Gdx.graphics.getFramesPerSecond() , 350, 20);
+				(int)((Gdx.graphics.getHeight()-Gdx.input.getY())/Constants.TILE_HEIGHT)+")", 150, 0);
+		font.draw(renderer.getBatch(), "FPS: "+Gdx.graphics.getFramesPerSecond() , 50, 0);
 		
 		renderer.getBatch().end();
 		shapeRenderer.end();

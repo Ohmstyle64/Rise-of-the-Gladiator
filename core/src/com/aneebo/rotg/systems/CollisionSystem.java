@@ -1,9 +1,11 @@
 package com.aneebo.rotg.systems;
 
 import com.aneebo.rotg.components.CollisionComponent;
+import com.aneebo.rotg.components.LevelChangerComponent;
 import com.aneebo.rotg.components.Mappers;
 import com.aneebo.rotg.components.PositionComponent;
 import com.aneebo.rotg.components.ProjectileComponent;
+import com.aneebo.rotg.screens.Play;
 import com.aneebo.rotg.types.ColliderType;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -45,6 +47,7 @@ public class CollisionSystem extends EntitySystem {
 			ent1Pos = Mappers.posMap.get(e1);
 			if(ent1Pos.isStopped()) continue;
 			
+			
 			//CHECK IF ENTITIY HIT A WALL
 			if(wallLayer.getCell(ent1Pos.nXPos, ent1Pos.nYPos) != null) {
 				ent1Pos.nXPos = (int)ent1Pos.curXPos;
@@ -65,9 +68,9 @@ public class CollisionSystem extends EntitySystem {
 				ent2Col = Mappers.colMap.get(e2);
 				//CHECK IF THE ENT2 IS WHERE ENT1 WANTS TO GO
 				if(ent1Col.type == ColliderType.character) {
-					if(ent2Col.type != ColliderType.projectile && 
-							ent1Pos.nXPos==(int)ent2Pos.curXPos && 
-							ent1Pos.nYPos==(int)ent2Pos.curYPos) {
+					if(ent2Col.type != ColliderType.projectile &&
+							ent1Pos.nXPos == ent2Pos.curXPos &&
+							ent1Pos.nYPos == ent2Pos.curYPos) {
 							switch(ent2Col.type) {
 							case character:
 								ent1Pos.nXPos = (int)ent1Pos.curXPos;
@@ -75,11 +78,17 @@ public class CollisionSystem extends EntitySystem {
 								break;
 							case trap:
 								break;
+							case levelChange:
+								LevelChangerComponent lcc = Mappers.lvlcMap.get(e2);
+								Play.levelManager.goToLevel(lcc.level);
+								break;
 							default:
 								break;
 						}
 					
 					}
+					
+					
 				}else{
 					float dstX = Math.abs(ent1Pos.curXPos - ent2Pos.curXPos);
 					float dstY = Math.abs(ent1Pos.curYPos - ent2Pos.curYPos);

@@ -18,6 +18,11 @@ public class Constants {
 	public static final int WIDTH = 800;
 	public static final int HEIGHT = 480;
 	
+	//Levels
+	public static final int TEST_LEVEL = 0;
+	public static final int CARAVAN_LEVEL = 1;
+	
+	
 	//ASSET PATHS
 	public static final String DRAGON_FORM = "img/characters/dragon_form.png";
 	public static final String PIG_FORM = "img/characters/pig_form.png";
@@ -30,9 +35,15 @@ public class Constants {
 	public static final String SHORTSWORD_1 = "img/item/weapon/short_sword2.png";
 	public static final String SPEAR_1 = "img/item/weapon/spear2.png";
 	
+	public static final String BODY_PLAYER = "img/characters/animations/BODY_male.png";
+	public static final String BODY_SKELETON = "img/characters/animations/BODY_skeleton.png";
+	
 	public static final int MAX_ABILITY_SLOTS = 6;
-	public static final float TILE_WIDTH = 32f;
-	public static final float TILE_HEIGHT = 32f;
+	public static final int TILE_WIDTH = 32;
+	public static final int TILE_HEIGHT = 32;
+	public static final int MAP_WIDTH = 480;
+	public static final int MAP_HEIGHT = 320;
+	
 	
 	//INVENTORY SLOTS
 	public static final int HEAD = 0;
@@ -50,9 +61,9 @@ public class Constants {
 	public static final ObjectMap<Integer, Ability> abilityMap = new ObjectMap<Integer, Ability>();
 	static {
 		//Create abilities
-		Slash slash = new Slash(AT_SLASH, 2, 2, AbilityType.offense, "Slash", 5, 10f, 20f);
+		Slash slash = new Slash(AT_SLASH, 2, 2, AbilityType.offense, "Slash", 5, 10f, 8f);
 		Parry parry = new Parry(DF_PARRY, 2, 3, AbilityType.defense, "Parry", 5, 0f, 10f);
-		Fireblast fireBlast = new Fireblast(AT_FIREBLAST, 2, 5, AbilityType.offense, "Fireblast", 2, 20f, 20f, FIREBALL_EFFECT, null);
+		Fireblast fireBlast = new Fireblast(AT_FIREBLAST, 2, 5, AbilityType.offense, "Fireblast", 2, 20f, 15f, FIREBALL_EFFECT, null);
 		
 		//Add to map
 		abilityMap.put(slash.getId(), slash);

@@ -1,22 +1,25 @@
 package com.aneebo.rotg.screens;
 
 import com.aneebo.rotg.abilities.Ability;
-import com.aneebo.rotg.components.AIComponent;
+import com.aneebo.rotg.abilities.range.RangeAbility;
 import com.aneebo.rotg.components.AbilityComponent;
+import com.aneebo.rotg.components.AnimationComponent;
 import com.aneebo.rotg.components.CollisionComponent;
 import com.aneebo.rotg.components.InputComponent;
 import com.aneebo.rotg.components.InventoryComponent;
+import com.aneebo.rotg.components.Mappers;
 import com.aneebo.rotg.components.PositionComponent;
 import com.aneebo.rotg.components.RenderComponent;
 import com.aneebo.rotg.components.StatComponent;
 import com.aneebo.rotg.inventory.Inventory;
 import com.aneebo.rotg.inventory.Item;
 import com.aneebo.rotg.inventory.items.ChestP1;
-import com.aneebo.rotg.inventory.items.ChestP2;
 import com.aneebo.rotg.inventory.items.EmptyItem;
 import com.aneebo.rotg.inventory.items.HeadP1;
 import com.aneebo.rotg.inventory.items.PrimP1;
-import com.aneebo.rotg.inventory.items.PrimP2;
+import com.aneebo.rotg.level.Level;
+import com.aneebo.rotg.level.LevelManager;
+import com.aneebo.rotg.level.arena.CaravanLevel;
 import com.aneebo.rotg.level.arena.TestLevel;
 import com.aneebo.rotg.systems.AISystem;
 import com.aneebo.rotg.systems.AbilitySystem;
@@ -27,7 +30,6 @@ import com.aneebo.rotg.systems.MovementSystem;
 import com.aneebo.rotg.systems.ProjectileSystem;
 import com.aneebo.rotg.systems.RegenSystem;
 import com.aneebo.rotg.systems.RenderSystem;
-import com.aneebo.rotg.types.AIState;
 import com.aneebo.rotg.types.ColliderType;
 import com.aneebo.rotg.types.Direction;
 import com.aneebo.rotg.utils.Assets;
@@ -37,10 +39,10 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -53,7 +55,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class Play implements Screen {
 
@@ -74,8 +76,8 @@ public class Play implements Screen {
 	private PositionComponent pos;
 	private AbilityComponent ability;
 	
-	
-	private OrthogonalTiledMapRenderer renderer;
+	public static LevelManager levelManager;
+		
 	//UI
 	private Table table;
 	private Skin skin;
@@ -85,16 +87,14 @@ public class Play implements Screen {
 	
 	@Override
 	public void show() {
-
-		renderer = new OrthogonalTiledMapRenderer(new TmxMapLoader().load("img/arena/arena_1.tmx"));
-		
+	
 		Assets.load();
 		
 		TextureAtlas atlas = new TextureAtlas("img/gui/uiskin.atlas");
 		skin = new Skin(Gdx.files.internal("img/gui/uiskin.json"),atlas);
 		
 		stage = new Stage();
-		stage.setViewport(new StretchViewport(Constants.WIDTH, Constants.HEIGHT));
+		stage.setViewport(new FitViewport(Constants.WIDTH, Constants.HEIGHT));
 
 		Gdx.input.setInputProcessor(stage);
 		
@@ -103,11 +103,11 @@ public class Play implements Screen {
 		
 		engine = new Engine();
 
-		//Create Entities
+		//Create Player
 		createPlayer();
-		
-		TestLevel testLevel = new TestLevel(engine, player);
-		testLevel.addEntities();
+
+		//Create Levels
+		createLevels();
 		
 		//Create Systems
 		createSystems();
@@ -127,6 +127,15 @@ public class Play implements Screen {
 		engine.addSystem(deathSystem);		
 	}
 	
+	private void createLevels() {
+		TestLevel testLevel = new TestLevel(engine, player, new Vector2(2,2));
+		CaravanLevel caravanLevel = new CaravanLevel(engine, player, new Vector2(2,2));
+		ObjectMap<Integer, Level> levels = new ObjectMap<Integer, Level>(2);
+		levels.put(Constants.TEST_LEVEL, testLevel);
+		levels.put(Constants.CARAVAN_LEVEL, caravanLevel);
+		levelManager = new LevelManager(levels, Constants.CARAVAN_LEVEL);
+	}
+
 	private void createPlayer() {
 		Array<Ability> abilityList = new Array<Ability>();
 		abilityList.add(Constants.abilityMap.get(Constants.AT_SLASH));
@@ -138,10 +147,11 @@ public class Play implements Screen {
 		player = new Entity();
 		player.add(pos = new PositionComponent(3,4, Direction.Right));
 		player.add(new InputComponent());
-		player.add(new RenderComponent(Constants.DRAGON_FORM));
 		player.add(new CollisionComponent(ColliderType.character));
 		player.add(ability = new AbilityComponent(abilityList, engine));
 		player.add(stat = new StatComponent("Kevin", 35f, 60f, Color.RED, 5, 5, 1.5f));
+		player.add(new RenderComponent(Constants.DRAGON_FORM));		
+//		player.add(new AnimationComponent(Assets.assetManager.get(Constants.BODY_PLAYER, Texture.class),64,64, stat.speed / 16));
 		ObjectMap<Integer, Item> equipped = new ObjectMap<Integer, Item>();
 		ChestP1 cp1 = new ChestP1();
 		HeadP1 hp1 =  new HeadP1();
@@ -203,7 +213,7 @@ public class Play implements Screen {
 		region = new TextureRegionDrawable(atlas.findRegion("tab_label_spell"));
 		abilityImgBtnStyle.up = region;
 		abilityImgBtnStyle.down = region;
-		
+		final PositionComponent pos = Mappers.posMap.get(player);
 		for(final Ability a : ability.abilitySlots) {
 			if(a != null) {
 				Label abilityName = new Label(a.getName(), skin);
@@ -211,7 +221,12 @@ public class Play implements Screen {
 				abilityBtn.addListener(new ClickListener() {
 					@Override
 					public void clicked(InputEvent event, float x, float y) {
-						a.isActivated = true;
+						if(a instanceof RangeAbility) {
+							if(pos.isStopped()) {
+								a.isActivated = true;
+							}
+						}else 
+							a.isActivated = true;
 					}
 				});
 				abilityTable.add(abilityName);
@@ -334,10 +349,10 @@ public class Play implements Screen {
 	}
 
 	private void createSystems() {
-		collisionSystem = new CollisionSystem(renderer.getMap());
+		collisionSystem = new CollisionSystem(levelManager.renderer().getMap());
 		inputSystem = new InputSystem(stage, skin);
 		movementSystem = new MovementSystem();
-		renderSystem = new RenderSystem(renderer);
+		renderSystem = new RenderSystem(levelManager.renderer());
 		abilitySystem = new AbilitySystem();
 		aiSystem = new AISystem();
 		regenSystem = new RegenSystem();
@@ -353,7 +368,7 @@ public class Play implements Screen {
 		stage.act(delta);
 		engine.update(delta);
 		UIUpdates();
-
+		levelManager.update(delta);
 		stage.draw();
 		
 	}

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-up" width="15" height="10" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="arena_1_tiles" tilewidth="32" tileheight="32">
+  <image source="arena_1_tiles.png" width="160" height="128"/>
+ </tileset>
+ <layer name="floor" width="15" height="10">
+  <data encoding="base64" compression="zlib">
+   eJxjYKAMMGHBnEDMD8TMWORY0PRyEMDIekWQ9HIi6QfRvFA2LxJG1w8DyO7Cpg+GsemF8XHpwadXBE0cmz5cbuZHs5uDAXv44QpnUjAnA+UAAB8tApQ=
+  </data>
+ </layer>
+ <layer name="wall" width="15" height="10">
+  <data encoding="base64" compression="zlib">
+   eJwTYGBgEMCC2YCYHYh5oFgISU4QiBmhbHIANwV6haD201svzO/k6uUmU68gBXrZGMh3Mw8DIq4FCLCxYQAEDQKn
+  </data>
+ </layer>
+</map>

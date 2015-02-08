@@ -1,6 +1,7 @@
 package com.aneebo.rotg.systems;
 
 import com.aneebo.rotg.abilities.Ability;
+import com.aneebo.rotg.abilities.range.RangeAbility;
 import com.aneebo.rotg.components.AbilityComponent;
 import com.aneebo.rotg.components.InputComponent;
 import com.aneebo.rotg.components.InventoryComponent;
@@ -236,7 +237,11 @@ public class InputSystem extends EntitySystem {
 		//SINGLEPLAYER ONLY
 		abilitySlots = abilityComponent.abilitySlots;
 		if(Gdx.input.isKeyJustPressed(Keys.NUMPAD_1)) {
-			abilitySlots.get(0).isActivated = true;
+			if(abilitySlots.get(0) instanceof RangeAbility) {
+				if(posComponent.isStopped())
+					abilitySlots.get(0).isActivated = true;
+			}else
+				abilitySlots.get(0).isActivated = true;
 		}else if(Gdx.input.isKeyJustPressed(Keys.NUMPAD_2)) {
 			abilitySlots.get(1).isActivated = true;
 		}

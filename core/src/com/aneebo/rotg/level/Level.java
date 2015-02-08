@@ -2,10 +2,12 @@ package com.aneebo.rotg.level;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.EntityListener;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
-public abstract class Level implements EntityListener{
+public abstract class Level{
 	
 	public int totalRounds;
 	public int currentRound;
@@ -14,36 +16,54 @@ public abstract class Level implements EntityListener{
 	public Prize prize;
 	protected Engine engine;
 	protected Entity player;
+	protected TiledMap tiledMap;
+	protected Vector2 playerStart;
 	
-	
-	public Level(Engine engine, Entity player) {
+	public Level(Engine engine, Entity player, String mapLocation, Vector2 playerStart) {
 		this.engine = engine;
 		this.player = player;
-		engine.addEntityListener(this);
+		this.mapLocation = mapLocation;
+		this.playerStart = playerStart;
+
 		currentRound = 0;
+		tiledMap = new TmxMapLoader().load(mapLocation);
+		
 		rounds = new Array<Round>();
-		loadLevel();
 	}
 	
 	public boolean isCompleted() {
-		return currentRound >= totalRounds;
+		if(currentRound >= totalRounds) {
+			currentRound = totalRounds - 1;
+			return true;
+		}
+		return false;
 	}
 	
 	public class Round {
-		public Array<Entity> enemies;
+		public Array<Entity> entities;
 		
-		public Round(Array<Entity> enemies) {
-			this.enemies = enemies;
+		public Round(Array<Entity> entities) {
+			this.entities = entities;
 		}
 	}
 	
 	public void addEntities() {
 		Round r = rounds.get(currentRound);
-		for(Entity e : r.enemies) {
+		for(Entity e : r.entities) {
 			engine.addEntity(e);
 		}
 	}
 	
-	protected abstract void loadLevel();
+	public void removeEntities() {
+		Round r = rounds.get(currentRound);
+		for(Entity e : r.entities) {
+			engine.removeEntity(e);
+		}
+	}
 	
+	protected abstract void loadLevel();
+
+	public abstract void transitionIn(float deltaTime);
+
+	public abstract void transitionOut(float deltaTime);	
 }

@@ -2,6 +2,7 @@ package com.aneebo.rotg.utils;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Assets {
 	public static final AssetManager assetManager = new AssetManager();
@@ -17,6 +18,8 @@ public class Assets {
 		assetManager.load(Constants.ELVEN_SCALEMAIL_1, Texture.class);
 		assetManager.load(Constants.SHORTSWORD_1, Texture.class);
 		assetManager.load(Constants.SPEAR_1, Texture.class);
+		assetManager.load(Constants.BODY_PLAYER, Texture.class);
+		assetManager.load(Constants.BODY_SKELETON, Texture.class);
 		assetManager.finishLoading();
 	}
 	
