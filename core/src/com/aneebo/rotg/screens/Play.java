@@ -31,7 +31,7 @@ import com.aneebo.rotg.systems.ProjectileSystem;
 import com.aneebo.rotg.systems.RegenSystem;
 import com.aneebo.rotg.systems.RenderSystem;
 import com.aneebo.rotg.types.ColliderType;
-import com.aneebo.rotg.types.Direction;
+import com.aneebo.rotg.types.DirectionType;
 import com.aneebo.rotg.utils.Assets;
 import com.aneebo.rotg.utils.Constants;
 import com.badlogic.ashley.core.Engine;
@@ -145,7 +145,7 @@ public class Play implements Screen {
 		
 		
 		player = new Entity();
-		player.add(pos = new PositionComponent(3,4, Direction.Right));
+		player.add(pos = new PositionComponent(3,4, DirectionType.Right));
 		player.add(new InputComponent());
 		player.add(new CollisionComponent(ColliderType.character));
 		player.add(ability = new AbilityComponent(abilityList, engine));
@@ -262,7 +262,7 @@ public class Play implements Screen {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				if(pos.isStopped()) {
-					pos.direction = Direction.Left;
+					pos.direction = DirectionType.Left;
 					if(pos.isMoveable)
 						pos.nXPos--;
 				}
@@ -286,7 +286,7 @@ public class Play implements Screen {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				if(pos.isStopped()) {
-					pos.direction = Direction.Right;
+					pos.direction = DirectionType.Right;
 					if(pos.isMoveable)
 						pos.nXPos++;
 				}
@@ -309,7 +309,7 @@ public class Play implements Screen {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				if(pos.isStopped()) {
-					pos.direction = Direction.Up;
+					pos.direction = DirectionType.Up;
 					if(pos.isMoveable)
 						pos.nYPos++;
 				}
@@ -333,7 +333,7 @@ public class Play implements Screen {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				if(pos.isStopped()) {
-					pos.direction = Direction.Down;
+					pos.direction = DirectionType.Down;
 					if(pos.isMoveable)
 						pos.nYPos--;
 				}

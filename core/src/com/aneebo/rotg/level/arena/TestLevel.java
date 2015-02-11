@@ -2,6 +2,7 @@ package com.aneebo.rotg.level.arena;
 
 import com.aneebo.rotg.abilities.Ability;
 import com.aneebo.rotg.ai.CloseBasicE1;
+import com.aneebo.rotg.ai.RangeTeleportBasicE1;
 import com.aneebo.rotg.components.AIComponent;
 import com.aneebo.rotg.components.AbilityComponent;
 import com.aneebo.rotg.components.CollisionComponent;
@@ -18,7 +19,7 @@ import com.aneebo.rotg.level.Level;
 import com.aneebo.rotg.level.Prize;
 import com.aneebo.rotg.screens.Play;
 import com.aneebo.rotg.types.ColliderType;
-import com.aneebo.rotg.types.Direction;
+import com.aneebo.rotg.types.DirectionType;
 import com.aneebo.rotg.utils.Constants;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -55,14 +56,15 @@ public class TestLevel extends Level implements EntityListener {
 		Array<Entity> r1entities = new Array<Entity>(1);
 		//ENTITIES
 		Entity e1 = new Entity();
-		e1.add(new PositionComponent(11, 5, Direction.Left));
+		e1.add(new PositionComponent(11, 5, DirectionType.Left));
 		e1.add(new RenderComponent(Constants.ICE_FORM));
 		e1.add(new CollisionComponent(ColliderType.character));
-		e1.add(new AIComponent(new CloseBasicE1(engine)));
+		e1.add(new AIComponent(new RangeTeleportBasicE1(e1, engine)));
 		Array<Ability> abilities1 = new Array<Ability>();
-		abilities1.add(Constants.abilityMap.get(Constants.AT_SLASH));
+		abilities1.add(Constants.abilityMap.get(Constants.AT_FIREBLAST));
+		abilities1.add(Constants.abilityMap.get(Constants.DF_TELEPORT_MOST_DST));
 		e1.add(new AbilityComponent(abilities1, engine));
-		e1.add(new StatComponent("Enemy1", 25f, 30f, Color.YELLOW, 2f, 2f, 1.3f));
+		e1.add(new StatComponent("Enemy1", 25f, 60f, Color.YELLOW, 2f, 2f, 1.3f));
 		r1entities.add(e1);
 		
 		Round r1 = new Round(r1entities);
@@ -72,10 +74,10 @@ public class TestLevel extends Level implements EntityListener {
 		Array<Entity> r2entities = new Array<Entity>(1);
 		//ENTITIES
 		Entity e2 = new Entity();
-		e2.add(new PositionComponent(11, 5, Direction.Left));
+		e2.add(new PositionComponent(11, 5, DirectionType.Left));
 		e2.add(new RenderComponent(Constants.ICE_FORM));
 		e2.add(new CollisionComponent(ColliderType.character));
-		e2.add(new AIComponent(new CloseBasicE1(engine)));
+		e2.add(new AIComponent(new CloseBasicE1(e2, engine)));
 		Array<Ability> abilities2 = new Array<Ability>();
 		abilities2.add(Constants.abilityMap.get(Constants.AT_SLASH));
 		e2.add(new AbilityComponent(abilities2, engine));
@@ -89,10 +91,10 @@ public class TestLevel extends Level implements EntityListener {
 		Array<Entity> r3entities = new Array<Entity>(1);
 		//ENTITIES
 		Entity e3 = new Entity();
-		e3.add(new PositionComponent(11, 5, Direction.Left));
+		e3.add(new PositionComponent(11, 5, DirectionType.Left));
 		e3.add(new RenderComponent(Constants.ICE_FORM));
 		e3.add(new CollisionComponent(ColliderType.character));
-		e3.add(new AIComponent(new CloseBasicE1(engine)));
+		e3.add(new AIComponent(new CloseBasicE1(e3, engine)));
 		Array<Ability> abilities3 = new Array<Ability>();
 		abilities3.add(Constants.abilityMap.get(Constants.AT_SLASH));
 		e3.add(new AbilityComponent(abilities3, engine));

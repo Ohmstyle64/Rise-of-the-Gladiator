@@ -159,8 +159,8 @@ public class RenderSystem extends EntitySystem {
 		//DEV INFO
 		font.draw(renderer.getBatch(), "Mouse Pos (X,Y): ("+Gdx.input.getX()+", "+(Gdx.graphics.getHeight()-Gdx.input.getY())+")"
 				+", ("+(int)(Gdx.input.getX()/Constants.TILE_WIDTH)+", "+
-				(int)((Gdx.graphics.getHeight()-Gdx.input.getY())/Constants.TILE_HEIGHT)+")", 150, 0);
-		font.draw(renderer.getBatch(), "FPS: "+Gdx.graphics.getFramesPerSecond() , 50, 0);
+				(int)((Gdx.graphics.getHeight()-Gdx.input.getY())/Constants.TILE_HEIGHT)+")", 250, 20);
+		font.draw(renderer.getBatch(), "FPS: "+Gdx.graphics.getFramesPerSecond() , 150, 20);
 		
 		renderer.getBatch().end();
 		shapeRenderer.end();

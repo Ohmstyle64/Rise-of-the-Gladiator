@@ -46,8 +46,11 @@ public class ProjectileSystem extends EntitySystem {
 						pos.nYPos = (int)proj.path.first().y;
 						proj.path.removeIndex(0);
 					}
+				}else if(proj.hitInAnimmate) {
+					engine.removeEntity(e);
 				}
-			}else {
+			}
+			else {
 				engine.removeEntity(e);
 			}
 		}

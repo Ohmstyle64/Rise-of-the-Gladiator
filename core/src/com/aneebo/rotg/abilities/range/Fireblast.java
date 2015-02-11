@@ -33,8 +33,8 @@ public class Fireblast extends RangeAbility {
 
 	}
 
-	public Fireblast(RangeAbility rangeAbility) {
-		super(rangeAbility);
+	public Fireblast(RangeAbility rangeAbility, Engine engine) {
+		super(rangeAbility, engine);
 	}
 
 	@Override

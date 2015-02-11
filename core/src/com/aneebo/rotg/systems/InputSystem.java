@@ -12,7 +12,7 @@ import com.aneebo.rotg.inventory.Item;
 import com.aneebo.rotg.inventory.ItemSlotListener;
 import com.aneebo.rotg.inventory.SlotData;
 import com.aneebo.rotg.inventory.items.EmptyItem;
-import com.aneebo.rotg.types.Direction;
+import com.aneebo.rotg.types.DirectionType;
 import com.aneebo.rotg.utils.Constants;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
@@ -249,19 +249,19 @@ public class InputSystem extends EntitySystem {
 		if(!posComponent.isStopped()) return;
 		
 		if(Gdx.input.isKeyJustPressed(Keys.A)) {
-			posComponent.direction = Direction.Left;
+			posComponent.direction = DirectionType.Left;
 			if(posComponent.isMoveable)
 				posComponent.nXPos--;
 		}else if(Gdx.input.isKeyJustPressed(Keys.D)) {
-			posComponent.direction = Direction.Right;
+			posComponent.direction = DirectionType.Right;
 			if(posComponent.isMoveable)
 				posComponent.nXPos++;
 		}else if(Gdx.input.isKeyJustPressed(Keys.W)) {
-			posComponent.direction = Direction.Up;
+			posComponent.direction = DirectionType.Up;
 			if(posComponent.isMoveable)
 				posComponent.nYPos++;
 		}else if(Gdx.input.isKeyJustPressed(Keys.S)) {
-			posComponent.direction = Direction.Down;
+			posComponent.direction = DirectionType.Down;
 			if(posComponent.isMoveable)
 				posComponent.nYPos--;
 		}

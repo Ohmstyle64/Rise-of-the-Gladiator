@@ -4,8 +4,8 @@ import com.aneebo.rotg.abilities.Ability;
 import com.aneebo.rotg.abilities.Parry;
 import com.aneebo.rotg.abilities.Slash;
 import com.aneebo.rotg.abilities.SuicideBomb;
-import com.aneebo.rotg.abilities.TeleportMostDst;
 import com.aneebo.rotg.abilities.range.Fireblast;
+import com.aneebo.rotg.abilities.range.TeleportMostDst;
 import com.aneebo.rotg.types.AbilityType;
 import com.badlogic.gdx.utils.ObjectMap;
 
@@ -41,8 +41,14 @@ public class Constants {
 	public static final int MAX_ABILITY_SLOTS = 6;
 	public static final int TILE_WIDTH = 32;
 	public static final int TILE_HEIGHT = 32;
-	public static final int MAP_WIDTH = 480;
-	public static final int MAP_HEIGHT = 320;
+	public static final int MAP_X = 0;
+	public static final int MAP_Y = 0;
+	public static final int MAP_WIDTH = 800;
+	public static final int MAP_HEIGHT = 480;
+	public static final float last_col = Constants.MAP_WIDTH / Constants.TILE_WIDTH - 2;
+	public static final float last_row = Constants.MAP_HEIGHT / Constants.TILE_HEIGHT - 2;
+	public static final float first_col = Constants.MAP_X / Constants.TILE_WIDTH + 2;
+	public static final float first_row = Constants.MAP_Y / Constants.TILE_HEIGHT + 2;
 	
 	
 	//INVENTORY SLOTS
@@ -65,8 +71,8 @@ public class Constants {
 		//Create abilities
 		Slash slash = new Slash(AT_SLASH, 2, 2, AbilityType.offense, "Slash", 5, 10f, 8f);
 		Parry parry = new Parry(DF_PARRY, 2, 3, AbilityType.defense, "Parry", 5, 0f, 10f);
-		Fireblast fireBlast = new Fireblast(AT_FIREBLAST, 2, 5, AbilityType.offense, "Fireblast", 2, 20f, 15f, FIREBALL_EFFECT, null);
-		TeleportMostDst tmd = new TeleportMostDst(DF_TELEPORT_MOST_DST, 3, 5, AbilityType.defense, "Teleport Furthest Away", 10, 0f, 10f);
+		Fireblast fireBlast = new Fireblast(AT_FIREBLAST, 2, 8, AbilityType.offense, "Fireblast", 2, 20f, 15f, FIREBALL_EFFECT, null);
+		TeleportMostDst tmd = new TeleportMostDst(DF_TELEPORT_MOST_DST, 2, 2, AbilityType.defense, "Teleport Furthest Away", 2, 0f, 0f, EMPTY_CELL, null);
 		SuicideBomb sb = new SuicideBomb(AT_SUICIDEBOMB, 1, 3, AbilityType.offense, "Suicide Bomb", 0, 30f, 0f);
 		
 		//Add to map

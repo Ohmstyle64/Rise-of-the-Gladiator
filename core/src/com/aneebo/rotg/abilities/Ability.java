@@ -6,7 +6,6 @@ import com.aneebo.rotg.components.InventoryComponent;
 import com.aneebo.rotg.components.Mappers;
 import com.aneebo.rotg.inventory.Item;
 import com.aneebo.rotg.types.AbilityType;
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -32,7 +31,6 @@ public abstract class Ability {
 	private Skin skin;
 	protected Array<Entity> targets;
 	private InventoryComponent invC;
-	private ComponentMapper<InventoryComponent> ic = ComponentMapper.getFor(InventoryComponent.class);
 	
 	protected float increaseToAttackSpeed = 0;
 	protected float increaseToDamage = 0;
@@ -174,7 +172,7 @@ public abstract class Ability {
 	}
 	
 	private void grabEquipmentStats(Entity me) {
-		invC = ic.get(me);
+		invC = Mappers.invMap.get(me);
 		if(invC == null) return;
 		resetStats();
 		Iterator<Entry<Integer, Item>> it = invC.inventory.equipped.iterator();

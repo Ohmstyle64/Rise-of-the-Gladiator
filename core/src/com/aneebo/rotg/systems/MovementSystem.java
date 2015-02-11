@@ -4,7 +4,7 @@ import com.aneebo.rotg.components.Mappers;
 import com.aneebo.rotg.components.PositionComponent;
 import com.aneebo.rotg.components.ProjectileComponent;
 import com.aneebo.rotg.components.StatComponent;
-import com.aneebo.rotg.types.Direction;
+import com.aneebo.rotg.types.DirectionType;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
@@ -44,19 +44,19 @@ public class MovementSystem extends EntitySystem {
 			if(!pos.isMoveable) continue;
 			if(pos.curXPos < pos.nXPos) {
 				pos.curXPos += speed*deltaTime;
-				pos.direction = Direction.Right;
+				pos.direction = DirectionType.Right;
 				if(pos.curXPos >= pos.nXPos) pos.curXPos = pos.nXPos;
 			}else if(pos.curXPos > pos.nXPos) {
 				pos.curXPos -= speed*deltaTime;
-				pos.direction = Direction.Left;
+				pos.direction = DirectionType.Left;
 				if(pos.curXPos <= pos.nXPos) pos.curXPos = pos.nXPos;
 			}else if(pos.curYPos < pos.nYPos) {
 				pos.curYPos += speed*deltaTime;
-				pos.direction = Direction.Up;
+				pos.direction = DirectionType.Up;
 				if(pos.curYPos >= pos.nYPos) pos.curYPos = pos.nYPos;
 			}else if(pos.curYPos > pos.nYPos) {
 				pos.curYPos -= speed*deltaTime;
-				pos.direction = Direction.Down;
+				pos.direction = DirectionType.Down;
 				if(pos.curYPos <= pos.nYPos) pos.curYPos = pos.nYPos;
 			}
 		}

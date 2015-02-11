@@ -3,17 +3,15 @@ package com.aneebo.rotg.ai;
 import com.aneebo.rotg.components.AbilityComponent;
 import com.aneebo.rotg.components.Mappers;
 import com.aneebo.rotg.components.PositionComponent;
-import com.aneebo.rotg.types.Direction;
 import com.aneebo.rotg.utils.Astar;
 import com.aneebo.rotg.utils.Constants;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.IntArray;
 
 public class CloseBasicE1 extends AiPlan {
 	
-	public enum AIState {
+	private enum AIState {
 		idle,chase,fight,flee
 	}
 	
@@ -24,15 +22,15 @@ public class CloseBasicE1 extends AiPlan {
 	private PositionComponent enemPos;
 	private Entity e;
 
-	private Vector2 dir;
+
 	private Astar astar;
 	private static final int ROWS = (int) (Constants.HEIGHT / Constants.TILE_WIDTH);
 	private static final int COLS = (int) (Constants.WIDTH / Constants.TILE_WIDTH);
 	private static final int MAP_SIZE = ROWS * COLS;
 	
 	
-	public CloseBasicE1(Engine engine) {
-		super(engine);
+	public CloseBasicE1(Entity me, Engine engine) {
+		super(me, engine);
 		
 		aiState = AIState.idle;
 		
@@ -44,30 +42,26 @@ public class CloseBasicE1 extends AiPlan {
 		
 		astar = new Astar(COLS, ROWS, validityMap);
 		
-		dir = new Vector2();
+
 	}
 	
 	@Override
 	public void update(float deltaTime) {
 		updateGridPositions();
 
-		int size = entities.size();
-		for(int i = 0; i < size; i++) {
-			e = entities.get(i);
-			switch(aiState) {
-			case chase:
-				chase();
-				break;
-			case fight:
-				fight();
-				break;
-			case flee:
-				flee();
-				break;
-			case idle:
-				idle();
-				break;
-			}
+		switch(aiState) {
+		case chase:
+			chase();
+			break;
+		case fight:
+			fight();
+			break;
+		case flee:
+			flee();
+			break;
+		case idle:
+			idle();
+			break;
 		}
 	}
 	
@@ -81,39 +75,32 @@ public class CloseBasicE1 extends AiPlan {
 
 	private void fight() {
 		//Check facing
-		enemPos = Mappers.posMap.get(e);
+		enemPos = Mappers.posMap.get(me);
 		playerPos = Mappers.posMap.get(player);
 		correctFacing(enemPos, playerPos);
 		//Check ability
-		eAbilityComponent = Mappers.abMap.get(e);
+		eAbilityComponent = Mappers.abMap.get(me);
 		if(!inAbilityRange(eAbilityComponent, Constants.AT_SLASH)) {
 			aiState = AIState.chase;
 			return;
 		}
-		if(Mappers.staMap.get(e).energy >= eAbilityComponent.abilityMap.get(Constants.AT_SLASH).getEnergy_cost())
+		if(Mappers.staMap.get(me).energy >= eAbilityComponent.abilityMap.get(Constants.AT_SLASH).getEnergy_cost())
 			eAbilityComponent.abilityMap.get(Constants.AT_SLASH).isActivated = true;
 	}
 
 	private void chase() {
 		//Check facing
-		enemPos = Mappers.posMap.get(e);
+		enemPos = Mappers.posMap.get(me);
 		playerPos = Mappers.posMap.get(player);
 		correctFacing(enemPos, playerPos);
 		
-		eAbilityComponent = Mappers.abMap.get(e);
+		eAbilityComponent = Mappers.abMap.get(me);
 		if(inAbilityRange(eAbilityComponent, Constants.AT_SLASH)) {
 			aiState = AIState.fight;
 			return;
 		}
 		
 		enemyPathToPoint(enemPos, playerPos);
-	}
-
-	private boolean inAbilityRange(AbilityComponent abil, int abilityId) {
-		if(abil.abilityMap.get(abilityId).getTargets(e, new Entity[] {player}).size > 0) {
-			return true;
-		}
-		return false;
 	}
 
 	private void updateGridPositions() {
@@ -152,19 +139,5 @@ public class CloseBasicE1 extends AiPlan {
 		mePos.nYPos = pathToPt.get(pathToPt.size - 1);
 	}
 	
-	private void correctFacing(PositionComponent mePos, PositionComponent otherPos) {
-		//Check if 1 space away
-		float d = dir.set(otherPos.curXPos, otherPos.curYPos).sub(mePos.curXPos, mePos.curYPos).len();
-		if(d <= 1f) {
-			if(dir.x < 0) {
-				mePos.direction = Direction.Left;
-			}else if(dir.x > 0) {
-				mePos.direction = Direction.Right;
-			}else if(dir.y < 0) {
-				mePos.direction = Direction.Down;
-			}else if(dir.y > 0){
-				mePos.direction = Direction.Up;
-			}
-		}
-	}
+
 }

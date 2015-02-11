@@ -87,8 +87,6 @@ public class CollisionSystem extends EntitySystem {
 						}
 					
 					}
-					
-					
 				}else{
 					float dstX = Math.abs(ent1Pos.curXPos - ent2Pos.curXPos);
 					float dstY = Math.abs(ent1Pos.curYPos - ent2Pos.curYPos);
