@@ -5,6 +5,7 @@ import com.aneebo.rotg.abilities.Parry;
 import com.aneebo.rotg.abilities.Slash;
 import com.aneebo.rotg.abilities.SuicideBomb;
 import com.aneebo.rotg.abilities.range.Fireblast;
+import com.aneebo.rotg.abilities.range.RangeAbility;
 import com.aneebo.rotg.abilities.range.TeleportMostDst;
 import com.aneebo.rotg.types.AbilityType;
 import com.badlogic.gdx.utils.ObjectMap;
@@ -71,15 +72,15 @@ public class Constants {
 		//Create abilities
 		Slash slash = new Slash(AT_SLASH, 2, 2, AbilityType.offense, "Slash", 5, 10f, 8f);
 		Parry parry = new Parry(DF_PARRY, 2, 3, AbilityType.defense, "Parry", 5, 0f, 10f);
-		Fireblast fireBlast = new Fireblast(AT_FIREBLAST, 2, 8, AbilityType.offense, "Fireblast", 2, 20f, 15f, FIREBALL_EFFECT, null);
-		TeleportMostDst tmd = new TeleportMostDst(DF_TELEPORT_MOST_DST, 2, 2, AbilityType.defense, "Teleport Furthest Away", 2, 0f, 0f, EMPTY_CELL, null);
+		Fireblast fireBlast = new Fireblast(AT_FIREBLAST, 2, 8, AbilityType.offense, "Fireblast", 2, 20f, 2f, FIREBALL_EFFECT, null);
+		TeleportMostDst tmd = new TeleportMostDst(DF_TELEPORT_MOST_DST, 2, 2, AbilityType.defense, "Teleport Furthest Away", 5, 0f, 0f, EMPTY_CELL, null);
 		SuicideBomb sb = new SuicideBomb(AT_SUICIDEBOMB, 1, 3, AbilityType.offense, "Suicide Bomb", 0, 30f, 0f);
 		
 		//Add to map
 		abilityMap.put(slash.getId(), slash);
 		abilityMap.put(parry.getId(), parry);
+		abilityMap.put(sb.getId(), sb);
 		abilityMap.put(fireBlast.getId(), fireBlast);
 		abilityMap.put(tmd.getId(), tmd);
-		abilityMap.put(sb.getId(), sb);
 	}
 }

@@ -134,7 +134,9 @@ public class CloseBasicE1 extends AiPlan {
 				(int)mePos.curYPos, 
 				(int)otherPos.curXPos, 
 				(int)otherPos.curYPos);
-
+		
+		if(pathToPt == null || pathToPt.size < 2) return;
+		
 		mePos.nXPos = pathToPt.get(pathToPt.size - 2);
 		mePos.nYPos = pathToPt.get(pathToPt.size - 1);
 	}

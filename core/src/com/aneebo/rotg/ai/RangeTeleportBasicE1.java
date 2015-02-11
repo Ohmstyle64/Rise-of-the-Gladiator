@@ -60,7 +60,7 @@ public class RangeTeleportBasicE1 extends AiPlan {
 		statComponent = Mappers.staMap.get(me);
 		abComponent = Mappers.abMap.get(me);
 		
-		correctFacing(mePos, mePos);
+		correctFacing(mePos, playerPos);
 				
 		ab = abComponent.abilityMap.get(Constants.AT_FIREBLAST);
 		

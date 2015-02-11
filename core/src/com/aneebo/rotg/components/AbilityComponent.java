@@ -1,12 +1,10 @@
 package com.aneebo.rotg.components;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
 import com.aneebo.rotg.abilities.Ability;
-import com.aneebo.rotg.abilities.Parry;
-import com.aneebo.rotg.abilities.Slash;
-import com.aneebo.rotg.abilities.SuicideBomb;
-import com.aneebo.rotg.abilities.range.Fireblast;
 import com.aneebo.rotg.abilities.range.RangeAbility;
-import com.aneebo.rotg.abilities.range.TeleportMostDst;
 import com.aneebo.rotg.utils.Constants;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Engine;
@@ -20,35 +18,56 @@ public class AbilityComponent extends Component {
 	
 	public AbilityComponent(Array<Ability> abilityList, Engine engine) {
 		
-		this.abilityList = new Array<Ability>(abilityList.size);
+		this.abilityList = new Array<Ability>();
 		
 		abilitySlots = new Array<Ability>();
 		
 		abilityMap = new ObjectMap<Integer, Ability>();
 		
 		for(int i = 0; i < abilityList.size; i++) {
-			if(abilityList.get(i) instanceof Parry) {
-				Parry p = new Parry(abilityList.get(i));
-				this.abilityList.add(p);
-				abilityMap.put(Constants.DF_PARRY, p);
-			}else if(abilityList.get(i) instanceof Slash) {
-				Slash s = new Slash(abilityList.get(i));
-				this.abilityList.add(s);
-				abilityMap.put(Constants.AT_SLASH, s);
-			}else if(abilityList.get(i) instanceof Fireblast) {
-				Fireblast f = new Fireblast((RangeAbility)abilityList.get(i), engine);
-				this.abilityList.add(f);
-				abilityMap.put(Constants.AT_FIREBLAST, f);
-			}else if(abilityList.get(i) instanceof TeleportMostDst) {
-				TeleportMostDst tmd = new TeleportMostDst((RangeAbility)abilityList.get(i), engine);
-				this.abilityList.add(tmd);
-				abilityMap.put(Constants.DF_TELEPORT_MOST_DST, tmd);
-			}else if(abilityList.get(i) instanceof SuicideBomb) {
-				SuicideBomb sb = new SuicideBomb(abilityList.get(i));
-				this.abilityList.add(sb);
-				abilityMap.put(Constants.AT_SUICIDEBOMB, sb);
+			if(abilityList.get(i) instanceof RangeAbility) {
+				Class<?> clazz = abilityList.get(i).getClass();
+				try {
+					Constructor<?> ctor = clazz.getConstructor(RangeAbility.class, Engine.class);
+					Ability r = (Ability) ctor.newInstance(abilityList.get(i), engine);
+					this.abilityList.add(r);
+					abilityMap.put(r.getId(), r);
+				} catch (NoSuchMethodException e) {
+					e.printStackTrace();
+				} catch (SecurityException e) {
+					e.printStackTrace();
+				} catch (InstantiationException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
+			}else if(abilityList.get(i) instanceof Ability) {
+				Class<?> clazz = abilityList.get(i).getClass();
+				try {
+					Constructor<?> ctor = clazz.getConstructor(Ability.class);
+					Ability a = (Ability) ctor.newInstance(abilityList.get(i));
+					this.abilityList.add(a);
+					abilityMap.put(a.getId(), a);
+				} catch (NoSuchMethodException e) {
+					e.printStackTrace();
+				} catch (SecurityException e) {
+					e.printStackTrace();
+				} catch (InstantiationException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
 			}
 		}
+		
 		//FILL ABILITY SLOTS WITH ABILITY LIST
 		abilitySlots.addAll(this.abilityList, 0, Math.min(Constants.MAX_ABILITY_SLOTS,this.abilityList.size));
 	}

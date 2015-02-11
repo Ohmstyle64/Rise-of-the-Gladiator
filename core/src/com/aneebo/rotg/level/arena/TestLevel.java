@@ -1,6 +1,7 @@
 package com.aneebo.rotg.level.arena;
 
 import com.aneebo.rotg.abilities.Ability;
+import com.aneebo.rotg.abilities.range.RangeAbility;
 import com.aneebo.rotg.ai.CloseBasicE1;
 import com.aneebo.rotg.ai.RangeTeleportBasicE1;
 import com.aneebo.rotg.components.AIComponent;
@@ -53,19 +54,42 @@ public class TestLevel extends Level implements EntityListener {
 
 	private void createRounds() {
 		//ROUND 1
-		Array<Entity> r1entities = new Array<Entity>(1);
+		Array<Entity> r1entities = new Array<Entity>(2);
 		//ENTITIES
-		Entity e1 = new Entity();
-		e1.add(new PositionComponent(11, 5, DirectionType.Left));
-		e1.add(new RenderComponent(Constants.ICE_FORM));
-		e1.add(new CollisionComponent(ColliderType.character));
-		e1.add(new AIComponent(new RangeTeleportBasicE1(e1, engine)));
-		Array<Ability> abilities1 = new Array<Ability>();
-		abilities1.add(Constants.abilityMap.get(Constants.AT_FIREBLAST));
-		abilities1.add(Constants.abilityMap.get(Constants.DF_TELEPORT_MOST_DST));
-		e1.add(new AbilityComponent(abilities1, engine));
-		e1.add(new StatComponent("Enemy1", 25f, 60f, Color.YELLOW, 2f, 2f, 1.3f));
-		r1entities.add(e1);
+		Entity r1e1 = new Entity();
+		r1e1.add(new PositionComponent(11, 5, DirectionType.Left));
+		r1e1.add(new RenderComponent(Constants.ICE_FORM));
+		r1e1.add(new CollisionComponent(ColliderType.character));
+		r1e1.add(new AIComponent(new RangeTeleportBasicE1(r1e1, engine)));
+		Array<Ability> abilities_r1e1 = new Array<Ability>();
+		abilities_r1e1.add(Constants.abilityMap.get(Constants.AT_FIREBLAST));
+		abilities_r1e1.add(Constants.abilityMap.get(Constants.DF_TELEPORT_MOST_DST));
+		r1e1.add(new AbilityComponent(abilities_r1e1, engine));
+		r1e1.add(new StatComponent("Range_Enemy_1", 25f, 60f, Color.YELLOW, 2f, 2f, 1.3f));
+		r1entities.add(r1e1);
+		
+		
+		Entity r1e2 = new Entity();
+		r1e2.add(new PositionComponent(5, 5, DirectionType.Left));
+		r1e2.add(new RenderComponent(Constants.PIG_FORM));
+		r1e2.add(new CollisionComponent(ColliderType.character));
+		r1e2.add(new AIComponent(new CloseBasicE1(r1e2, engine)));
+		Array<Ability> abilities_r1e2 = new Array<Ability>();
+		abilities_r1e2.add(Constants.abilityMap.get(Constants.AT_SLASH));
+		r1e2.add(new AbilityComponent(abilities_r1e2, engine));
+		r1e2.add(new StatComponent("Close_Enemy_1", 25f, 60f, Color.YELLOW, 2f, 2f, 1.5f));
+		r1entities.add(r1e2);
+		
+		Entity r1e3 = new Entity();
+		r1e3.add(new PositionComponent(5, 3, DirectionType.Left));
+		r1e3.add(new RenderComponent(Constants.PIG_FORM));
+		r1e3.add(new CollisionComponent(ColliderType.character));
+		r1e3.add(new AIComponent(new CloseBasicE1(r1e3, engine)));
+		Array<Ability> abilities_r1e3 = new Array<Ability>();
+		abilities_r1e3.add(Constants.abilityMap.get(Constants.AT_SLASH));
+		r1e3.add(new AbilityComponent(abilities_r1e3, engine));
+		r1e3.add(new StatComponent("Close_Enemy_2", 25f, 60f, Color.YELLOW, 2f, 2f, 1.5f));
+		r1entities.add(r1e3);
 		
 		Round r1 = new Round(r1entities);
 		rounds.add(r1);
@@ -73,16 +97,16 @@ public class TestLevel extends Level implements EntityListener {
 		//ROUND 2
 		Array<Entity> r2entities = new Array<Entity>(1);
 		//ENTITIES
-		Entity e2 = new Entity();
-		e2.add(new PositionComponent(11, 5, DirectionType.Left));
-		e2.add(new RenderComponent(Constants.ICE_FORM));
-		e2.add(new CollisionComponent(ColliderType.character));
-		e2.add(new AIComponent(new CloseBasicE1(e2, engine)));
-		Array<Ability> abilities2 = new Array<Ability>();
-		abilities2.add(Constants.abilityMap.get(Constants.AT_SLASH));
-		e2.add(new AbilityComponent(abilities2, engine));
-		e2.add(new StatComponent("Enemy2", 35f, 40f, Color.YELLOW, 2f, 2f, 1.3f));
-		r2entities.add(e2);
+		Entity r2e1 = new Entity();
+		r2e1.add(new PositionComponent(11, 5, DirectionType.Left));
+		r2e1.add(new RenderComponent(Constants.ICE_FORM));
+		r2e1.add(new CollisionComponent(ColliderType.character));
+		r2e1.add(new AIComponent(new CloseBasicE1(r2e1, engine)));
+		Array<Ability> abilities_r2e1 = new Array<Ability>();
+		abilities_r2e1.add(Constants.abilityMap.get(Constants.AT_SLASH));
+		r2e1.add(new AbilityComponent(abilities_r2e1, engine));
+		r2e1.add(new StatComponent("Enemy2", 35f, 40f, Color.YELLOW, 2f, 2f, 1.3f));
+		r2entities.add(r2e1);
 		
 		Round r2 = new Round(r2entities);
 		rounds.add(r2);
@@ -90,16 +114,16 @@ public class TestLevel extends Level implements EntityListener {
 		//ROUND 3
 		Array<Entity> r3entities = new Array<Entity>(1);
 		//ENTITIES
-		Entity e3 = new Entity();
-		e3.add(new PositionComponent(11, 5, DirectionType.Left));
-		e3.add(new RenderComponent(Constants.ICE_FORM));
-		e3.add(new CollisionComponent(ColliderType.character));
-		e3.add(new AIComponent(new CloseBasicE1(e3, engine)));
-		Array<Ability> abilities3 = new Array<Ability>();
-		abilities3.add(Constants.abilityMap.get(Constants.AT_SLASH));
-		e3.add(new AbilityComponent(abilities3, engine));
-		e3.add(new StatComponent("Enemy3", 45f, 50f, Color.YELLOW, 2f, 2f, 1.3f));
-		r3entities.add(e3);		
+		Entity r3e1 = new Entity();
+		r3e1.add(new PositionComponent(11, 5, DirectionType.Left));
+		r3e1.add(new RenderComponent(Constants.ICE_FORM));
+		r3e1.add(new CollisionComponent(ColliderType.character));
+		r3e1.add(new AIComponent(new CloseBasicE1(r3e1, engine)));
+		Array<Ability> abilities_r3e1 = new Array<Ability>();
+		abilities_r3e1.add(Constants.abilityMap.get(Constants.AT_SLASH));
+		r3e1.add(new AbilityComponent(abilities_r3e1, engine));
+		r3e1.add(new StatComponent("Enemy3", 45f, 50f, Color.YELLOW, 2f, 2f, 1.3f));
+		r3entities.add(r3e1);		
 		
 		Round r3 = new Round(r3entities);
 		rounds.add(r3);

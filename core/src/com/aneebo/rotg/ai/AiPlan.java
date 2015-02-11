@@ -9,6 +9,7 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 public abstract class AiPlan {
@@ -18,6 +19,7 @@ public abstract class AiPlan {
 	protected Entity me;
 	protected ImmutableArray<Entity> entities;
 	private Vector2 dir;
+	private Vector2 ref;
 	
 	public AiPlan(Entity me, Engine engine) {
 		this.engine = engine;
@@ -25,6 +27,7 @@ public abstract class AiPlan {
 		entities = engine.getEntitiesFor(Family.getFor(AIComponent.class, AbilityComponent.class));
 		player = engine.getEntitiesFor(Family.getFor(InputComponent.class)).first();
 		dir = new Vector2();
+		ref = new Vector2();
 	}
 	
 	
@@ -38,18 +41,17 @@ public abstract class AiPlan {
 	}
 	
 	protected void correctFacing(PositionComponent mePos, PositionComponent otherPos) {
-		//Check if 1 space away
-		float d = dir.set(otherPos.curXPos, otherPos.curYPos).sub(mePos.curXPos, mePos.curYPos).len();
-		if(d <= 1f) {
-			if(dir.x < 0) {
-				mePos.direction = DirectionType.Left;
-			}else if(dir.x > 0) {
-				mePos.direction = DirectionType.Right;
-			}else if(dir.y < 0) {
-				mePos.direction = DirectionType.Down;
-			}else if(dir.y > 0){
-				mePos.direction = DirectionType.Up;
-			}
-		}
+		float angle = dir.set(mePos.curXPos, mePos.curYPos).angle(ref.set(otherPos.curXPos, otherPos.curYPos));
+		if(angle < 0) angle += 360;
+		angle *= MathUtils.degRad;
+		
+		if(angle > MathUtils.PI*(1/4) && angle < MathUtils.PI*(3/4)) {
+			mePos.direction = DirectionType.Up;
+		}else if(angle >= MathUtils.PI*(3/4) && angle <= MathUtils.PI*(5/4)) {
+			mePos.direction = DirectionType.Left;
+		}else if(angle > MathUtils.PI*(5/4) && angle < MathUtils.PI*(7/4)) {
+			mePos.direction = DirectionType.Down;
+		}else 
+			mePos.direction = DirectionType.Right;
 	}
 }

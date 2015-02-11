@@ -133,7 +133,7 @@ public class Play implements Screen {
 		ObjectMap<Integer, Level> levels = new ObjectMap<Integer, Level>(2);
 		levels.put(Constants.TEST_LEVEL, testLevel);
 		levels.put(Constants.CARAVAN_LEVEL, caravanLevel);
-		levelManager = new LevelManager(levels, Constants.CARAVAN_LEVEL);
+		levelManager = new LevelManager(levels, Constants.TEST_LEVEL);
 	}
 
 	private void createPlayer() {
