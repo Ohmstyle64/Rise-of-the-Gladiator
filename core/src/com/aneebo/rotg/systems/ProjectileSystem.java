@@ -36,16 +36,13 @@ public class ProjectileSystem extends EntitySystem {
 			pos = Mappers.posMap.get(e);
 			proj = Mappers.projMap.get(e);
 			if(proj.path.size > 0) {
-				
-				if(pos.isStopped()) {
-					if(proj.isCollided()) {
-						proj.rangeAbility.hit(proj.from, proj.hit);
-						engine.removeEntity(e);
-					}else {
-						pos.nXPos = (int)proj.path.first().x;
-						pos.nYPos = (int)proj.path.first().y;
-						proj.path.removeIndex(0);
-					}
+				if(proj.isCollided()) {
+					proj.rangeAbility.hit(proj.from, proj.hit);
+					engine.removeEntity(e);
+				} else if(pos.isStopped()) {
+					pos.nXPos = (int)proj.path.first().x;
+					pos.nYPos = (int)proj.path.first().y;
+					proj.path.removeIndex(0);
 				}else if(proj.hitInAnimmate) {
 					engine.removeEntity(e);
 				}

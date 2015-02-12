@@ -47,9 +47,14 @@ public class CollisionSystem extends EntitySystem {
 			ent1Pos = Mappers.posMap.get(e1);
 			if(ent1Pos.isStopped()) continue;
 			
+//			proj = Mappers.projMap.get(e1);
+//			if(proj != null) {
+//				System.out.println("apples");
+//			}
 			
 			//CHECK IF ENTITIY HIT A WALL
-			if(wallLayer.getCell(ent1Pos.nXPos, ent1Pos.nYPos) != null) {
+			if(wallLayer.getCell((int)ent1Pos.curXPos, (int)ent1Pos.curYPos) != null ||
+					wallLayer.getCell(ent1Pos.nXPos, ent1Pos.nYPos) != null) {
 				ent1Pos.nXPos = (int)ent1Pos.curXPos;
 				ent1Pos.nYPos = (int)ent1Pos.curYPos;
 				proj = Mappers.projMap.get(e1);
