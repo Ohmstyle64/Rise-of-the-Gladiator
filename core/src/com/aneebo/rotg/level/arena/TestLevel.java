@@ -37,6 +37,7 @@ public class TestLevel extends Level implements EntityListener {
 
 	@Override
 	protected void loadLevel() {
+		engine.addEntityListener(this);
 		currentRound = 0;
 		totalRounds = 3;
 		Array<Item> prizes = new Array<Item>(2);
