@@ -17,6 +17,12 @@ public class StatComponent extends Component {
 	public int skillPoints;
 	public int currency;
 	
+	public float increaseToAttackSpeed;
+	public float increaseToDamage;
+	public float increaseToRange;
+	public float damageMitigation;
+	public float magicResist;
+	
 	public StatComponent(String name, float health, float energy, Color color, float health_regen, float energy_regen, float speed) {
 		this.name = name;
 		this.health = health;
@@ -30,5 +36,10 @@ public class StatComponent extends Component {
 		this.eValue = 0;
 		skillPoints = 0;
 		currency = 0;
-	}
+		increaseToAttackSpeed = 0;
+		increaseToDamage = 0;
+		increaseToRange = 0;
+		damageMitigation = 0;
+		magicResist = 0;
+	}	
 }

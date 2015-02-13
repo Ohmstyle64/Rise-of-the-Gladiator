@@ -114,7 +114,9 @@ public class Fireblast extends RangeAbility {
 		stat = Mappers.staMap.get(hit);
 		fromStat = Mappers.staMap.get(from);
 		if(stat != null) {
-			stat.health -= (1-(stat.eValue + fromStat.eValue))*damage;
+			float damageDealt = (1+fromStat.eValue)*damage;
+			stat.health -= damageDealt;
+			Gdx.app.log(fromStat.name," has dealt "+damageDealt+" to "+stat.name);
 			fromStat.eValue = 0;
 		}
 		

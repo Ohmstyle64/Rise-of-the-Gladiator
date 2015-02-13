@@ -1,21 +1,15 @@
 package com.aneebo.rotg.abilities;
 
-import java.util.Iterator;
-
-import com.aneebo.rotg.components.InventoryComponent;
 import com.aneebo.rotg.components.Mappers;
-import com.aneebo.rotg.inventory.Item;
 import com.aneebo.rotg.types.AbilityType;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ObjectMap.Entry;
 
 public abstract class Ability {
 	protected int id, castTime, range, cooldown, tier;
@@ -30,13 +24,6 @@ public abstract class Ability {
 	private Label label;
 	private Skin skin;
 	protected Array<Entity> targets;
-	private InventoryComponent invC;
-	
-	protected float increaseToAttackSpeed = 0;
-	protected float increaseToDamage = 0;
-	protected float increaseToRange = 0;
-	protected float damageMitigation = 0;
-	protected float magicResist = 0;
 	
 	public Ability(int id, int castTime, int range, AbilityType type, String name, int cooldown, float damage, float energy_cost) {
 		this.id = id;
@@ -52,7 +39,6 @@ public abstract class Ability {
 		isInterrupted = false;
 		isActivated = false;
 		castTimeTimer = 0;
-		resetStats();
 		cooldownTimer = cooldown;
 		tier = 0;
 		targets = new Array<Entity>();
@@ -67,13 +53,7 @@ public abstract class Ability {
 		this(ability.getId(), ability.getCastTime(), ability.getRange(), ability.getType(), ability.getName(), ability.getCooldown(), ability.getDamage(), ability.getEnergy_cost());
 	}
 	
-	private void resetStats() {
-		increaseToAttackSpeed = 0;
-		increaseToDamage = 0;
-		increaseToRange = 0;
-		damageMitigation = 0;
-		magicResist = 0;
-	}
+
 	
 	public int getId() {
 		return id;
@@ -124,9 +104,9 @@ public abstract class Ability {
 		float perc = castTimeTimer / castTime;
 		isInterrupted = true;
 		if(perc < 0.15f) {
-			return 0.5f;
+			return 1.5f;
 		}else if(perc < 0.25f) {
-			return 0.25f;
+			return 0.75f;
 		}else if(perc < 0.75f) {
 			return 0.1f; 
 		}else {
@@ -160,32 +140,13 @@ public abstract class Ability {
 	public void action(float delta, Entity me){
 		onLoopStart(delta);
 		if(isActivated && justStarted) {
-			Gdx.app.log(Mappers.staMap.get(me).name+" activates ability ",getName());
-			grabEquipmentStats(me);
+			Gdx.app.log(Mappers.staMap.get(me).name," activates ability "+getName());
 			onAbilityStart(me);
 			justStarted = false;
 		}
 		if(castTimeTimer >=castTime) {
 			onAbilityEnd(me);
 			cleanUp();
-		}
-	}
-	
-	private void grabEquipmentStats(Entity me) {
-		invC = Mappers.invMap.get(me);
-		if(invC == null) return;
-		resetStats();
-		Iterator<Entry<Integer, Item>> it = invC.inventory.equipped.iterator();
-		while(it.hasNext()) {
-			Entry<Integer, Item> ent = it.next();
-			increaseToAttackSpeed += ent.value.getAttackSpeed();
-			castTime *= (1 - MathUtils.clamp(MathUtils.random(increaseToAttackSpeed),0f, 0.5f));
-			increaseToDamage += ent.value.getDamage();
-			damage += MathUtils.clamp(MathUtils.random(increaseToDamage),0f, 10f);
-			increaseToRange += ent.value.getIncreaseToRange();
-			range += MathUtils.clamp(MathUtils.random(increaseToRange),0f,10f);
-			damageMitigation += ent.value.getDamageMitigation();
-			magicResist += ent.value.getMagicResist();
 		}
 	}
 	

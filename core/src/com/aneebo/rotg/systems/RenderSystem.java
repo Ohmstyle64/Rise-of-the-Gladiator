@@ -2,14 +2,12 @@ package com.aneebo.rotg.systems;
 
 import com.aneebo.rotg.components.AbilityComponent;
 import com.aneebo.rotg.components.AnimationComponent;
-import com.aneebo.rotg.components.InputComponent;
 import com.aneebo.rotg.components.Mappers;
 import com.aneebo.rotg.components.PositionComponent;
 import com.aneebo.rotg.components.RenderComponent;
 import com.aneebo.rotg.components.StatComponent;
 import com.aneebo.rotg.utils.Assets;
 import com.aneebo.rotg.utils.Constants;
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
@@ -37,12 +35,6 @@ public class RenderSystem extends EntitySystem {
 	private ImmutableArray<Entity> entities;
 	private ImmutableArray<Entity> abilityEntities;
 	private ImmutableArray<Entity> animEntities;
-	private Entity player;
-	
-	private ComponentMapper<PositionComponent> pc = ComponentMapper.getFor(PositionComponent.class);
-	private ComponentMapper<RenderComponent> rc = ComponentMapper.getFor(RenderComponent.class);
-	private ComponentMapper<AbilityComponent> ac = ComponentMapper.getFor(AbilityComponent.class);
-	private ComponentMapper<StatComponent> sc = ComponentMapper.getFor(StatComponent.class);
 	
 	private AbilityComponent abilityComponent;
 	private PositionComponent posComponent;
@@ -51,7 +43,6 @@ public class RenderSystem extends EntitySystem {
 	private AnimationComponent animComponent;
 	private Animation anim;
 	private Entity e;
-	private Engine engine;
 	
 	
 	public RenderSystem(OrthogonalTiledMapRenderer renderer) {
@@ -69,8 +60,6 @@ public class RenderSystem extends EntitySystem {
 		entities = engine.getEntitiesFor(Family.getFor(RenderComponent.class));
 		animEntities = engine.getEntitiesFor(Family.getFor(AnimationComponent.class));
 		abilityEntities = engine.getEntitiesFor(Family.getFor(AbilityComponent.class));
-		player = engine.getEntitiesFor(Family.getFor(InputComponent.class)).first();
-		this.engine = engine;
 	}
 	
 	@Override
@@ -89,9 +78,9 @@ public class RenderSystem extends EntitySystem {
 		int size = entities.size();
 		for(int i = 0; i < size; i++) {
 			e = entities.get(i);
-			posComponent = pc.get(e);
-			renderComponent = rc.get(e);
-			statComponent = sc.get(e);
+			posComponent = Mappers.posMap.get(e);
+			renderComponent = Mappers.renMap.get(e);
+			statComponent = Mappers.staMap.get(e);
 			renderer.getBatch().draw(Assets.assetManager.get(renderComponent.textureName, Texture.class),
 					posComponent.curXPos*Constants.TILE_WIDTH, 
 					posComponent.curYPos*Constants.TILE_HEIGHT);
@@ -100,7 +89,7 @@ public class RenderSystem extends EntitySystem {
 					statComponent.name,
 					posComponent.curXPos*Constants.TILE_WIDTH,
 					posComponent.curYPos*Constants.TILE_HEIGHT + 70);
-			font.draw(renderer.getBatch(), statComponent.health+"",
+			font.draw(renderer.getBatch(), String.format("%.1f", statComponent.health)+"",
 					posComponent.curXPos*Constants.TILE_WIDTH,
 					posComponent.curYPos*Constants.TILE_HEIGHT + 50);
 			shapeRenderer.setColor(statComponent.color);
@@ -140,13 +129,13 @@ public class RenderSystem extends EntitySystem {
 		size = abilityEntities.size();
 		for(int i = 0; i < size; i++) {
 			e = abilityEntities.get(i);
-			abilityComponent = ac.get(e);
+			abilityComponent = Mappers.abMap.get(e);
 			int abilSize = abilityComponent.abilitySlots.size;
 			for(int j = 0; j < abilSize; j++) {
 				//TEMP CODE FOR DEV
 				if(abilityComponent.abilitySlots.get(j).isActivated && abilityComponent.abilitySlots.get(j).isAvailable) {
-					posComponent = pc.get(e);
-					statComponent = sc.get(e);
+					posComponent = Mappers.posMap.get(e);
+					statComponent = Mappers.staMap.get(e);
 					shapeRenderer.setColor(statComponent.color);
 					shapeRenderer.circle(posComponent.curXPos*Constants.TILE_WIDTH+Constants.TILE_WIDTH / 2, 
 							posComponent.curYPos*Constants.TILE_HEIGHT+Constants.TILE_HEIGHT / 2, 

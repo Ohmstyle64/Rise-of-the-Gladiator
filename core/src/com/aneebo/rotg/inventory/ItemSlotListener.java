@@ -78,6 +78,7 @@ public class ItemSlotListener extends ClickListener {
 					inv.selected.isSelected = false;
 					inv.selected = null;
 					inv.btnSelected = null;
+					inv.updateStats();
 				}
 			}else {		//NO ITEM WAS SELECTED BEFORE THIS ONE
 				isSelected = true;

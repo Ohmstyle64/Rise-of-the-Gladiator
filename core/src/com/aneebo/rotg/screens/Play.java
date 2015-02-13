@@ -158,9 +158,9 @@ public class Play implements Screen {
 		PrimP1 pp1 = new PrimP1();
 		equipped.put(cp1.slot, cp1);
 		equipped.put(hp1.slot, hp1);
-//		equipped.put(pp1.slot, pp1);
+		equipped.put(pp1.slot, pp1);
 		Array<Item> iList = new Array<Item>(true, Constants.INVENTORY_SIZE, Item.class);
-		player.add(new InventoryComponent(new Inventory(equipped, fillRest(iList))));
+		player.add(new InventoryComponent(new Inventory(player, equipped, fillRest(iList))));
 		
 		engine.addEntity(player);
 	}

@@ -5,7 +5,6 @@ import com.aneebo.rotg.abilities.Parry;
 import com.aneebo.rotg.abilities.Slash;
 import com.aneebo.rotg.abilities.SuicideBomb;
 import com.aneebo.rotg.abilities.range.Fireblast;
-import com.aneebo.rotg.abilities.range.RangeAbility;
 import com.aneebo.rotg.abilities.range.TeleportMostDst;
 import com.aneebo.rotg.types.AbilityType;
 import com.badlogic.gdx.utils.ObjectMap;
