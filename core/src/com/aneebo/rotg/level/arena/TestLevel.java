@@ -44,6 +44,7 @@ public class TestLevel extends Level implements EntityListener {
 		prizes.add(new PrimP2());
 		prizes.add(new ChestP2());
 		prize = new Prize(2, prizes, 100);
+		rounds.clear();
 		createRounds();
 		
 		PositionComponent pos = Mappers.posMap.get(player);

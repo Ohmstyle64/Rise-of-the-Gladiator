@@ -3,17 +3,17 @@ package com.aneebo.rotg.abilities.range;
 import com.aneebo.rotg.abilities.util.Target;
 import com.aneebo.rotg.components.CollisionComponent;
 import com.aneebo.rotg.components.Mappers;
+import com.aneebo.rotg.components.ParticleComponent;
 import com.aneebo.rotg.components.PositionComponent;
 import com.aneebo.rotg.components.ProjectileComponent;
 import com.aneebo.rotg.components.RenderComponent;
 import com.aneebo.rotg.components.StatComponent;
 import com.aneebo.rotg.types.AbilityType;
 import com.aneebo.rotg.types.ColliderType;
-import com.aneebo.rotg.utils.Constants;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
@@ -97,6 +97,10 @@ public class Fireblast extends RangeAbility {
 		eFireBlast.add(projPos);
 		eFireBlast.add(new CollisionComponent(ColliderType.projectile));
 		eFireBlast.add(new ProjectileComponent(me, this, path, 3f));
+		ParticleEffect pEffect = new ParticleEffect();
+		pEffect.load(Gdx.files.internal("img/effects/explosion.p"), Gdx.files.internal("img/effects/"));
+		eFireBlast.add(new ParticleComponent(pEffect));
+		pEffect.start();
 		this.engine.addEntity(eFireBlast);
 		pos.isMoveable = true;
 	}

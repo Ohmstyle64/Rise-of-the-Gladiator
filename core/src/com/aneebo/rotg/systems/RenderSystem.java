@@ -3,6 +3,7 @@ package com.aneebo.rotg.systems;
 import com.aneebo.rotg.components.AbilityComponent;
 import com.aneebo.rotg.components.AnimationComponent;
 import com.aneebo.rotg.components.Mappers;
+import com.aneebo.rotg.components.ParticleComponent;
 import com.aneebo.rotg.components.PositionComponent;
 import com.aneebo.rotg.components.RenderComponent;
 import com.aneebo.rotg.components.StatComponent;
@@ -35,12 +36,14 @@ public class RenderSystem extends EntitySystem {
 	private ImmutableArray<Entity> entities;
 	private ImmutableArray<Entity> abilityEntities;
 	private ImmutableArray<Entity> animEntities;
+	private ImmutableArray<Entity> particleEntities;
 	
 	private AbilityComponent abilityComponent;
 	private PositionComponent posComponent;
 	private RenderComponent renderComponent;
 	private StatComponent statComponent;
 	private AnimationComponent animComponent;
+	private ParticleComponent partComponent;
 	private Animation anim;
 	private Entity e;
 	
@@ -60,6 +63,7 @@ public class RenderSystem extends EntitySystem {
 		entities = engine.getEntitiesFor(Family.getFor(RenderComponent.class));
 		animEntities = engine.getEntitiesFor(Family.getFor(AnimationComponent.class));
 		abilityEntities = engine.getEntitiesFor(Family.getFor(AbilityComponent.class));
+		particleEntities = engine.getEntitiesFor(Family.getFor(ParticleComponent.class));
 	}
 	
 	@Override
@@ -97,6 +101,13 @@ public class RenderSystem extends EntitySystem {
 					posComponent.curYPos*Constants.TILE_HEIGHT, 
 					Constants.TILE_WIDTH, 
 					Constants.TILE_HEIGHT);
+		}
+		
+		size = particleEntities.size();
+		for(int i = 0; i < size; i++) {
+			e = particleEntities.get(i);
+			partComponent = Mappers.partMap.get(e);
+			partComponent.pEffect.draw(renderer.getBatch(), deltaTime);
 		}
 		
 		//RENDER ANIMATIONS

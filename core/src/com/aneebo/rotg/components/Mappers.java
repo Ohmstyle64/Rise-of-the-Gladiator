@@ -14,4 +14,5 @@ public class Mappers {
 	public static final ComponentMapper<InventoryComponent> invMap = ComponentMapper.getFor(InventoryComponent.class);
 	public static final ComponentMapper<LevelChangerComponent> lvlcMap = ComponentMapper.getFor(LevelChangerComponent.class);
 	public static final ComponentMapper<AnimationComponent> animMap = ComponentMapper.getFor(AnimationComponent.class);
+	public static final ComponentMapper<ParticleComponent> partMap = ComponentMapper.getFor(ParticleComponent.class);
 }

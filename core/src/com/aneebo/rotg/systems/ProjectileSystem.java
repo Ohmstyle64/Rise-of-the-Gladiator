@@ -1,8 +1,10 @@
 package com.aneebo.rotg.systems;
 
 import com.aneebo.rotg.components.Mappers;
+import com.aneebo.rotg.components.ParticleComponent;
 import com.aneebo.rotg.components.PositionComponent;
 import com.aneebo.rotg.components.ProjectileComponent;
+import com.aneebo.rotg.utils.Constants;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
@@ -15,6 +17,7 @@ public class ProjectileSystem extends EntitySystem {
 	private Entity e;
 	private PositionComponent pos;
 	private ProjectileComponent proj;
+	private ParticleComponent particle;
 	
 	private Engine engine;
 	
@@ -38,21 +41,33 @@ public class ProjectileSystem extends EntitySystem {
 			if(proj.path.size > 0) {
 				if(proj.isCollided()) {
 					proj.rangeAbility.hit(proj.from, proj.hit);
-					engine.removeEntity(e);
+					removeEntity(e);
 				} else if(pos.isStopped()) {
 					pos.nXPos = (int)proj.path.first().x;
 					pos.nYPos = (int)proj.path.first().y;
 					proj.path.removeIndex(0);
+					particle = Mappers.partMap.get(e);
+					particle.pEffect.setPosition(pos.curXPos*Constants.TILE_WIDTH, pos.curYPos*Constants.TILE_HEIGHT);
+					particle.pEffect.start();
 				}else if(proj.hitInAnimmate) {
-					engine.removeEntity(e);
+					removeEntity(e);
 				}
 			}
 			else {
-				engine.removeEntity(e);
+				removeEntity(e);
 			}
 		}
 	}
 	
+
+	private void removeEntity(Entity e2) {
+		particle = Mappers.partMap.get(e);
+		if(particle != null) {
+			particle.pEffect.dispose();
+		}
+		engine.removeEntity(e);
+	}
+
 	public void dipose() {
 		
 	}
