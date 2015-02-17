@@ -8,15 +8,15 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 
-public class Slash extends Ability {
+public class Blade_Strike extends Ability {
 	
 	private StatComponent stat;
 	
-	public Slash(int id, int castTime, int range, AbilityType type, String name, int cooldown, float damage, float energy_cost) {
+	public Blade_Strike(int id, int castTime, int range, AbilityType type, String name, int cooldown, float damage, float energy_cost) {
 		super(id, castTime, range, type, name, cooldown, damage, energy_cost);
 	}
 	
-	public Slash(Ability ability) {
+	public Blade_Strike(Ability ability) {
 		super(ability);
 	}
 

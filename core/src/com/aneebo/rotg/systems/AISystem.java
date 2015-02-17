@@ -19,7 +19,7 @@ public class AISystem extends EntitySystem {
 	
 	@Override
 	public void addedToEngine(Engine engine) {
-		entities = engine.getEntitiesFor(Family.getFor(AIComponent.class));
+		entities = engine.getEntitiesFor(Family.all(AIComponent.class).get());
 
 	}
 	

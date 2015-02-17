@@ -47,7 +47,6 @@ public class RenderSystem extends EntitySystem {
 	private Animation anim;
 	private Entity e;
 	
-	
 	public RenderSystem(OrthogonalTiledMapRenderer renderer) {
 		super(4);
 		this.renderer = renderer;
@@ -58,12 +57,13 @@ public class RenderSystem extends EntitySystem {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public void addedToEngine(Engine engine) {
-		entities = engine.getEntitiesFor(Family.getFor(RenderComponent.class));
-		animEntities = engine.getEntitiesFor(Family.getFor(AnimationComponent.class));
-		abilityEntities = engine.getEntitiesFor(Family.getFor(AbilityComponent.class));
-		particleEntities = engine.getEntitiesFor(Family.getFor(ParticleComponent.class));
+		entities = engine.getEntitiesFor(Family.all(RenderComponent.class).get());
+		animEntities = engine.getEntitiesFor(Family.all(AnimationComponent.class).get());
+		abilityEntities = engine.getEntitiesFor(Family.all(AbilityComponent.class).get());
+		particleEntities = engine.getEntitiesFor(Family.all(ParticleComponent.class).get());
 	}
 	
 	@Override
@@ -165,7 +165,6 @@ public class RenderSystem extends EntitySystem {
 		renderer.getBatch().end();
 		shapeRenderer.end();
 		
-
 	}
 	
 

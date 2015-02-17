@@ -12,7 +12,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
-public class Parry extends Ability {
+public class Blade_Block extends Ability {
 
 	private ComponentMapper<StatComponent> sc = ComponentMapper.getFor(StatComponent.class);
 	private ComponentMapper<AbilityComponent> ac = ComponentMapper.getFor(AbilityComponent.class);
@@ -26,14 +26,14 @@ public class Parry extends Ability {
 	
 	private Vector2 abilityDst;
 	
-	public Parry(int id, int castTime, int range, AbilityType type, String name, int cooldown, float damage, float energy_cost) {
+	public Blade_Block(int id, int castTime, int range, AbilityType type, String name, int cooldown, float damage, float energy_cost) {
 		super(id, castTime, range, type, name, cooldown, damage, energy_cost);
 		
 		abilityDst = new Vector2();
 	}
 
 	
-	public Parry(Ability ability) {
+	public Blade_Block(Ability ability) {
 		super(ability);
 	}
 

@@ -11,7 +11,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.utils.Array;
 
-public class TeleportMostDst extends RangeAbility {
+public class Teleport extends RangeAbility {
 
 	private Entity player;
 	private AbilityComponent pAbilityComponent;
@@ -19,7 +19,7 @@ public class TeleportMostDst extends RangeAbility {
 	
 	private Array<Entity> entities;
 	
-	public TeleportMostDst(int id, int castTime, int range, AbilityType type,
+	public Teleport(int id, int castTime, int range, AbilityType type,
 			String name, int cooldown, float damage, float energy_cost,
 			String textureName, Engine engine) {
 		super(id, castTime, range, type, name, cooldown, damage, energy_cost,
@@ -27,7 +27,7 @@ public class TeleportMostDst extends RangeAbility {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public TeleportMostDst(RangeAbility rangeAbility, Engine engine) {
+	public Teleport(RangeAbility rangeAbility, Engine engine) {
 		super(rangeAbility, engine);
 		player = engine.getEntitiesFor(Family.getFor(InputComponent.class)).first();
 		entities = new Array<Entity>(1);

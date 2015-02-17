@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-up" width="1" height="1" tilewidth="800" tileheight="480">
+ <tileset firstgid="1" name="worldgen" tilewidth="800" tileheight="480">
+  <image source="worldgen.png" width="800" height="480"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="1" height="1">
+  <data encoding="base64">
+   AQAAAA==
+  </data>
+ </layer>
+ <objectgroup name="cities">
+  <object name="city1" x="427" y="128" width="46" height="46">
+   <ellipse/>
+  </object>
+  <object name="city2" x="242" y="228" width="46" height="46">
+   <ellipse/>
+  </object>
+  <object name="city3" x="325" y="339.5" width="46" height="46">
+   <ellipse/>
+  </object>
+  <object name="city4" x="604" y="264.5" width="46" height="46">
+   <ellipse/>
+  </object>
+ </objectgroup>
+</map>

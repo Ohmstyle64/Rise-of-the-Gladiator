@@ -62,10 +62,10 @@ public class RangeTeleportBasicE1 extends AiPlan {
 		
 		correctFacing(mePos, playerPos);
 				
-		ab = abComponent.abilityMap.get(Constants.AT_FIREBLAST);
+		ab = abComponent.abilityMap.get(Constants.AT_WAVE_OF_FIRE);
 		
 		if(statComponent.energy >= ab.getEnergy_cost()) {
-			if(inAbilityRange(abComponent, Constants.AT_FIREBLAST)) {
+			if(inAbilityRange(abComponent, Constants.AT_WAVE_OF_FIRE)) {
 				ab.isActivated = true;
 				return;
 			}
@@ -75,11 +75,11 @@ public class RangeTeleportBasicE1 extends AiPlan {
 	private void chase() {
 		abComponent = Mappers.abMap.get(me);
 		statComponent = Mappers.staMap.get(me);
-		ab = abComponent.abilityMap.get(Constants.DF_TELEPORT_MOST_DST);
+		ab = abComponent.abilityMap.get(Constants.DF_TELEPORT);
 		
 
 		if(statComponent.energy >= ab.getEnergy_cost()) {
-			if(inAbilityRange(abComponent, Constants.DF_TELEPORT_MOST_DST)) {
+			if(inAbilityRange(abComponent, Constants.DF_TELEPORT)) {
 				ab.isActivated = true;
 				aiState = AIState.fight;
 				return;

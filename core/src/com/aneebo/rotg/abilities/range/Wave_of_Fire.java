@@ -17,7 +17,7 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
-public class Fireblast extends RangeAbility {
+public class Wave_of_Fire extends RangeAbility {
 	
 	private static int id_Count = 0;
 	
@@ -26,14 +26,14 @@ public class Fireblast extends RangeAbility {
 	private StatComponent fromStat;
 	private PositionComponent projPos;
 
-	public Fireblast(int id, int castTime, int range, AbilityType type,
+	public Wave_of_Fire(int id, int castTime, int range, AbilityType type,
 			String name, int cooldown, float damage, float energy_cost,String textureName,
 			Engine engine) {
 		super(id, castTime, range, type, name, cooldown, damage, energy_cost,textureName, engine);
 
 	}
 
-	public Fireblast(RangeAbility rangeAbility, Engine engine) {
+	public Wave_of_Fire(RangeAbility rangeAbility, Engine engine) {
 		super(rangeAbility, engine);
 	}
 

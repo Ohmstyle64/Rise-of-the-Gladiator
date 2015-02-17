@@ -4,15 +4,15 @@ import com.aneebo.rotg.types.AbilityType;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Array;
 
-public class SuicideBomb extends Ability {
+public class Explode extends Ability {
 
-	public SuicideBomb(int id, int castTime, int range, AbilityType type,
+	public Explode(int id, int castTime, int range, AbilityType type,
 			String name, int cooldown, float damage, float energy_cost) {
 		super(id, castTime, range, type, name, cooldown, damage, energy_cost);
 		// TODO Auto-generated constructor stub
 	}
 	
-	public SuicideBomb(Ability ability) {
+	public Explode(Ability ability) {
 		super(ability);
 	}
 

@@ -1,11 +1,16 @@
 package com.aneebo.rotg.utils;
 
 import com.aneebo.rotg.abilities.Ability;
-import com.aneebo.rotg.abilities.Parry;
-import com.aneebo.rotg.abilities.Slash;
-import com.aneebo.rotg.abilities.SuicideBomb;
-import com.aneebo.rotg.abilities.range.Fireblast;
-import com.aneebo.rotg.abilities.range.TeleportMostDst;
+import com.aneebo.rotg.abilities.Blade_Block;
+import com.aneebo.rotg.abilities.Blade_Strike;
+import com.aneebo.rotg.abilities.Explode;
+import com.aneebo.rotg.abilities.Force_Field;
+import com.aneebo.rotg.abilities.Pure_Heart;
+import com.aneebo.rotg.abilities.Quick_Knife;
+import com.aneebo.rotg.abilities.range.Electric_Charge;
+import com.aneebo.rotg.abilities.range.Ice_Strike;
+import com.aneebo.rotg.abilities.range.Teleport;
+import com.aneebo.rotg.abilities.range.Wave_of_Fire;
 import com.aneebo.rotg.types.AbilityType;
 import com.badlogic.gdx.utils.ObjectMap;
 
@@ -35,6 +40,8 @@ public class Constants {
 	public static final String SHORTSWORD_1 = "img/item/weapon/short_sword2.png";
 	public static final String SPEAR_1 = "img/item/weapon/spear2.png";
 	
+	public static final String WORLD_MAP = "img/map/worldmap.tmx";
+	
 	public static final String BODY_PLAYER = "img/characters/animations/BODY_male.png";
 	public static final String BODY_SKELETON = "img/characters/animations/BODY_skeleton.png";
 	
@@ -60,26 +67,43 @@ public class Constants {
 	public static final int INVENTORY_SIZE = 12;
 	
 	//ABILITY
-	public static final int AT_SLASH = 0;
-	public static final int AT_FIREBLAST = 1;
-	public static final int AT_SUICIDEBOMB = 2;
-	public static final int DF_PARRY = 3;
-	public static final int DF_TELEPORT_MOST_DST = 4;
+	public static final int AT_BLADE_STRIKE = 0;
+	public static final int AT_WAVE_OF_FIRE = 1;
+	public static final int AT_QUICK_KNIFE = 2;
+	public static final int AT_ELECTRIC_CHARGE = 3;
+	public static final int AT_ICE_STRIKE = 4;
+	public static final int AT_EXPLODE = 5;
+	public static final int DF_BLADE_BLOCK = 6;
+	public static final int DF_PURE_HEART = 7;
+	public static final int DF_FORCE_FIELD = 8;
+	public static final int DF_TELEPORT = 9;
 
 	public static final ObjectMap<Integer, Ability> abilityMap = new ObjectMap<Integer, Ability>();
 	static {
 		//Create abilities
-		Slash slash = new Slash(AT_SLASH, 2, 2, AbilityType.offense, "Slash", 5, 10f, 8f);
-		Parry parry = new Parry(DF_PARRY, 2, 3, AbilityType.defense, "Parry", 5, 0f, 10f);
-		Fireblast fireBlast = new Fireblast(AT_FIREBLAST, 2, 8, AbilityType.offense, "Fireblast", 2, 20f, 2f, FIREBALL_EFFECT, null);
-		TeleportMostDst tmd = new TeleportMostDst(DF_TELEPORT_MOST_DST, 2, 2, AbilityType.defense, "Teleport Furthest Away", 5, 0f, 0f, EMPTY_CELL, null);
-		SuicideBomb sb = new SuicideBomb(AT_SUICIDEBOMB, 1, 3, AbilityType.offense, "Suicide Bomb", 0, 30f, 0f);
+		Blade_Strike bs = new Blade_Strike(AT_BLADE_STRIKE, 2, 2, AbilityType.offense, "Blade Strike", 5, 10f, 8f);
+		Blade_Block bb = new Blade_Block(DF_BLADE_BLOCK, 2, 3, AbilityType.defense, "Blade Block", 5, 0f, 10f);
+		Quick_Knife qk = new Quick_Knife(AT_QUICK_KNIFE, 1, 3, AbilityType.offense, "Quick Knife", 0, 30f, 0f);
+		Force_Field ff = new Force_Field(DF_FORCE_FIELD, 1, 3, AbilityType.defense, "Force Field", 0, 30f, 0f);
+		Pure_Heart ph = new Pure_Heart(DF_PURE_HEART, 1, 3, AbilityType.defense, "Pure Heart", 0, 30f, 0f);
+
+		Explode ex = new Explode(AT_EXPLODE, 1, 3, AbilityType.offense, "Explode", 0, 30f, 0f);
+
+		Electric_Charge ec = new Electric_Charge(AT_ELECTRIC_CHARGE, 1, 3, AbilityType.offense, "Pure Heart", 0, 30f, 0f, FIREBALL_EFFECT, null);
+		Ice_Strike is = new Ice_Strike(AT_ICE_STRIKE, 1, 3, AbilityType.offense, "Ice Strike", 0, 30f, 0f, FIREBALL_EFFECT, null);
+		Wave_of_Fire wof = new Wave_of_Fire(AT_WAVE_OF_FIRE, 2, 8, AbilityType.offense, "Wave of Fire", 2, 20f, 2f, FIREBALL_EFFECT, null);
+		Teleport tel = new Teleport(DF_TELEPORT, 2, 2, AbilityType.defense, "Teleport", 5, 0f, 0f, EMPTY_CELL, null);
 		
 		//Add to map
-		abilityMap.put(slash.getId(), slash);
-		abilityMap.put(parry.getId(), parry);
-		abilityMap.put(sb.getId(), sb);
-		abilityMap.put(fireBlast.getId(), fireBlast);
-		abilityMap.put(tmd.getId(), tmd);
+		abilityMap.put(bs.getId(), bs);
+		abilityMap.put(bb.getId(), bb);
+		abilityMap.put(ex.getId(), ex);
+		abilityMap.put(wof.getId(), wof);
+		abilityMap.put(tel.getId(), tel);
+		abilityMap.put(qk.getId(), qk);
+		abilityMap.put(ff.getId(), ff);
+		abilityMap.put(ph.getId(), ph);
+		abilityMap.put(ec.getId(), ec);
+		abilityMap.put(is.getId(), is);
 	}
 }

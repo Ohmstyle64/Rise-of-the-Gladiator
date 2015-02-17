@@ -80,12 +80,12 @@ public class CloseBasicE1 extends AiPlan {
 		correctFacing(enemPos, playerPos);
 		//Check ability
 		eAbilityComponent = Mappers.abMap.get(me);
-		if(!inAbilityRange(eAbilityComponent, Constants.AT_SLASH)) {
+		if(!inAbilityRange(eAbilityComponent, Constants.AT_BLADE_STRIKE)) {
 			aiState = AIState.chase;
 			return;
 		}
-		if(Mappers.staMap.get(me).energy >= eAbilityComponent.abilityMap.get(Constants.AT_SLASH).getEnergy_cost())
-			eAbilityComponent.abilityMap.get(Constants.AT_SLASH).isActivated = true;
+		if(Mappers.staMap.get(me).energy >= eAbilityComponent.abilityMap.get(Constants.AT_BLADE_STRIKE).getEnergy_cost())
+			eAbilityComponent.abilityMap.get(Constants.AT_BLADE_STRIKE).isActivated = true;
 	}
 
 	private void chase() {
@@ -95,7 +95,7 @@ public class CloseBasicE1 extends AiPlan {
 		correctFacing(enemPos, playerPos);
 		
 		eAbilityComponent = Mappers.abMap.get(me);
-		if(inAbilityRange(eAbilityComponent, Constants.AT_SLASH)) {
+		if(inAbilityRange(eAbilityComponent, Constants.AT_BLADE_STRIKE)) {
 			aiState = AIState.fight;
 			return;
 		}
