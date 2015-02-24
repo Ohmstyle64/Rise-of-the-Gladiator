@@ -8,12 +8,19 @@ import com.aneebo.rotg.components.StatComponent;
 import com.aneebo.rotg.utils.Constants;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.MathUtils;
 
-public class RangeTeleportBasicE1 extends AiPlan {
+public class BasicRangeAI extends AiPlan {
 	
 	private enum AIState {
 		idle, chase, fight
 	}
+	
+	private static final float PROXIMITY = 3f;
+	private static final float TICK = 6f;
+	private static final float FAIL = 0.1f;
+	private float timer;
 	
 	private PositionComponent playerPos;
 	private PositionComponent mePos;
@@ -22,10 +29,11 @@ public class RangeTeleportBasicE1 extends AiPlan {
 	private Ability ab;
 	private AIState aiState;
 
-	public RangeTeleportBasicE1(Entity me, Engine engine) {
+	public BasicRangeAI(Entity me, Engine engine) {
 		super(me, engine);
 		
 		aiState = AIState.idle;
+		timer = 0;
 	}
 
 	@Override
@@ -45,15 +53,18 @@ public class RangeTeleportBasicE1 extends AiPlan {
 	}
 
 	private void idle() {
-		aiState = AIState.chase;
+		aiState = AIState.fight;
 	}
 
 	private void fight() {
 		playerPos = Mappers.posMap.get(player);
 		mePos = Mappers.posMap.get(me);
+		int yDiff = (int) (playerPos.curYPos - mePos.curYPos);
+		int xDiff = (int) (playerPos.curXPos - mePos.curXPos);
 		
-		if(playerPos.curYPos != mePos.curYPos && playerPos.curXPos != mePos.curXPos) {
+		if(Math.sqrt(yDiff*yDiff + xDiff*xDiff) <= PROXIMITY) {
 			aiState = AIState.chase;
+			timer = 0;
 			return;
 		}
 		
@@ -61,7 +72,17 @@ public class RangeTeleportBasicE1 extends AiPlan {
 		abComponent = Mappers.abMap.get(me);
 		
 		correctFacing(mePos, playerPos);
-				
+		
+		timer += Gdx.graphics.getDeltaTime();
+		if(timer >= TICK) {
+			timer = 0;
+			if(MathUtils.randomBoolean(FAIL)) {
+				Gdx.app.log(statComponent.name+" : ", "Ability failed!");
+				return;
+			}
+		} else 
+			return;
+
 		ab = abComponent.abilityMap.get(Constants.AT_WAVE_OF_FIRE);
 		
 		if(statComponent.energy >= ab.getEnergy_cost()) {

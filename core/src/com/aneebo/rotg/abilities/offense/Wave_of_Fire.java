@@ -1,5 +1,7 @@
-package com.aneebo.rotg.abilities.range;
+package com.aneebo.rotg.abilities.offense;
 
+import com.aneebo.rotg.abilities.Ability;
+import com.aneebo.rotg.abilities.upgrades.Upgrade;
 import com.aneebo.rotg.abilities.util.Target;
 import com.aneebo.rotg.components.CollisionComponent;
 import com.aneebo.rotg.components.Mappers;
@@ -17,24 +19,23 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
-public class Wave_of_Fire extends RangeAbility {
-	
-	private static int id_Count = 0;
+public class Wave_of_Fire extends Ability {
 	
 	private PositionComponent pos;
 	private StatComponent stat;
 	private StatComponent fromStat;
 	private PositionComponent projPos;
 
-	public Wave_of_Fire(int id, int castTime, int range, AbilityType type,
-			String name, int cooldown, float damage, float energy_cost,String textureName,
-			Engine engine) {
-		super(id, castTime, range, type, name, cooldown, damage, energy_cost,textureName, engine);
+	public Wave_of_Fire(int id, int castTime, float range, AbilityType type,
+			String name, int cooldown, float damage, float energy_cost,
+			String textureName, Engine engine, Array<Upgrade> upgrades) {
+		super(id, castTime, range, type, name, cooldown, damage, energy_cost,
+				textureName, engine, upgrades);
 
 	}
 
-	public Wave_of_Fire(RangeAbility rangeAbility, Engine engine) {
-		super(rangeAbility, engine);
+	public Wave_of_Fire(Ability ability, Engine engine) {
+		super(ability, engine);
 	}
 
 	@Override
@@ -96,7 +97,7 @@ public class Wave_of_Fire extends RangeAbility {
 		eFireBlast.add(new RenderComponent(textureName));
 		eFireBlast.add(projPos);
 		eFireBlast.add(new CollisionComponent(ColliderType.projectile));
-		eFireBlast.add(new ProjectileComponent(me, this, path, 3f));
+		eFireBlast.add(new ProjectileComponent(me, this, path, 3f, damage));
 		ParticleEffect pEffect = new ParticleEffect();
 		pEffect.load(Gdx.files.internal("img/effects/explosion.p"), Gdx.files.internal("img/effects/"));
 		eFireBlast.add(new ParticleComponent(pEffect));
@@ -114,11 +115,11 @@ public class Wave_of_Fire extends RangeAbility {
 	}
 
 	@Override
-	public void hit(Entity from, Entity hit) {
+	public void hit(ProjectileComponent proj, Entity from, Entity hit) {
 		stat = Mappers.staMap.get(hit);
 		fromStat = Mappers.staMap.get(from);
 		if(stat != null) {
-			float damageDealt = (1+fromStat.eValue)*damage;
+			float damageDealt = (1+fromStat.eValue)*proj.damage;
 			stat.health -= damageDealt;
 			Gdx.app.log(fromStat.name," has dealt "+damageDealt+" to "+stat.name);
 			fromStat.eValue = 0;
@@ -140,6 +141,12 @@ public class Wave_of_Fire extends RangeAbility {
 
 	@Override
 	public void activateTier3() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void abilityActing(Entity me) {
 		// TODO Auto-generated method stub
 		
 	}

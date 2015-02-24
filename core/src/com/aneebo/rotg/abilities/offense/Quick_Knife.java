@@ -1,28 +1,24 @@
-package com.aneebo.rotg.abilities.range;
+package com.aneebo.rotg.abilities.offense;
 
+import com.aneebo.rotg.abilities.Ability;
+import com.aneebo.rotg.abilities.upgrades.Upgrade;
+import com.aneebo.rotg.components.ProjectileComponent;
 import com.aneebo.rotg.types.AbilityType;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Array;
 
-public class Electric_Charge extends RangeAbility {
+public class Quick_Knife extends Ability {
 
-	public Electric_Charge(int id, int castTime, int range, AbilityType type,
+	public Quick_Knife(int id, int castTime, float range, AbilityType type,
 			String name, int cooldown, float damage, float energy_cost,
-			String textureName, Engine engine) {
+			String textureName, Engine engine, Array<Upgrade> upgrades) {
 		super(id, castTime, range, type, name, cooldown, damage, energy_cost,
-				textureName, engine);
-		// TODO Auto-generated constructor stub
+				textureName, engine, upgrades);
 	}
 	
-	public Electric_Charge(RangeAbility rangeAbility, Engine engine) {
-		super(rangeAbility, engine);
-	}
-
-	@Override
-	public void hit(Entity from, Entity hit) {
-		// TODO Auto-generated method stub
-
+	public Quick_Knife(Ability ability, Engine engine) {
+		super(ability, engine);
 	}
 
 	@Override
@@ -59,6 +55,18 @@ public class Electric_Charge extends RangeAbility {
 	public void activateTier3() {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void hit(ProjectileComponent proj, Entity from, Entity hit) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void abilityActing(Entity me) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

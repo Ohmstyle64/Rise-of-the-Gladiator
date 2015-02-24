@@ -1,7 +1,10 @@
 package com.aneebo.rotg.abilities;
 
+import com.aneebo.rotg.abilities.upgrades.Upgrade;
 import com.aneebo.rotg.components.Mappers;
+import com.aneebo.rotg.components.ProjectileComponent;
 import com.aneebo.rotg.types.AbilityType;
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -12,10 +15,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 
 public abstract class Ability {
-	protected int id, castTime, range, cooldown, tier;
+	protected int id, castTime, cooldown, tier;
 	protected AbilityType type;
 	protected String name;
-	protected float castTimeTimer, cooldownTimer, damage, energy_cost;
+	protected float castTimeTimer, cooldownTimer, damage, energy_cost, range;
 	public boolean isAvailable;
 	public boolean isInterrupted;
 	public boolean isActivated;
@@ -24,8 +27,12 @@ public abstract class Ability {
 	private Label label;
 	private Skin skin;
 	protected Array<Entity> targets;
+	protected Engine engine;
+
+	protected String textureName;
+	protected Array<Upgrade> upgrades;
 	
-	public Ability(int id, int castTime, int range, AbilityType type, String name, int cooldown, float damage, float energy_cost) {
+	public Ability(int id, int castTime, float range, AbilityType type, String name, int cooldown, float damage, float energy_cost, String textureName, Engine engine, Array<Upgrade> upgrades) {
 		this.id = id;
 		this.castTime = castTime;
 		this.range = range;
@@ -34,6 +41,9 @@ public abstract class Ability {
 		this.cooldown = cooldown;
 		this.damage = damage;
 		this.energy_cost = energy_cost;
+		this.engine = engine;
+		this.textureName = textureName;
+		this.upgrades = upgrades;
 		justStarted = true;
 		isAvailable = false;
 		isInterrupted = false;
@@ -49,8 +59,9 @@ public abstract class Ability {
 		label.setPosition(Gdx.graphics.getWidth() / 2 - label.getWidth() / 2, Gdx.graphics.getHeight() * 0.9f - label.getHeight());
 	}
 	
-	public Ability(Ability ability) {
-		this(ability.getId(), ability.getCastTime(), ability.getRange(), ability.getType(), ability.getName(), ability.getCooldown(), ability.getDamage(), ability.getEnergy_cost());
+	public Ability(Ability ability, Engine engine) {
+		this(ability.getId(), ability.getCastTime(), ability.getRange(), ability.getType(), ability.getName(), ability.getCooldown(),
+				ability.getDamage(), ability.getEnergy_cost(), ability.getTexture(), engine, ability.getUpgrades());
 	}
 	
 
@@ -67,7 +78,7 @@ public abstract class Ability {
 		return cooldown;
 	}
 
-	public int getRange() {
+	public float getRange() {
 		return range;
 	}
 
@@ -91,6 +102,17 @@ public abstract class Ability {
 		return name;
 	}
 	
+	public String getTexture() {
+		return textureName;
+	}
+	
+	public Engine getEngine() {
+		return engine;
+	}
+	
+	public Array<Upgrade> getUpgrades() {
+		return upgrades;
+	}
 	
 	public float getDamage() {
 		return damage;
@@ -100,7 +122,7 @@ public abstract class Ability {
 		return energy_cost;
 	}
 
-	protected float interrupt() {
+	public float interrupt() {
 		float perc = castTimeTimer / castTime;
 		isInterrupted = true;
 		if(perc < 0.15f) {
@@ -144,6 +166,9 @@ public abstract class Ability {
 			onAbilityStart(me);
 			justStarted = false;
 		}
+		if(isActivated) {
+			abilityActing(me);
+		}
 		if(castTimeTimer >=castTime) {
 			onAbilityEnd(me);
 			cleanUp();
@@ -154,6 +179,8 @@ public abstract class Ability {
 	
 	protected abstract void onAbilityEnd(Entity me);
 	
+	protected abstract void abilityActing(Entity me);
+	
 	public abstract Array<Entity> getTargets(Entity me, Entity[] allEnemies);
 	
 	public abstract void activateTier1();
@@ -161,6 +188,8 @@ public abstract class Ability {
 	public abstract void activateTier2();
 	
 	public abstract void activateTier3();
+	
+	public abstract void hit(ProjectileComponent proj, Entity from, Entity hit);
 
 	protected void onLoopStart(float delta) {
 		isAvailable = (cooldownTimer >= cooldown);

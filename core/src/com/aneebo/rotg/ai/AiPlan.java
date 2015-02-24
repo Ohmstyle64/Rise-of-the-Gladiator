@@ -41,17 +41,15 @@ public abstract class AiPlan {
 	}
 	
 	protected void correctFacing(PositionComponent mePos, PositionComponent otherPos) {
-		float angle = dir.set(mePos.curXPos, mePos.curYPos).angle(ref.set(otherPos.curXPos, otherPos.curYPos));
-		if(angle < 0) angle += 360;
+		float angle = dir.set(mePos.curXPos, mePos.curYPos).sub(ref.set(otherPos.curXPos, otherPos.curYPos)).angle();
 		angle *= MathUtils.degRad;
-		
-		if(angle > MathUtils.PI*(1/4) && angle < MathUtils.PI*(3/4)) {
+		if(angle > MathUtils.PI*(5f/4f) && angle < MathUtils.PI*(7f/4f)) {
 			mePos.direction = DirectionType.Up;
-		}else if(angle >= MathUtils.PI*(3/4) && angle <= MathUtils.PI*(5/4)) {
-			mePos.direction = DirectionType.Left;
-		}else if(angle > MathUtils.PI*(5/4) && angle < MathUtils.PI*(7/4)) {
+		}else if(angle > MathUtils.PI*(1f/4f) && angle < MathUtils.PI*(3f/4f)) {
 			mePos.direction = DirectionType.Down;
-		}else 
+		}else if(angle >= MathUtils.PI*(3f/4f) && angle <= MathUtils.PI*(5f/4f)) {
 			mePos.direction = DirectionType.Right;
+		}else 
+			mePos.direction = DirectionType.Left;
 	}
 }

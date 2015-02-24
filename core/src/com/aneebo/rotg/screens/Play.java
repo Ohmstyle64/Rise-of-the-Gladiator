@@ -1,7 +1,6 @@
 package com.aneebo.rotg.screens;
 
 import com.aneebo.rotg.abilities.Ability;
-import com.aneebo.rotg.abilities.range.RangeAbility;
 import com.aneebo.rotg.components.AbilityComponent;
 import com.aneebo.rotg.components.CollisionComponent;
 import com.aneebo.rotg.components.InputComponent;
@@ -36,8 +35,8 @@ import com.aneebo.rotg.utils.Constants;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -50,6 +49,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
@@ -85,7 +85,7 @@ public class Play implements Screen {
 	private PerformanceCounter pUIUpdates;
 	private PerformanceCounter pLevelManager;
 	
-	
+	WindowStyle as;
 		
 	//UI
 	private Table table;
@@ -155,6 +155,9 @@ public class Play implements Screen {
 		abilityList.add(Constants.abilityMap.get(Constants.AT_BLADE_STRIKE));
 		abilityList.add(Constants.abilityMap.get(Constants.DF_BLADE_BLOCK));
 		abilityList.add(Constants.abilityMap.get(Constants.AT_WAVE_OF_FIRE));
+		abilityList.add(Constants.abilityMap.get(Constants.DF_TELEPORT));
+		abilityList.add(Constants.abilityMap.get(Constants.DF_FORCE_FIELD));
+		abilityList.add(Constants.abilityMap.get(Constants.DF_PURE_HEART));
 		
 		
 		
@@ -235,7 +238,7 @@ public class Play implements Screen {
 				abilityBtn.addListener(new ClickListener() {
 					@Override
 					public void clicked(InputEvent event, float x, float y) {
-						if(a instanceof RangeAbility) {
+						if(a instanceof Ability) {
 							if(pos.isStopped()) {
 								a.isActivated = true;
 							}

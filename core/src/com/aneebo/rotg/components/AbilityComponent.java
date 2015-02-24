@@ -4,7 +4,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 import com.aneebo.rotg.abilities.Ability;
-import com.aneebo.rotg.abilities.range.RangeAbility;
 import com.aneebo.rotg.utils.Constants;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Engine;
@@ -25,10 +24,10 @@ public class AbilityComponent extends Component {
 		abilityMap = new ObjectMap<Integer, Ability>();
 		
 		for(int i = 0; i < abilityList.size; i++) {
-			if(abilityList.get(i) instanceof RangeAbility) {
+			if(abilityList.get(i) instanceof Ability) {
 				Class<?> clazz = abilityList.get(i).getClass();
 				try {
-					Constructor<?> ctor = clazz.getConstructor(RangeAbility.class, Engine.class);
+					Constructor<?> ctor = clazz.getConstructor(Ability.class, Engine.class);
 					Ability r = (Ability) ctor.newInstance(abilityList.get(i), engine);
 					this.abilityList.add(r);
 					abilityMap.put(r.getId(), r);

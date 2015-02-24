@@ -1,23 +1,31 @@
-package com.aneebo.rotg.abilities;
+package com.aneebo.rotg.abilities.offense;
 
+import com.aneebo.rotg.abilities.Ability;
+import com.aneebo.rotg.abilities.upgrades.Upgrade;
 import com.aneebo.rotg.abilities.util.Target;
 import com.aneebo.rotg.components.Mappers;
+import com.aneebo.rotg.components.ProjectileComponent;
 import com.aneebo.rotg.components.StatComponent;
 import com.aneebo.rotg.types.AbilityType;
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 
 public class Blade_Strike extends Ability {
-	
+
 	private StatComponent stat;
 	
-	public Blade_Strike(int id, int castTime, int range, AbilityType type, String name, int cooldown, float damage, float energy_cost) {
-		super(id, castTime, range, type, name, cooldown, damage, energy_cost);
+	public Blade_Strike(int id, int castTime, float range, AbilityType type,
+			String name, int cooldown, float damage, float energy_cost,
+			String textureName, Engine engine, Array<Upgrade> upgrades) {
+		super(id, castTime, range, type, name, cooldown, damage, energy_cost,
+				textureName, engine, upgrades);
+		// TODO Auto-generated constructor stub
 	}
-	
-	public Blade_Strike(Ability ability) {
-		super(ability);
+
+	public Blade_Strike(Ability ability, Engine engine) {
+		super(ability, engine);
 	}
 
 	@Override
@@ -34,8 +42,9 @@ public class Blade_Strike extends Ability {
 	@Override
 	protected void onAbilityStart(Entity me) {
 		stat = Mappers.staMap.get(me);
-		
-		if(stat.energy - energy_cost < 0) {
+		stat.energy -= energy_cost;
+		if(stat.energy < 0) {
+			//TODO:This needs to be an alert in the GUI
 			Gdx.app.log(stat.name, "Not enough energy!");
 			stat.energy = 0;
 			isInterrupted = true;
@@ -67,6 +76,20 @@ public class Blade_Strike extends Ability {
 
 	@Override
 	public void activateTier3() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+	@Override
+	public void hit(ProjectileComponent proj, Entity from, Entity hit) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void abilityActing(Entity me) {
 		// TODO Auto-generated method stub
 		
 	}

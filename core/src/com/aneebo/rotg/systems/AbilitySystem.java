@@ -81,7 +81,7 @@ public class AbilitySystem extends EntitySystem {
 				}
 			}
 			for(int k = 0; k < slots; k++) {
-				abilitySlots.get(k).getTargets(abe, (Entity[]) posEntities.toArray(Entity.class));
+				abilitySlots.get(k).getTargets(abe, (Entity[]) enemyInRange.toArray(Entity.class));
 				abilitySlots.get(k).action(deltaTime, abe);
 			}
 			enemyInRange.clear();

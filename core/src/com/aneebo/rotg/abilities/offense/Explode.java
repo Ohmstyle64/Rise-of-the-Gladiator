@@ -1,34 +1,31 @@
-package com.aneebo.rotg.abilities.range;
+package com.aneebo.rotg.abilities.offense;
 
+import com.aneebo.rotg.abilities.Ability;
+import com.aneebo.rotg.abilities.upgrades.Upgrade;
+import com.aneebo.rotg.components.ProjectileComponent;
 import com.aneebo.rotg.types.AbilityType;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Array;
 
-public class Ice_Strike extends RangeAbility {
+public class Explode extends Ability {
 
-	public Ice_Strike(int id, int castTime, int range, AbilityType type,
+	public Explode(int id, int castTime, float range, AbilityType type,
 			String name, int cooldown, float damage, float energy_cost,
-			String textureName, Engine engine) {
+			String textureName, Engine engine, Array<Upgrade> upgrades) {
 		super(id, castTime, range, type, name, cooldown, damage, energy_cost,
-				textureName, engine);
+				textureName, engine, upgrades);
 		// TODO Auto-generated constructor stub
 	}
+
+	public Explode(Ability ability, Engine engine) {
+		super(ability, engine);
+	}
 	
-	public Ice_Strike(RangeAbility rangeAbility, Engine engine) {
-		super(rangeAbility, engine);
-	}
-
-	@Override
-	public void hit(Entity from, Entity hit) {
-		// TODO Auto-generated method stub
-
-	}
-
+	
 	@Override
 	protected void onAbilityStart(Entity me) {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
@@ -38,8 +35,13 @@ public class Ice_Strike extends RangeAbility {
 	}
 
 	@Override
-	public Array<Entity> getTargets(Entity me, Entity[] allEnemies) {
+	public void hit(ProjectileComponent proj, Entity from, Entity hit) {
 		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Array<Entity> getTargets(Entity me, Entity[] allEnemies) {
 		return null;
 	}
 
@@ -60,5 +62,12 @@ public class Ice_Strike extends RangeAbility {
 		// TODO Auto-generated method stub
 
 	}
+
+	@Override
+	protected void abilityActing(Entity me) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }

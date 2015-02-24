@@ -3,23 +3,31 @@ package com.aneebo.rotg.ai;
 import com.aneebo.rotg.components.AbilityComponent;
 import com.aneebo.rotg.components.Mappers;
 import com.aneebo.rotg.components.PositionComponent;
+import com.aneebo.rotg.components.StatComponent;
 import com.aneebo.rotg.utils.Astar;
 import com.aneebo.rotg.utils.Constants;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.IntArray;
 
-public class CloseBasicE1 extends AiPlan {
+public class BasicMeleeAI extends AiPlan {
 	
 	private enum AIState {
 		idle,chase,fight,flee
 	}
+	
+	private static final float TICK = 1.5f;
+	private static final float FAIL = 0.1f;
+	private float timer;
 	
 	private AIState aiState;
 	
 	private AbilityComponent eAbilityComponent;
 	private PositionComponent playerPos;
 	private PositionComponent enemPos;
+	private StatComponent statComponent;
 	private Entity e;
 
 
@@ -29,10 +37,12 @@ public class CloseBasicE1 extends AiPlan {
 	private static final int MAP_SIZE = ROWS * COLS;
 	
 	
-	public CloseBasicE1(Entity me, Engine engine) {
+	public BasicMeleeAI(Entity me, Engine engine) {
 		super(me, engine);
 		
 		aiState = AIState.idle;
+		
+		timer = 0;
 		
 		boolean[] validityMap = new boolean[COLS*ROWS];
 		
@@ -77,7 +87,21 @@ public class CloseBasicE1 extends AiPlan {
 		//Check facing
 		enemPos = Mappers.posMap.get(me);
 		playerPos = Mappers.posMap.get(player);
+		
 		correctFacing(enemPos, playerPos);
+		
+		statComponent = Mappers.staMap.get(me);
+		
+		timer += Gdx.graphics.getDeltaTime();
+		if(timer >= TICK) {
+			timer = 0;
+			if(MathUtils.randomBoolean(FAIL)) {
+				Gdx.app.log(statComponent.name+" : ", "Ability failed!");
+				return;
+			}
+		} else 
+			return;
+		
 		//Check ability
 		eAbilityComponent = Mappers.abMap.get(me);
 		if(!inAbilityRange(eAbilityComponent, Constants.AT_BLADE_STRIKE)) {
