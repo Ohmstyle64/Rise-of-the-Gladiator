@@ -6,6 +6,7 @@ import com.aneebo.rotg.abilities.defense.Force_Field;
 import com.aneebo.rotg.abilities.defense.Pure_Heart;
 import com.aneebo.rotg.abilities.defense.Teleport;
 import com.aneebo.rotg.abilities.offense.Blade_Strike;
+import com.aneebo.rotg.abilities.offense.DashingStrike;
 import com.aneebo.rotg.abilities.offense.Electric_Charge;
 import com.aneebo.rotg.abilities.offense.Explode;
 import com.aneebo.rotg.abilities.offense.Ice_Strike;
@@ -75,10 +76,11 @@ public class Constants {
 	public static final int AT_ELECTRIC_CHARGE = 3;
 	public static final int AT_ICE_STRIKE = 4;
 	public static final int AT_EXPLODE = 5;
-	public static final int DF_BLADE_BLOCK = 6;
-	public static final int DF_PURE_HEART = 7;
-	public static final int DF_FORCE_FIELD = 8;
-	public static final int DF_TELEPORT = 9;
+	public static final int AT_DASHING_STRIKE = 6;
+	public static final int DF_BLADE_BLOCK = 7;
+	public static final int DF_PURE_HEART = 8;
+	public static final int DF_FORCE_FIELD = 9;
+	public static final int DF_TELEPORT = 10;
 
 	public static final ObjectMap<Integer, Ability> abilityMap = new ObjectMap<Integer, Ability>();
 	static {
@@ -98,6 +100,7 @@ public class Constants {
 		Ice_Strike is = new Ice_Strike(AT_ICE_STRIKE, 1, 3, AbilityType.magic, "Ice Strike", 0, 30f, 0f, EMPTY_CELL, null, fake);
 		Wave_of_Fire wof = new Wave_of_Fire(AT_WAVE_OF_FIRE, 2, 8, AbilityType.magic, "Wave of Fire", 2, 20f, 2f, FIREBALL_EFFECT, null, fake);
 		Teleport tel = new Teleport(DF_TELEPORT, 2, LAST_COL, AbilityType.magic, "Teleport", 1, 0f, 0f, EMPTY_CELL, null, fake);
+		DashingStrike ds = new DashingStrike(AT_DASHING_STRIKE, 0.5f, 3f, AbilityType.magic, "Dashing Strike", 5f, 0f, 0f, EMPTY_CELL, null, fake);
 		
 		//Add to map
 		abilityMap.put(bs.getId(), bs);
@@ -110,5 +113,6 @@ public class Constants {
 		abilityMap.put(ph.getId(), ph);
 		abilityMap.put(ec.getId(), ec);
 		abilityMap.put(is.getId(), is);
+		abilityMap.put(ds.getId(), ds);
 	}
 }

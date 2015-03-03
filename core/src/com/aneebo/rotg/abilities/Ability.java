@@ -15,10 +15,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 
 public abstract class Ability {
-	protected int id, castTime, cooldown, tier;
+	protected int id, tier;
 	protected AbilityType type;
 	protected String name;
-	protected float castTimeTimer, cooldownTimer, damage, energy_cost, range;
+	protected float castTimeTimer, cooldownTimer, damage, energy_cost, range, castTime, cooldown;
 	public boolean isAvailable;
 	public boolean isInterrupted;
 	public boolean isActivated;
@@ -32,7 +32,7 @@ public abstract class Ability {
 	protected String textureName;
 	protected Array<Upgrade> upgrades;
 	
-	public Ability(int id, int castTime, float range, AbilityType type, String name, int cooldown, float damage, float energy_cost, String textureName, Engine engine, Array<Upgrade> upgrades) {
+	public Ability(int id, float castTime, float range, AbilityType type, String name, float cooldown, float damage, float energy_cost, String textureName, Engine engine, Array<Upgrade> upgrades) {
 		this.id = id;
 		this.castTime = castTime;
 		this.range = range;
@@ -70,11 +70,11 @@ public abstract class Ability {
 		return id;
 	}
 
-	public int getCastTime() {
+	public float getCastTime() {
 		return castTime;
 	}
 	
-	public int getCooldown() {
+	public float getCooldown() {
 		return cooldown;
 	}
 
@@ -125,9 +125,9 @@ public abstract class Ability {
 	public float interrupt() {
 		float perc = castTimeTimer / castTime;
 		isInterrupted = true;
-		if(perc < 0.15f) {
+		if(perc < 0.25f) {
 			return 1.5f;
-		}else if(perc < 0.25f) {
+		}else if(perc < 0.5f) {
 			return 0.75f;
 		}else if(perc < 0.75f) {
 			return 0.1f; 

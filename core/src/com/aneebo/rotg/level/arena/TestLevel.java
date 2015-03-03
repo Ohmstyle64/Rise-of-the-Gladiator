@@ -57,28 +57,28 @@ public class TestLevel extends Level implements EntityListener {
 		//ROUND 1
 		Array<Entity> r1entities = new Array<Entity>(2);
 		//ENTITIES
-		Entity r1e1 = new Entity();
-		r1e1.add(new PositionComponent(11, 5, DirectionType.Left));
-		r1e1.add(new RenderComponent(Constants.ICE_FORM));
-		r1e1.add(new CollisionComponent(ColliderType.character));
-		r1e1.add(new AIComponent(new BasicRangeAI(r1e1, engine)));
-		Array<Ability> abilities_r1e1 = new Array<Ability>();
-		abilities_r1e1.add(Constants.abilityMap.get(Constants.AT_WAVE_OF_FIRE));
-		abilities_r1e1.add(Constants.abilityMap.get(Constants.DF_TELEPORT));
-		r1e1.add(new AbilityComponent(abilities_r1e1, engine));
-		r1e1.add(new StatComponent("Range_Enemy_1", 25f, 60f, Color.YELLOW, 2f, 2f, 1.3f));
-		r1entities.add(r1e1);
+//		Entity r1e1 = new Entity();
+//		r1e1.add(new PositionComponent(11, 5, DirectionType.Left));
+//		r1e1.add(new RenderComponent(Constants.ICE_FORM));
+//		r1e1.add(new CollisionComponent(ColliderType.character));
+//		r1e1.add(new AIComponent(new BasicRangeAI(r1e1, engine)));
+//		Array<Ability> abilities_r1e1 = new Array<Ability>();
+//		abilities_r1e1.add(Constants.abilityMap.get(Constants.AT_WAVE_OF_FIRE));
+//		abilities_r1e1.add(Constants.abilityMap.get(Constants.DF_TELEPORT));
+//		r1e1.add(new AbilityComponent(abilities_r1e1, engine));
+//		r1e1.add(new StatComponent("Range_Enemy_1", 25f, 60f, Color.YELLOW, 2f, 2f, 1.3f));
+//		r1entities.add(r1e1);
 		
-//		Entity r1e2 = new Entity();
-//		r1e2.add(new PositionComponent(5, 5, DirectionType.Left));
-//		r1e2.add(new RenderComponent(Constants.PIG_FORM));
-//		r1e2.add(new CollisionComponent(ColliderType.character));
-//		r1e2.add(new AIComponent(new BasicMeleeAI(r1e2, engine)));
-//		Array<Ability> abilities_r1e2 = new Array<Ability>();
-//		abilities_r1e2.add(Constants.abilityMap.get(Constants.AT_BLADE_STRIKE));
-//		r1e2.add(new AbilityComponent(abilities_r1e2, engine));
-//		r1e2.add(new StatComponent("Close_Enemy_1", 25f, 60f, Color.YELLOW, 2f, 2f, 1.5f));
-//		r1entities.add(r1e2);
+		Entity r1e1 = new Entity();
+		r1e1.add(new PositionComponent(5, 5, DirectionType.Left));
+		r1e1.add(new RenderComponent(Constants.PIG_FORM));
+		r1e1.add(new CollisionComponent(ColliderType.character));
+		r1e1.add(new AIComponent(new BasicMeleeAI(r1e1, engine)));
+		Array<Ability> abilities_r1e2 = new Array<Ability>();
+		abilities_r1e2.add(Constants.abilityMap.get(Constants.AT_BLADE_STRIKE));
+		r1e1.add(new AbilityComponent(abilities_r1e2, engine));
+		r1e1.add(new StatComponent("Close_Enemy_1", 25f, 60f, Color.YELLOW, 2f, 2f, 1.5f));
+		r1entities.add(r1e1);
 		
 //		Entity r1e3 = new Entity();
 //		r1e3.add(new PositionComponent(5, 3, DirectionType.Left));
@@ -113,11 +113,12 @@ public class TestLevel extends Level implements EntityListener {
 		r2e1.add(new PositionComponent(11, 5, DirectionType.Left));
 		r2e1.add(new RenderComponent(Constants.ICE_FORM));
 		r2e1.add(new CollisionComponent(ColliderType.character));
-		r2e1.add(new AIComponent(new BasicMeleeAI(r2e1, engine)));
+		r2e1.add(new AIComponent(new BasicRangeAI(r2e1, engine)));
 		Array<Ability> abilities_r2e1 = new Array<Ability>();
-		abilities_r2e1.add(Constants.abilityMap.get(Constants.AT_BLADE_STRIKE));
+		abilities_r2e1.add(Constants.abilityMap.get(Constants.AT_WAVE_OF_FIRE));
+		abilities_r2e1.add(Constants.abilityMap.get(Constants.DF_TELEPORT));
 		r2e1.add(new AbilityComponent(abilities_r2e1, engine));
-		r2e1.add(new StatComponent("Enemy2", 35f, 40f, Color.YELLOW, 2f, 2f, 1.3f));
+		r2e1.add(new StatComponent("Range_Enemy_1", 25f, 60f, Color.YELLOW, 2f, 2f, 1.3f));
 		r2entities.add(r2e1);
 		
 		Round r2 = new Round(r2entities);
@@ -135,10 +136,22 @@ public class TestLevel extends Level implements EntityListener {
 		abilities_r3e1.add(Constants.abilityMap.get(Constants.AT_BLADE_STRIKE));
 		r3e1.add(new AbilityComponent(abilities_r3e1, engine));
 		r3e1.add(new StatComponent("Enemy3", 45f, 50f, Color.YELLOW, 2f, 2f, 1.3f));
-		r3entities.add(r3e1);		
+		r3entities.add(r3e1);
+		
+		Entity r3e2 = new Entity();
+		r3e2.add(new PositionComponent(2, 8, DirectionType.Left));
+		r3e2.add(new RenderComponent(Constants.ICE_FORM));
+		r3e2.add(new CollisionComponent(ColliderType.character));
+		r3e2.add(new AIComponent(new BasicMeleeAI(r3e2, engine)));
+		Array<Ability> abilities_r3e2 = new Array<Ability>();
+		abilities_r3e2.add(Constants.abilityMap.get(Constants.AT_BLADE_STRIKE));
+		r3e2.add(new AbilityComponent(abilities_r3e2, engine));
+		r3e2.add(new StatComponent("Enemy3", 45f, 50f, Color.YELLOW, 2f, 2f, 1.3f));
+		r3entities.add(r3e2);
 		
 		Round r3 = new Round(r3entities);
 		rounds.add(r3);
+		
 	}
 
 	@Override

@@ -47,11 +47,6 @@ public class CollisionSystem extends EntitySystem {
 			ent1Pos = Mappers.posMap.get(e1);
 			if(ent1Pos.isStopped()) continue;
 			
-//			proj = Mappers.projMap.get(e1);
-//			if(proj != null) {
-//				System.out.println("apples");
-//			}
-			
 			//CHECK IF ENTITIY HIT A WALL
 			if(wallLayer.getCell((int)ent1Pos.curXPos, (int)ent1Pos.curYPos) != null ||
 					wallLayer.getCell(ent1Pos.nXPos, ent1Pos.nYPos) != null) {
@@ -76,21 +71,20 @@ public class CollisionSystem extends EntitySystem {
 					if(ent2Col.type != ColliderType.projectile &&
 							ent1Pos.nXPos == ent2Pos.curXPos &&
 							ent1Pos.nYPos == ent2Pos.curYPos) {
-							switch(ent2Col.type) {
-							case character:
-								ent1Pos.nXPos = (int)ent1Pos.curXPos;
-								ent1Pos.nYPos = (int)ent1Pos.curYPos;
-								break;
-							case trap:
-								break;
-							case levelChange:
-								LevelChangerComponent lcc = Mappers.lvlcMap.get(e2);
-								Play.levelManager.goToLevel(lcc.level);
-								break;
-							default:
-								break;
+						switch(ent2Col.type) {
+						case character:
+							ent1Pos.nXPos = (int)ent1Pos.curXPos;
+							ent1Pos.nYPos = (int)ent1Pos.curYPos;
+							break;
+						case trap:
+							break;
+						case levelChange:
+							LevelChangerComponent lcc = Mappers.lvlcMap.get(e2);
+							Play.levelManager.goToLevel(lcc.level);
+							break;
+						default:
+							break;
 						}
-					
 					}
 				}else{
 					float dstX = Math.abs(ent1Pos.curXPos - ent2Pos.curXPos);
@@ -125,7 +119,6 @@ public class CollisionSystem extends EntitySystem {
 								break;
 						}
 					}
-					
 				}
 			}
 		}

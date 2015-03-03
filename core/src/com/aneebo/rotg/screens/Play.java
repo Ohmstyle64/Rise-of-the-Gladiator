@@ -155,9 +155,10 @@ public class Play implements Screen {
 		abilityList.add(Constants.abilityMap.get(Constants.AT_BLADE_STRIKE));
 		abilityList.add(Constants.abilityMap.get(Constants.DF_BLADE_BLOCK));
 		abilityList.add(Constants.abilityMap.get(Constants.AT_WAVE_OF_FIRE));
-		abilityList.add(Constants.abilityMap.get(Constants.DF_TELEPORT));
-		abilityList.add(Constants.abilityMap.get(Constants.DF_FORCE_FIELD));
-		abilityList.add(Constants.abilityMap.get(Constants.DF_PURE_HEART));
+		abilityList.add(Constants.abilityMap.get(Constants.AT_DASHING_STRIKE));
+//		abilityList.add(Constants.abilityMap.get(Constants.DF_TELEPORT));
+//		abilityList.add(Constants.abilityMap.get(Constants.DF_FORCE_FIELD));
+//		abilityList.add(Constants.abilityMap.get(Constants.DF_PURE_HEART));
 		
 		
 		
@@ -167,7 +168,7 @@ public class Play implements Screen {
 		player.add(new CollisionComponent(ColliderType.character));
 		player.add(ability = new AbilityComponent(abilityList, engine));
 		player.add(stat = new StatComponent("Kevin", 35f, 60f, Color.RED, 5, 5, 1.5f));
-		player.add(new RenderComponent(Constants.DRAGON_FORM));		
+		player.add(new RenderComponent(Constants.DRAGON_FORM));
 //		player.add(new AnimationComponent(Assets.assetManager.get(Constants.BODY_PLAYER, Texture.class),64,64, stat.speed / 16));
 		ObjectMap<Integer, Item> equipped = new ObjectMap<Integer, Item>();
 		ChestP1 cp1 = new ChestP1();
@@ -195,7 +196,8 @@ public class Play implements Screen {
 		table.add(createStats()).top().left().row();	
 		table.add(createMovementButtons()).bottom().left().expand();
 		table.add(createAbilitySlots());
-		
+		//Add Action Buttons
+		//Add Potion Buttons
 		stage.addActor(table);
 	}
 	

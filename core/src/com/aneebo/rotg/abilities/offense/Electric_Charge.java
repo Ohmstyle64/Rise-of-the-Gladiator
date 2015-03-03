@@ -10,8 +10,8 @@ import com.badlogic.gdx.utils.Array;
 
 public class Electric_Charge extends Ability {
 
-	public Electric_Charge(int id, int castTime, float range, AbilityType type,
-			String name, int cooldown, float damage, float energy_cost,
+	public Electric_Charge(int id, float castTime, float range, AbilityType type,
+			String name, float cooldown, float damage, float energy_cost,
 			String textureName, Engine engine, Array<Upgrade> upgrades) {
 		super(id, castTime, range, type, name, cooldown, damage, energy_cost,
 				textureName, engine, upgrades);

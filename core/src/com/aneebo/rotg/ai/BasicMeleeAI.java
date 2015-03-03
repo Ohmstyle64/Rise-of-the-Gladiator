@@ -88,8 +88,6 @@ public class BasicMeleeAI extends AiPlan {
 		enemPos = Mappers.posMap.get(me);
 		playerPos = Mappers.posMap.get(player);
 		
-		correctFacing(enemPos, playerPos);
-		
 		statComponent = Mappers.staMap.get(me);
 		
 		timer += Gdx.graphics.getDeltaTime();

@@ -16,8 +16,8 @@ public class Pure_Heart extends Ability {
 	private StatComponent stat;
 	private Array<Entity> targets;
 	
-	public Pure_Heart(int id, int castTime, float range, AbilityType type,
-			String name, int cooldown, float damage, float energy_cost,
+	public Pure_Heart(int id, float castTime, float range, AbilityType type,
+			String name, float cooldown, float damage, float energy_cost,
 			String textureName, Engine engine, Array<Upgrade> upgrades) {
 		super(id, castTime, range, type, name, cooldown, damage, energy_cost,
 				textureName, engine, upgrades);

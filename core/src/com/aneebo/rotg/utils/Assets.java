@@ -2,7 +2,6 @@ package com.aneebo.rotg.utils;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Assets {
 	public static final AssetManager assetManager = new AssetManager();

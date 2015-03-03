@@ -26,8 +26,8 @@ public class Wave_of_Fire extends Ability {
 	private StatComponent fromStat;
 	private PositionComponent projPos;
 
-	public Wave_of_Fire(int id, int castTime, float range, AbilityType type,
-			String name, int cooldown, float damage, float energy_cost,
+	public Wave_of_Fire(int id, float castTime, float range, AbilityType type,
+			String name, float cooldown, float damage, float energy_cost,
 			String textureName, Engine engine, Array<Upgrade> upgrades) {
 		super(id, castTime, range, type, name, cooldown, damage, energy_cost,
 				textureName, engine, upgrades);

@@ -20,8 +20,8 @@ public class Blade_Block extends Ability {
 	private Entity e;
 	
 
-	public Blade_Block(int id, int castTime, float range, AbilityType type,
-			String name, int cooldown, float damage, float energy_cost,
+	public Blade_Block(int id, float castTime, float range, AbilityType type,
+			String name, float cooldown, float damage, float energy_cost,
 			String textureName, Engine engine, Array<Upgrade> upgrades) {
 		super(id, castTime, range, type, name, cooldown, damage, energy_cost,
 				textureName, engine, upgrades);

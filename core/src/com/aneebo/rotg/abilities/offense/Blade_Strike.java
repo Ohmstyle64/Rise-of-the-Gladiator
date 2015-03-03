@@ -32,7 +32,7 @@ public class Blade_Strike extends Ability {
 	protected void onAbilityEnd(Entity me) {
 		for(Entity e : targets) {
 			stat = Mappers.staMap.get(e);
-			float damageDealt = ((1+Mappers.staMap.get(e).eValue)*damage+Mappers.staMap.get(me).increaseToDamage)*(1-stat.damageMitigation);
+			float damageDealt = ((1+Mappers.staMap.get(me).eValue)*damage+Mappers.staMap.get(me).increaseToDamage)*(1-stat.damageMitigation);
 			stat.health -= damageDealt;
 			Gdx.app.log(Mappers.staMap.get(me).name," has dealt "+damageDealt+" to "+stat.name);
 			Mappers.staMap.get(me).eValue = 0;

@@ -10,8 +10,8 @@ import com.badlogic.gdx.utils.Array;
 
 public class Explode extends Ability {
 
-	public Explode(int id, int castTime, float range, AbilityType type,
-			String name, int cooldown, float damage, float energy_cost,
+	public Explode(int id, float castTime, float range, AbilityType type,
+			String name, float cooldown, float damage, float energy_cost,
 			String textureName, Engine engine, Array<Upgrade> upgrades) {
 		super(id, castTime, range, type, name, cooldown, damage, energy_cost,
 				textureName, engine, upgrades);

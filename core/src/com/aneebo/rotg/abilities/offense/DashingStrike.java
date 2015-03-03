@@ -1,4 +1,4 @@
-package com.aneebo.rotg.abilities.defense;
+package com.aneebo.rotg.abilities.offense;
 
 import com.aneebo.rotg.abilities.Ability;
 import com.aneebo.rotg.abilities.upgrades.Upgrade;
@@ -12,26 +12,21 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 
-public class Force_Field extends Ability {
-
-	private Array<Entity> targets;
-	private ProjectileComponent proj;
-	private StatComponent stat;
-	private float shieldHealth;
+public class DashingStrike extends Ability {
 	
-	public Force_Field(int id, float castTime, float range, AbilityType type,
+	private StatComponent stat;
+
+	public DashingStrike(int id, float castTime, float range, AbilityType type,
 			String name, float cooldown, float damage, float energy_cost,
 			String textureName, Engine engine, Array<Upgrade> upgrades) {
 		super(id, castTime, range, type, name, cooldown, damage, energy_cost,
 				textureName, engine, upgrades);
-		
+		// TODO Auto-generated constructor stub
 	}
 	
-	public Force_Field(Ability ability, Engine engine) {
+	public DashingStrike(Ability ability, Engine engine) {
 		super(ability, engine);
-
-		targets = new Array<Entity>();
-		shieldHealth = damage;
+		
 	}
 
 	@Override
@@ -45,35 +40,24 @@ public class Force_Field extends Ability {
 			isInterrupted = true;
 			return;
 		}
-	}
-
-	@Override
-	protected void abilityActing(Entity me) {
-		for(Entity e : targets) {
-			proj = Mappers.projMap.get(e);
-			shieldHealth -= proj.damage;
-			if(shieldHealth < 0)
-				proj.damage = 0 - shieldHealth;
-			else
-				proj.hitInAnimmate = true;
-			
-			if(shieldHealth <= 0) {
-				shieldHealth = damage;
-				isInterrupted = true;
-				return;
-			}
-		}
+		stat.energy -= energy_cost;
 	}
 
 	@Override
 	protected void onAbilityEnd(Entity me) {
 		
 	}
-	
+
+	@Override
+	protected void abilityActing(Entity me) {
+		// TODO Auto-generated method stub
+
+	}
+
 	@Override
 	public Array<Entity> getTargets(Entity me, Entity[] allEnemies) {
 		targets.clear();
-		targets.addAll(Target.incommingProjectiles(me, allEnemies, range));
+		targets.addAll(Target.firstInRow(me, allEnemies, range));
 		return targets;
 	}
 
@@ -98,8 +82,7 @@ public class Force_Field extends Ability {
 	@Override
 	public void hit(ProjectileComponent proj, Entity from, Entity hit) {
 		// TODO Auto-generated method stub
-		
-	}
 
+	}
 
 }
