@@ -1,19 +1,20 @@
 package com.aneebo.rotg.level;
 
 import com.aneebo.rotg.screens.Play;
+import com.aneebo.rotg.types.LevelType;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.ObjectMap;
 
 public class LevelManager {
-	private ObjectMap<Integer, Level> levelList;
+	private ObjectMap<LevelType, Level> levelList;
 	private Level currentLevel;
-	private int nextLevel;
+	private LevelType nextLevel;
 	private boolean isTransitionIn;
 	private boolean isTransitionOut;
 	
 	private OrthogonalTiledMapRenderer renderer;
 	
-	public LevelManager(ObjectMap<Integer, Level> levels, int startLevel) {
+	public LevelManager(ObjectMap<LevelType, Level> levels, LevelType startLevel) {
 		levelList = levels;
 		currentLevel = levelList.get(startLevel);
 		renderer = new OrthogonalTiledMapRenderer(currentLevel.tiledMap);
@@ -23,7 +24,7 @@ public class LevelManager {
 		isTransitionOut = false;
 	}
 	
-	public void goToLevel(Integer levelId) {
+	public void goToLevel(LevelType levelId) {
 		nextLevel = levelId;
 		isTransitionOut = true;
 	}

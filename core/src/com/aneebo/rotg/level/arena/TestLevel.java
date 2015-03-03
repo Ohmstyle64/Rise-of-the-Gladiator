@@ -18,8 +18,10 @@ import com.aneebo.rotg.inventory.items.PrimP2;
 import com.aneebo.rotg.level.Level;
 import com.aneebo.rotg.level.Prize;
 import com.aneebo.rotg.screens.Play;
+import com.aneebo.rotg.types.AbilityNameType;
 import com.aneebo.rotg.types.ColliderType;
 import com.aneebo.rotg.types.DirectionType;
+import com.aneebo.rotg.types.LevelType;
 import com.aneebo.rotg.utils.Constants;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -63,8 +65,8 @@ public class TestLevel extends Level implements EntityListener {
 //		r1e1.add(new CollisionComponent(ColliderType.character));
 //		r1e1.add(new AIComponent(new BasicRangeAI(r1e1, engine)));
 //		Array<Ability> abilities_r1e1 = new Array<Ability>();
-//		abilities_r1e1.add(Constants.abilityMap.get(Constants.AT_WAVE_OF_FIRE));
-//		abilities_r1e1.add(Constants.abilityMap.get(Constants.DF_TELEPORT));
+//		abilities_r1e1.add(Constants.abilityMap.get(AbilityNameType.AT_WAVE_OF_FIRE));
+//		abilities_r1e1.add(Constants.abilityMap.get(AbilityNameType.DF_TELEPORT));
 //		r1e1.add(new AbilityComponent(abilities_r1e1, engine));
 //		r1e1.add(new StatComponent("Range_Enemy_1", 25f, 60f, Color.YELLOW, 2f, 2f, 1.3f));
 //		r1entities.add(r1e1);
@@ -75,7 +77,7 @@ public class TestLevel extends Level implements EntityListener {
 		r1e1.add(new CollisionComponent(ColliderType.character));
 		r1e1.add(new AIComponent(new BasicMeleeAI(r1e1, engine)));
 		Array<Ability> abilities_r1e2 = new Array<Ability>();
-		abilities_r1e2.add(Constants.abilityMap.get(Constants.AT_BLADE_STRIKE));
+		abilities_r1e2.add(Constants.abilityMap.get(AbilityNameType.AT_BLADE_STRIKE));
 		r1e1.add(new AbilityComponent(abilities_r1e2, engine));
 		r1e1.add(new StatComponent("Close_Enemy_1", 25f, 60f, Color.YELLOW, 2f, 2f, 1.5f));
 		r1entities.add(r1e1);
@@ -86,7 +88,7 @@ public class TestLevel extends Level implements EntityListener {
 //		r1e3.add(new CollisionComponent(ColliderType.character));
 //		r1e3.add(new AIComponent(new CloseBasicE1(r1e3, engine)));
 //		Array<Ability> abilities_r1e3 = new Array<Ability>();
-//		abilities_r1e3.add(Constants.abilityMap.get(Constants.AT_BLADE_STRIKE));
+//		abilities_r1e3.add(Constants.abilityMap.get(AbilityNameType.AT_BLADE_STRIKE));
 //		r1e3.add(new AbilityComponent(abilities_r1e3, engine));
 //		r1e3.add(new StatComponent("Close_Enemy_2", 25f, 60f, Color.YELLOW, 2f, 2f, 1.5f));
 //		r1entities.add(r1e3);
@@ -97,8 +99,8 @@ public class TestLevel extends Level implements EntityListener {
 //		r1e4.add(new CollisionComponent(ColliderType.character));
 //		r1e4.add(new AIComponent(new BasicRangeAI(r1e4, engine)));
 //		Array<Ability> abilities_r1e4 = new Array<Ability>();
-//		abilities_r1e4.add(Constants.abilityMap.get(Constants.AT_WAVE_OF_FIRE));
-//		abilities_r1e4.add(Constants.abilityMap.get(Constants.DF_TELEPORT));
+//		abilities_r1e4.add(Constants.abilityMap.get(AbilityNameType.AT_WAVE_OF_FIRE));
+//		abilities_r1e4.add(Constants.abilityMap.get(AbilityNameType.DF_TELEPORT));
 //		r1e4.add(new AbilityComponent(abilities_r1e4, engine));
 //		r1e4.add(new StatComponent("Range_Enemy_2", 25f, 60f, Color.YELLOW, 2f, 2f, 1.3f));
 //		r1entities.add(r1e4);
@@ -115,8 +117,8 @@ public class TestLevel extends Level implements EntityListener {
 		r2e1.add(new CollisionComponent(ColliderType.character));
 		r2e1.add(new AIComponent(new BasicRangeAI(r2e1, engine)));
 		Array<Ability> abilities_r2e1 = new Array<Ability>();
-		abilities_r2e1.add(Constants.abilityMap.get(Constants.AT_WAVE_OF_FIRE));
-		abilities_r2e1.add(Constants.abilityMap.get(Constants.DF_TELEPORT));
+		abilities_r2e1.add(Constants.abilityMap.get(AbilityNameType.AT_WAVE_OF_FIRE));
+		abilities_r2e1.add(Constants.abilityMap.get(AbilityNameType.DF_TELEPORT));
 		r2e1.add(new AbilityComponent(abilities_r2e1, engine));
 		r2e1.add(new StatComponent("Range_Enemy_1", 25f, 60f, Color.YELLOW, 2f, 2f, 1.3f));
 		r2entities.add(r2e1);
@@ -133,7 +135,7 @@ public class TestLevel extends Level implements EntityListener {
 		r3e1.add(new CollisionComponent(ColliderType.character));
 		r3e1.add(new AIComponent(new BasicMeleeAI(r3e1, engine)));
 		Array<Ability> abilities_r3e1 = new Array<Ability>();
-		abilities_r3e1.add(Constants.abilityMap.get(Constants.AT_BLADE_STRIKE));
+		abilities_r3e1.add(Constants.abilityMap.get(AbilityNameType.AT_BLADE_STRIKE));
 		r3e1.add(new AbilityComponent(abilities_r3e1, engine));
 		r3e1.add(new StatComponent("Enemy3", 45f, 50f, Color.YELLOW, 2f, 2f, 1.3f));
 		r3entities.add(r3e1);
@@ -144,7 +146,7 @@ public class TestLevel extends Level implements EntityListener {
 		r3e2.add(new CollisionComponent(ColliderType.character));
 		r3e2.add(new AIComponent(new BasicMeleeAI(r3e2, engine)));
 		Array<Ability> abilities_r3e2 = new Array<Ability>();
-		abilities_r3e2.add(Constants.abilityMap.get(Constants.AT_BLADE_STRIKE));
+		abilities_r3e2.add(Constants.abilityMap.get(AbilityNameType.AT_BLADE_STRIKE));
 		r3e2.add(new AbilityComponent(abilities_r3e2, engine));
 		r3e2.add(new StatComponent("Enemy3", 45f, 50f, Color.YELLOW, 2f, 2f, 1.3f));
 		r3entities.add(r3e2);
@@ -173,7 +175,7 @@ public class TestLevel extends Level implements EntityListener {
 				inv.inventory.addItemsToInventory(prize.prize);
 				InputComponent input = Mappers.inpMap.get(player);
 				input.needRefresh = true;
-				Play.levelManager.goToLevel(Constants.CARAVAN_LEVEL);
+				Play.levelManager.goToLevel(LevelType.CARAVAN_LEVEL);
 			}else {
 				addEntities();
 				StatComponent stat = Mappers.staMap.get(player);

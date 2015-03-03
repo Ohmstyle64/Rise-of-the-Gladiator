@@ -7,6 +7,7 @@ import com.aneebo.rotg.components.AbilityComponent;
 import com.aneebo.rotg.components.Mappers;
 import com.aneebo.rotg.components.ProjectileComponent;
 import com.aneebo.rotg.components.StatComponent;
+import com.aneebo.rotg.types.AbilityNameType;
 import com.aneebo.rotg.types.AbilityType;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -20,12 +21,12 @@ public class Blade_Block extends Ability {
 	private Entity e;
 	
 
-	public Blade_Block(int id, float castTime, float range, AbilityType type,
-			String name, float cooldown, float damage, float energy_cost,
-			String textureName, Engine engine, Array<Upgrade> upgrades) {
-		super(id, castTime, range, type, name, cooldown, damage, energy_cost,
+	public Blade_Block(AbilityNameType nameType, float castTime,
+			float range, AbilityType type, String name, float cooldown,
+			float damage, float energy_cost, String textureName, Engine engine,
+			Array<Upgrade> upgrades) {
+		super(nameType, castTime, range, type, name, cooldown, damage, energy_cost,
 				textureName, engine, upgrades);
-
 	}
 
 	public Blade_Block(Ability ability, Engine engine) {

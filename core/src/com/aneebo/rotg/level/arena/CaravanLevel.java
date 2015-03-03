@@ -10,6 +10,7 @@ import com.aneebo.rotg.level.Level;
 import com.aneebo.rotg.screens.Play;
 import com.aneebo.rotg.types.ColliderType;
 import com.aneebo.rotg.types.DirectionType;
+import com.aneebo.rotg.types.LevelType;
 import com.aneebo.rotg.utils.Constants;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -39,7 +40,7 @@ public class CaravanLevel extends Level {
 		changer.add(new RenderComponent(Constants.ICE_FORM));
 		changer.add(new StatComponent("Change Level", 1f, 1f, Color.WHITE, 1f, 1f, 0f));
 		changer.add(new CollisionComponent(ColliderType.levelChange));
-		changer.add(new LevelChangerComponent(Constants.TEST_LEVEL));
+		changer.add(new LevelChangerComponent(LevelType.TEST_LEVEL));
 		
 		entities.add(merchant);
 		entities.add(changer);

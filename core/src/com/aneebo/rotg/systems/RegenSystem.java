@@ -1,7 +1,7 @@
 package com.aneebo.rotg.systems;
 
+import com.aneebo.rotg.components.Mappers;
 import com.aneebo.rotg.components.StatComponent;
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
@@ -10,7 +10,6 @@ import com.badlogic.ashley.utils.ImmutableArray;
 
 public class RegenSystem extends EntitySystem {
 	
-	public ComponentMapper<StatComponent> sc = ComponentMapper.getFor(StatComponent.class);
 	public ImmutableArray<Entity> entities;
 	
 	public StatComponent stat;
@@ -27,7 +26,7 @@ public class RegenSystem extends EntitySystem {
 		int size = entities.size();
 		for(int i = 0; i < size; i++) {
 			e = entities.get(i);
-			stat = sc.get(e);
+			stat = Mappers.staMap.get(e);
 			
 			stat.health += stat.health_regen*(deltaTime / 6);
 			if(stat.health >= stat.max_health) stat.health = stat.max_health;

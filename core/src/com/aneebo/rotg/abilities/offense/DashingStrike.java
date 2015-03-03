@@ -6,6 +6,7 @@ import com.aneebo.rotg.abilities.util.Target;
 import com.aneebo.rotg.components.Mappers;
 import com.aneebo.rotg.components.ProjectileComponent;
 import com.aneebo.rotg.components.StatComponent;
+import com.aneebo.rotg.types.AbilityNameType;
 import com.aneebo.rotg.types.AbilityType;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -16,17 +17,17 @@ public class DashingStrike extends Ability {
 	
 	private StatComponent stat;
 
-	public DashingStrike(int id, float castTime, float range, AbilityType type,
-			String name, float cooldown, float damage, float energy_cost,
-			String textureName, Engine engine, Array<Upgrade> upgrades) {
-		super(id, castTime, range, type, name, cooldown, damage, energy_cost,
-				textureName, engine, upgrades);
-		// TODO Auto-generated constructor stub
-	}
-	
 	public DashingStrike(Ability ability, Engine engine) {
 		super(ability, engine);
 		
+	}
+
+	public DashingStrike(AbilityNameType nameType, float castTime,
+			float range, AbilityType type, String name, float cooldown,
+			float damage, float energy_cost, String textureName, Engine engine,
+			Array<Upgrade> upgrades) {
+		super(nameType, castTime, range, type, name, cooldown, damage, energy_cost,
+				textureName, engine, upgrades);
 	}
 
 	@Override

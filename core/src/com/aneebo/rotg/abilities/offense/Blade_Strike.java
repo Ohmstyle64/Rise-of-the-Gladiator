@@ -6,6 +6,7 @@ import com.aneebo.rotg.abilities.util.Target;
 import com.aneebo.rotg.components.Mappers;
 import com.aneebo.rotg.components.ProjectileComponent;
 import com.aneebo.rotg.components.StatComponent;
+import com.aneebo.rotg.types.AbilityNameType;
 import com.aneebo.rotg.types.AbilityType;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -16,12 +17,12 @@ public class Blade_Strike extends Ability {
 
 	private StatComponent stat;
 	
-	public Blade_Strike(int id, int castTime, float range, AbilityType type,
-			String name, int cooldown, float damage, float energy_cost,
-			String textureName, Engine engine, Array<Upgrade> upgrades) {
-		super(id, castTime, range, type, name, cooldown, damage, energy_cost,
+	public Blade_Strike(AbilityNameType nameType, float castTime,
+			float range, AbilityType type, String name, float cooldown,
+			float damage, float energy_cost, String textureName, Engine engine,
+			Array<Upgrade> upgrades) {
+		super(nameType, castTime, range, type, name, cooldown, damage, energy_cost,
 				textureName, engine, upgrades);
-		// TODO Auto-generated constructor stub
 	}
 
 	public Blade_Strike(Ability ability, Engine engine) {

@@ -1,0 +1,15 @@
+package com.aneebo.rotg.types;
+
+public enum AbilityNameType {
+	AT_BLADE_STRIKE,
+	AT_WAVE_OF_FIRE,
+	AT_QUICK_KNIFE,
+	AT_ELECTRIC_CHARGE,
+	AT_ICE_STRIKE,
+	AT_EXPLODE,
+	AT_DASHING_STRIKE,
+	DF_BLADE_BLOCK,
+	DF_PURE_HEART,
+	DF_FORCE_FIELD,
+	DF_TELEPORT
+}

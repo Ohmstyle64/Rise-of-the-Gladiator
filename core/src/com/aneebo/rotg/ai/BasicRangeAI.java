@@ -5,7 +5,7 @@ import com.aneebo.rotg.components.AbilityComponent;
 import com.aneebo.rotg.components.Mappers;
 import com.aneebo.rotg.components.PositionComponent;
 import com.aneebo.rotg.components.StatComponent;
-import com.aneebo.rotg.utils.Constants;
+import com.aneebo.rotg.types.AbilityNameType;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
@@ -83,10 +83,10 @@ public class BasicRangeAI extends AiPlan {
 		} else 
 			return;
 
-		ab = abComponent.abilityMap.get(Constants.AT_WAVE_OF_FIRE);
+		ab = abComponent.abilityMap.get(AbilityNameType.AT_WAVE_OF_FIRE);
 		
 		if(statComponent.energy >= ab.getEnergy_cost()) {
-			if(inAbilityRange(abComponent, Constants.AT_WAVE_OF_FIRE)) {
+			if(inAbilityRange(abComponent, AbilityNameType.AT_WAVE_OF_FIRE)) {
 				ab.isActivated = true;
 				return;
 			}
@@ -96,11 +96,11 @@ public class BasicRangeAI extends AiPlan {
 	private void chase() {
 		abComponent = Mappers.abMap.get(me);
 		statComponent = Mappers.staMap.get(me);
-		ab = abComponent.abilityMap.get(Constants.DF_TELEPORT);
+		ab = abComponent.abilityMap.get(AbilityNameType.DF_TELEPORT);
 		
 
 		if(statComponent.energy >= ab.getEnergy_cost()) {
-			if(inAbilityRange(abComponent, Constants.DF_TELEPORT)) {
+			if(inAbilityRange(abComponent, AbilityNameType.DF_TELEPORT)) {
 				ab.isActivated = true;
 				aiState = AIState.fight;
 				return;

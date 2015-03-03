@@ -28,14 +28,15 @@ import com.aneebo.rotg.systems.MovementSystem;
 import com.aneebo.rotg.systems.ProjectileSystem;
 import com.aneebo.rotg.systems.RegenSystem;
 import com.aneebo.rotg.systems.RenderSystem;
+import com.aneebo.rotg.types.AbilityNameType;
 import com.aneebo.rotg.types.ColliderType;
 import com.aneebo.rotg.types.DirectionType;
+import com.aneebo.rotg.types.LevelType;
 import com.aneebo.rotg.utils.Assets;
 import com.aneebo.rotg.utils.Constants;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -54,7 +55,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.badlogic.gdx.utils.PerformanceCounter;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class Play implements Screen {
@@ -78,13 +78,6 @@ public class Play implements Screen {
 	
 	public static LevelManager levelManager;
 	
-	public static PerformanceCounter pTotal;
-	private PerformanceCounter pEngine;
-	private PerformanceCounter pStageAct;
-	private PerformanceCounter pStageDraw;
-	private PerformanceCounter pUIUpdates;
-	private PerformanceCounter pLevelManager;
-	
 	WindowStyle as;
 		
 	//UI
@@ -96,12 +89,6 @@ public class Play implements Screen {
 	
 	@Override
 	public void show() {
-		pTotal = new PerformanceCounter("Total");
-		pEngine = new PerformanceCounter("Engine");
-		pStageAct = new PerformanceCounter("Stage Act");
-		pStageDraw = new PerformanceCounter("Stage Draw");
-		pUIUpdates = new PerformanceCounter("UI Updates");
-		pLevelManager = new PerformanceCounter("Level Manager");
 		Assets.load();
 		
 		TextureAtlas atlas = new TextureAtlas("img/gui/uiskin.atlas");
@@ -117,16 +104,12 @@ public class Play implements Screen {
 		
 		engine = new Engine();
 
-		//Create Player
 		createPlayer();
 
-		//Create Levels
 		createLevels();
 		
-		//Create Systems
 		createSystems();
 
-		//Build GUI
 		createGUI();
 		
 		//Add Systems
@@ -144,21 +127,21 @@ public class Play implements Screen {
 	private void createLevels() {
 		TestLevel testLevel = new TestLevel(engine, player, new Vector2(2,2));
 		CaravanLevel caravanLevel = new CaravanLevel(engine, player, new Vector2(2,2));
-		ObjectMap<Integer, Level> levels = new ObjectMap<Integer, Level>(2);
-		levels.put(Constants.TEST_LEVEL, testLevel);
-		levels.put(Constants.CARAVAN_LEVEL, caravanLevel);
-		levelManager = new LevelManager(levels, Constants.CARAVAN_LEVEL);
+		ObjectMap<LevelType, Level> levels = new ObjectMap<LevelType, Level>(2);
+		levels.put(LevelType.TEST_LEVEL, testLevel);
+		levels.put(LevelType.CARAVAN_LEVEL, caravanLevel);
+		levelManager = new LevelManager(levels, LevelType.CARAVAN_LEVEL);
 	}
 
 	private void createPlayer() {
 		Array<Ability> abilityList = new Array<Ability>();
-		abilityList.add(Constants.abilityMap.get(Constants.AT_BLADE_STRIKE));
-		abilityList.add(Constants.abilityMap.get(Constants.DF_BLADE_BLOCK));
-		abilityList.add(Constants.abilityMap.get(Constants.AT_WAVE_OF_FIRE));
-		abilityList.add(Constants.abilityMap.get(Constants.AT_DASHING_STRIKE));
-//		abilityList.add(Constants.abilityMap.get(Constants.DF_TELEPORT));
-//		abilityList.add(Constants.abilityMap.get(Constants.DF_FORCE_FIELD));
-//		abilityList.add(Constants.abilityMap.get(Constants.DF_PURE_HEART));
+		abilityList.add(Constants.abilityMap.get(AbilityNameType.AT_BLADE_STRIKE));
+		abilityList.add(Constants.abilityMap.get(AbilityNameType.DF_BLADE_BLOCK));
+		abilityList.add(Constants.abilityMap.get(AbilityNameType.AT_WAVE_OF_FIRE));
+		abilityList.add(Constants.abilityMap.get(AbilityNameType.AT_DASHING_STRIKE));
+//		abilityList.add(Constants.abilityMap.get(AbilityNameType.DF_TELEPORT));
+//		abilityList.add(Constants.abilityMap.get(AbilityNameType.DF_FORCE_FIELD));
+//		abilityList.add(Constants.abilityMap.get(AbilityNameType.DF_PURE_HEART));
 		
 		
 		
@@ -381,48 +364,18 @@ public class Play implements Screen {
 	
 	@Override
 	public void render(float delta) {
-		pTotal.tick(delta);
-		pTotal.start();
 		
 		stage.setDebugAll(Constants.DEBUG);
 		
-		pStageAct.tick(delta);
-		pStageAct.start();
 		stage.act(delta);
-		pStageAct.stop();
 		
-		pEngine.tick(delta);
-		pEngine.start();
 		engine.update(delta);
-		pEngine.stop();
 		
-		
-		pUIUpdates.tick(delta);
-		pUIUpdates.start();
 		UIUpdates();
-		pUIUpdates.stop();
 		
-		pLevelManager.tick(delta);
-		pLevelManager.start();
 		levelManager.update(delta);
-		pLevelManager.stop();
 		
-		pStageDraw.tick(delta);
-		pStageDraw.start();
 		stage.draw();
-		pStageDraw.stop();
-		
-		pTotal.stop();
-		
-		if(Gdx.input.isKeyJustPressed(Keys.P)) {
-			float ms = (float)1/Gdx.graphics.getFramesPerSecond()*1000;
-			System.out.println("FPS:"+Gdx.graphics.getFramesPerSecond());
-			System.out.println(pStageAct.name+": "+pStageAct.time.value / pTotal.time.value * ms);
-			System.out.println(pStageDraw.name+": "+pStageDraw.time.value / pTotal.time.value * ms);
-			System.out.println(pEngine.name+": "+pEngine.time.value / pTotal.time.value * ms);
-			System.out.println(pUIUpdates.name+": "+pUIUpdates.time.value / pTotal.time.value * ms);
-			System.out.println(pLevelManager.name+": "+pLevelManager.time.value / pTotal.time.value * ms);
-		}
 	}
 
 	private void UIUpdates() {

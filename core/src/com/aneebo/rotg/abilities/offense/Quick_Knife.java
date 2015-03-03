@@ -3,6 +3,7 @@ package com.aneebo.rotg.abilities.offense;
 import com.aneebo.rotg.abilities.Ability;
 import com.aneebo.rotg.abilities.upgrades.Upgrade;
 import com.aneebo.rotg.components.ProjectileComponent;
+import com.aneebo.rotg.types.AbilityNameType;
 import com.aneebo.rotg.types.AbilityType;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -10,10 +11,11 @@ import com.badlogic.gdx.utils.Array;
 
 public class Quick_Knife extends Ability {
 
-	public Quick_Knife(int id, float castTime, float range, AbilityType type,
-			String name, float cooldown, float damage, float energy_cost,
-			String textureName, Engine engine, Array<Upgrade> upgrades) {
-		super(id, castTime, range, type, name, cooldown, damage, energy_cost,
+	public Quick_Knife(AbilityNameType nameType, float castTime,
+			float range, AbilityType type, String name, float cooldown,
+			float damage, float energy_cost, String textureName, Engine engine,
+			Array<Upgrade> upgrades) {
+		super(nameType, castTime, range, type, name, cooldown, damage, energy_cost,
 				textureName, engine, upgrades);
 	}
 	

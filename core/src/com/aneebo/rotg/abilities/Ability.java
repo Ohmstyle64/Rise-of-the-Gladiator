@@ -3,6 +3,7 @@ package com.aneebo.rotg.abilities;
 import com.aneebo.rotg.abilities.upgrades.Upgrade;
 import com.aneebo.rotg.components.Mappers;
 import com.aneebo.rotg.components.ProjectileComponent;
+import com.aneebo.rotg.types.AbilityNameType;
 import com.aneebo.rotg.types.AbilityType;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -15,9 +16,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 
 public abstract class Ability {
-	protected int id, tier;
+	protected int tier;
 	protected AbilityType type;
 	protected String name;
+	protected AbilityNameType nameType;
 	protected float castTimeTimer, cooldownTimer, damage, energy_cost, range, castTime, cooldown;
 	public boolean isAvailable;
 	public boolean isInterrupted;
@@ -32,8 +34,8 @@ public abstract class Ability {
 	protected String textureName;
 	protected Array<Upgrade> upgrades;
 	
-	public Ability(int id, float castTime, float range, AbilityType type, String name, float cooldown, float damage, float energy_cost, String textureName, Engine engine, Array<Upgrade> upgrades) {
-		this.id = id;
+	public Ability(AbilityNameType nameType, float castTime, float range, AbilityType type, String name, float cooldown, float damage, float energy_cost, String textureName, Engine engine, Array<Upgrade> upgrades) {
+		this.nameType = nameType;
 		this.castTime = castTime;
 		this.range = range;
 		this.type = type;
@@ -60,14 +62,14 @@ public abstract class Ability {
 	}
 	
 	public Ability(Ability ability, Engine engine) {
-		this(ability.getId(), ability.getCastTime(), ability.getRange(), ability.getType(), ability.getName(), ability.getCooldown(),
+		this(ability.getNameType(), ability.getCastTime(), ability.getRange(), ability.getType(), ability.getName(), ability.getCooldown(),
 				ability.getDamage(), ability.getEnergy_cost(), ability.getTexture(), engine, ability.getUpgrades());
 	}
 	
 
-	
-	public int getId() {
-		return id;
+
+	public AbilityNameType getNameType() {
+		return nameType;
 	}
 
 	public float getCastTime() {

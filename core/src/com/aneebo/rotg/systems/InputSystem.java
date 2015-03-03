@@ -6,14 +6,12 @@ import com.aneebo.rotg.components.InputComponent;
 import com.aneebo.rotg.components.InventoryComponent;
 import com.aneebo.rotg.components.Mappers;
 import com.aneebo.rotg.components.PositionComponent;
-import com.aneebo.rotg.components.StatComponent;
 import com.aneebo.rotg.inventory.Item;
 import com.aneebo.rotg.inventory.ItemSlotListener;
 import com.aneebo.rotg.inventory.SlotData;
 import com.aneebo.rotg.inventory.items.EmptyItem;
 import com.aneebo.rotg.types.DirectionType;
 import com.aneebo.rotg.utils.Constants;
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
@@ -35,10 +33,6 @@ import com.badlogic.gdx.utils.ObjectMap;
 
 public class InputSystem extends EntitySystem {
 
-	private ComponentMapper<PositionComponent> pc = ComponentMapper.getFor(PositionComponent.class);
-	private ComponentMapper<AbilityComponent> ac = ComponentMapper.getFor(AbilityComponent.class);
-	private ComponentMapper<StatComponent> sc = ComponentMapper.getFor(StatComponent.class);
-	private ComponentMapper<InventoryComponent> ic = ComponentMapper.getFor(InventoryComponent.class);
 	private ImmutableArray<Entity> entities;
 	
 	private Array<Ability> abilitySlots;
@@ -66,7 +60,7 @@ public class InputSystem extends EntitySystem {
 	
 	private void createInventoryWindow() {
 		win = new Window("Character Screen", skin);
-		invC = ic.get(player);
+		invC = Mappers.invMap.get(player);
 		mainTable = new Table();
 		TextButton closeBtn = new TextButton("Close", skin);
 		closeBtn.addListener(new ClickListener() {
@@ -211,9 +205,9 @@ public class InputSystem extends EntitySystem {
 
 	private Table createHeader() {
 		Table table = new Table();
-		Label name = new Label("Name: "+sc.get(player).name, skin);
-		Label health = new Label("Health: "+sc.get(player).max_health, skin);
-		Label energy = new Label("Energy: "+sc.get(player).max_energy, skin);
+		Label name = new Label("Name: "+Mappers.staMap.get(player).name, skin);
+		Label health = new Label("Health: "+Mappers.staMap.get(player).max_health, skin);
+		Label energy = new Label("Energy: "+Mappers.staMap.get(player).max_energy, skin);
 		
 		table.add(name).row();
 		table.add(health).row();
@@ -225,8 +219,8 @@ public class InputSystem extends EntitySystem {
 	public void addedToEngine(Engine engine) {
 		entities = engine.getEntitiesFor(Family.getFor(InputComponent.class, AbilityComponent.class));
 		player = entities.first();
-		posComponent = pc.get(player);
-		abilityComponent = ac.get(player);
+		posComponent = Mappers.posMap.get(player);
+		abilityComponent = Mappers.abMap.get(player);
 		inputComponent = Mappers.inpMap.get(player);
 		createInventoryWindow();
 	}

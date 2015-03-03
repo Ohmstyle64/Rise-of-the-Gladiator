@@ -4,6 +4,7 @@ import com.aneebo.rotg.components.AbilityComponent;
 import com.aneebo.rotg.components.Mappers;
 import com.aneebo.rotg.components.PositionComponent;
 import com.aneebo.rotg.components.StatComponent;
+import com.aneebo.rotg.types.AbilityNameType;
 import com.aneebo.rotg.utils.Astar;
 import com.aneebo.rotg.utils.Constants;
 import com.badlogic.ashley.core.Engine;
@@ -102,12 +103,12 @@ public class BasicMeleeAI extends AiPlan {
 		
 		//Check ability
 		eAbilityComponent = Mappers.abMap.get(me);
-		if(!inAbilityRange(eAbilityComponent, Constants.AT_BLADE_STRIKE)) {
+		if(!inAbilityRange(eAbilityComponent, AbilityNameType.AT_BLADE_STRIKE)) {
 			aiState = AIState.chase;
 			return;
 		}
-		if(Mappers.staMap.get(me).energy >= eAbilityComponent.abilityMap.get(Constants.AT_BLADE_STRIKE).getEnergy_cost())
-			eAbilityComponent.abilityMap.get(Constants.AT_BLADE_STRIKE).isActivated = true;
+		if(Mappers.staMap.get(me).energy >= eAbilityComponent.abilityMap.get(AbilityNameType.AT_BLADE_STRIKE).getEnergy_cost())
+			eAbilityComponent.abilityMap.get(AbilityNameType.AT_BLADE_STRIKE).isActivated = true;
 	}
 
 	private void chase() {
@@ -117,7 +118,7 @@ public class BasicMeleeAI extends AiPlan {
 		correctFacing(enemPos, playerPos);
 		
 		eAbilityComponent = Mappers.abMap.get(me);
-		if(inAbilityRange(eAbilityComponent, Constants.AT_BLADE_STRIKE)) {
+		if(inAbilityRange(eAbilityComponent, AbilityNameType.AT_BLADE_STRIKE)) {
 			aiState = AIState.fight;
 			return;
 		}

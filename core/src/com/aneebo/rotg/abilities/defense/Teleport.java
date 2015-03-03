@@ -6,6 +6,7 @@ import com.aneebo.rotg.components.Mappers;
 import com.aneebo.rotg.components.PositionComponent;
 import com.aneebo.rotg.components.ProjectileComponent;
 import com.aneebo.rotg.components.StatComponent;
+import com.aneebo.rotg.types.AbilityNameType;
 import com.aneebo.rotg.types.AbilityType;
 import com.aneebo.rotg.utils.Constants;
 import com.badlogic.ashley.core.Engine;
@@ -21,12 +22,12 @@ public class Teleport extends Ability {
 	
 	private Array<Entity> targets;
 	
-	public Teleport(int id, float castTime, float range, AbilityType type,
-			String name, float cooldown, float damage, float energy_cost,
-			String textureName, Engine engine, Array<Upgrade> upgrades) {
-		super(id, castTime, range, type, name, cooldown, damage, energy_cost,
+	public Teleport(AbilityNameType nameType, float castTime,
+			float range, AbilityType type, String name, float cooldown,
+			float damage, float energy_cost, String textureName, Engine engine,
+			Array<Upgrade> upgrades) {
+		super(nameType, castTime, range, type, name, cooldown, damage, energy_cost,
 				textureName, engine, upgrades);
-
 	}
 	
 	public Teleport(Ability ability, Engine engine) {
@@ -34,6 +35,8 @@ public class Teleport extends Ability {
 		
 		targets = new Array<Entity>();
 	}
+
+
 
 	@Override
 	public void hit(ProjectileComponent proj, Entity from, Entity hit) {

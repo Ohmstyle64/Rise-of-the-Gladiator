@@ -4,6 +4,7 @@ import com.aneebo.rotg.components.AIComponent;
 import com.aneebo.rotg.components.AbilityComponent;
 import com.aneebo.rotg.components.InputComponent;
 import com.aneebo.rotg.components.PositionComponent;
+import com.aneebo.rotg.types.AbilityNameType;
 import com.aneebo.rotg.types.DirectionType;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -33,8 +34,8 @@ public abstract class AiPlan {
 	
 	public abstract void update(float deltaTime);
 	
-	protected boolean inAbilityRange(AbilityComponent abil, int abilityId) {
-		if(abil.abilityMap.get(abilityId).getTargets(me, new Entity[] {player}).size > 0) {
+	protected boolean inAbilityRange(AbilityComponent abil, AbilityNameType abilityName) {
+		if(abil.abilityMap.get(abilityName).getTargets(me, new Entity[] {player}).size > 0) {
 			return true;
 		}
 		return false;

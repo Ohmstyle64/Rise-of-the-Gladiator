@@ -2,8 +2,8 @@ package com.aneebo.rotg.systems;
 
 import com.aneebo.rotg.abilities.Ability;
 import com.aneebo.rotg.components.AbilityComponent;
+import com.aneebo.rotg.components.Mappers;
 import com.aneebo.rotg.components.PositionComponent;
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
@@ -14,8 +14,6 @@ import com.badlogic.gdx.utils.Array;
 
 public class AbilitySystem extends EntitySystem {
 	
-	private ComponentMapper<AbilityComponent> ac = ComponentMapper.getFor(AbilityComponent.class);
-	private ComponentMapper<PositionComponent> pc = ComponentMapper.getFor(PositionComponent.class);
 	private ImmutableArray<Entity> abilityEntities;
 	private ImmutableArray<Entity> posEntities;
 	
@@ -44,9 +42,9 @@ public class AbilitySystem extends EntitySystem {
 		int sizeM = posEntities.size();
 		for(int i = 0; i < sizeA; i++) {
 			abe = abilityEntities.get(i);
-			abilityComponent = ac.get(abe);
+			abilityComponent = Mappers.abMap.get(abe);
 			abilitySlots = abilityComponent.abilitySlots;
-			ent1Pos = pc.get(abe);
+			ent1Pos = Mappers.posMap.get(abe);
 			int activatedIndex = -1;
 			//CHECK IF ANY ABILITIES CAN BE ACTIVATED
 			int slots = abilitySlots.size;
@@ -69,7 +67,7 @@ public class AbilitySystem extends EntitySystem {
 					boolean equal = abe.equals(posEntities.get(k));
 					if(equal) continue;
 					e = posEntities.get(k);
-					ent2Pos = pc.get(e);
+					ent2Pos = Mappers.posMap.get(e);
 					//POSITION OF 2 ENTITIES IS WITHIN RANGE OF ABILITY
 					range.set(ent1Pos.curXPos, ent1Pos.curYPos);
 					float dst = range.dst(ent2Pos.curXPos, ent2Pos.curYPos);
