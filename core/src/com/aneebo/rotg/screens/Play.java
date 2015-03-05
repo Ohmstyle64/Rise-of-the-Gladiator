@@ -127,7 +127,7 @@ public class Play implements Screen {
 		//Play music
 		Music song1 = Assets.assetManager.get(Constants.TEST_MUSIC, Music.class);
 		song1.play();
-		song1.setVolume(.2f);
+		song1.setVolume(.1f);
 		song1.setLooping(true);
 	}
 	
