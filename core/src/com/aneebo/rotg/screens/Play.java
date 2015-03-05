@@ -38,6 +38,7 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -122,6 +123,12 @@ public class Play implements Screen {
 		engine.addSystem(regenSystem);
 		engine.addSystem(projectileSystem);
 		engine.addSystem(deathSystem);
+		
+		//Play music
+		Music song1 = Assets.assetManager.get(Constants.TEST_MUSIC, Music.class);
+		song1.play();
+		song1.setVolume(.2f);
+		song1.setLooping(true);
 	}
 	
 	private void createLevels() {
@@ -150,7 +157,7 @@ public class Play implements Screen {
 		player.add(new InputComponent());
 		player.add(new CollisionComponent(ColliderType.character));
 		player.add(ability = new AbilityComponent(abilityList, engine));
-		player.add(stat = new StatComponent("Kevin", 35f, 60f, Color.RED, 5, 5, 1.5f));
+		player.add(stat = new StatComponent("Player", 35f, 60f, Color.RED, 5, 5, 1.5f));
 		player.add(new RenderComponent(Constants.DRAGON_FORM));
 //		player.add(new AnimationComponent(Assets.assetManager.get(Constants.BODY_PLAYER, Texture.class),64,64, stat.speed / 16));
 		ObjectMap<Integer, Item> equipped = new ObjectMap<Integer, Item>();

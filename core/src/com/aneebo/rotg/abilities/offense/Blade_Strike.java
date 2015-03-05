@@ -8,14 +8,18 @@ import com.aneebo.rotg.components.ProjectileComponent;
 import com.aneebo.rotg.components.StatComponent;
 import com.aneebo.rotg.types.AbilityNameType;
 import com.aneebo.rotg.types.AbilityType;
+import com.aneebo.rotg.utils.Assets;
+import com.aneebo.rotg.utils.Constants;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.utils.Array;
 
 public class Blade_Strike extends Ability {
 
 	private StatComponent stat;
+	private Sound hit;
 	
 	public Blade_Strike(AbilityNameType nameType, float castTime,
 			float range, AbilityType type, String name, float cooldown,
@@ -37,6 +41,11 @@ public class Blade_Strike extends Ability {
 			stat.health -= damageDealt;
 			Gdx.app.log(Mappers.staMap.get(me).name," has dealt "+damageDealt+" to "+stat.name);
 			Mappers.staMap.get(me).eValue = 0;
+			if(stat.name.equals("Player")) {
+				hit = Assets.assetManager.get(Constants.TEST_GET_HIT, Sound.class);
+				hit.play();
+				Gdx.input.vibrate(1000);
+			}
 		}
 	}
 

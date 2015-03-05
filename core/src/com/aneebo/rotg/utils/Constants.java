@@ -39,6 +39,13 @@ public class Constants {
 	public static final String SHORTSWORD_1 = "img/item/weapon/short_sword2.png";
 	public static final String SPEAR_1 = "img/item/weapon/spear2.png";
 	
+	//SOUND EFFECTS
+	public static final String TEST_MUSIC = "sounds/music/pilot.mp3";
+	
+	//MUSIC
+	public static final String TEST_GET_HIT = "sounds/sfx/hit_sound.wav";
+	
+	
 	public static final String WORLD_MAP = "img/map/worldmap.tmx";
 	
 	public static final String BODY_PLAYER = "img/characters/animations/BODY_male.png";

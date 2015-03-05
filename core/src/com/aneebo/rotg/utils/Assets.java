@@ -1,6 +1,8 @@
 package com.aneebo.rotg.utils;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 
 public class Assets {
@@ -19,6 +21,8 @@ public class Assets {
 		assetManager.load(Constants.SPEAR_1, Texture.class);
 		assetManager.load(Constants.BODY_PLAYER, Texture.class);
 		assetManager.load(Constants.BODY_SKELETON, Texture.class);
+		assetManager.load(Constants.TEST_GET_HIT, Sound.class);
+		assetManager.load(Constants.TEST_MUSIC, Music.class);
 		assetManager.finishLoading();
 	}
 	
