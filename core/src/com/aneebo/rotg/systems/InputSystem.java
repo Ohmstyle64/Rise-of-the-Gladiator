@@ -215,9 +215,10 @@ public class InputSystem extends EntitySystem {
 		return table;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void addedToEngine(Engine engine) {
-		entities = engine.getEntitiesFor(Family.getFor(InputComponent.class, AbilityComponent.class));
+		entities = engine.getEntitiesFor(Family.all(InputComponent.class, AbilityComponent.class).get());
 		player = entities.first();
 		posComponent = Mappers.posMap.get(player);
 		abilityComponent = Mappers.abMap.get(player);
@@ -244,19 +245,19 @@ public class InputSystem extends EntitySystem {
 		if(Gdx.input.isKeyJustPressed(Keys.A)) {
 			posComponent.direction = DirectionType.Left;
 			if(posComponent.isMoveable)
-				posComponent.nXPos--;
+				posComponent.gridNXPos--;
 		}else if(Gdx.input.isKeyJustPressed(Keys.D)) {
 			posComponent.direction = DirectionType.Right;
 			if(posComponent.isMoveable)
-				posComponent.nXPos++;
+				posComponent.gridNXPos++;
 		}else if(Gdx.input.isKeyJustPressed(Keys.W)) {
 			posComponent.direction = DirectionType.Up;
 			if(posComponent.isMoveable)
-				posComponent.nYPos++;
+				posComponent.gridNYPos++;
 		}else if(Gdx.input.isKeyJustPressed(Keys.S)) {
 			posComponent.direction = DirectionType.Down;
 			if(posComponent.isMoveable)
-				posComponent.nYPos--;
+				posComponent.gridNYPos--;
 		}
 		
 		if(Gdx.input.isKeyJustPressed(Keys.C)) {

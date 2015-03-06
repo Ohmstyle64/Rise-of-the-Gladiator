@@ -30,7 +30,9 @@ public class BasicMeleeAI extends AiPlan {
 	private PositionComponent enemPos;
 	private StatComponent statComponent;
 	private Entity e;
-
+	
+	private int pXPos, pYPos;
+	private IntArray pathToPt;
 
 	private Astar astar;
 	private static final int ROWS = (int) (Constants.HEIGHT / Constants.TILE_WIDTH);
@@ -53,7 +55,10 @@ public class BasicMeleeAI extends AiPlan {
 		
 		astar = new Astar(COLS, ROWS, validityMap);
 		
-
+		playerPos = Mappers.posMap.get(player);
+		
+		pXPos = -1;
+		pYPos = -1;
 	}
 	
 	@Override
@@ -122,7 +127,7 @@ public class BasicMeleeAI extends AiPlan {
 			aiState = AIState.fight;
 			return;
 		}
-		
+
 		enemyPathToPoint(enemPos, playerPos);
 	}
 
@@ -138,7 +143,7 @@ public class BasicMeleeAI extends AiPlan {
 			for(int j = 0; j < size; j++) {
 				e = entities.get(j);
 				enemPos = Mappers.posMap.get(e);
-				if(enemPos.curXPos==x && enemPos.curYPos==y) {
+				if(enemPos.gridCurXPos==x && enemPos.gridCurYPos==y) {
 					occupied = true;
 					break;
 				}
@@ -153,15 +158,25 @@ public class BasicMeleeAI extends AiPlan {
 	}
 	
 	private void enemyPathToPoint(PositionComponent mePos, PositionComponent otherPos) {
-		IntArray pathToPt = astar.getPath((int)mePos.curXPos, 
-				(int)mePos.curYPos, 
-				(int)otherPos.curXPos, 
-				(int)otherPos.curYPos);
-		
+		if(otherPos.gridCurXPos != pXPos || otherPos.gridCurYPos != pYPos) {
+			
+			pXPos = playerPos.gridCurXPos;
+			pYPos = playerPos.gridCurYPos;
+			
+			pathToPt = astar.getPath(mePos.gridCurXPos, 
+					mePos.gridCurYPos, 
+					otherPos.gridCurXPos, 
+					otherPos.gridCurYPos);
+			
+		}
+			
 		if(pathToPt == null || pathToPt.size < 2) return;
-		
-		mePos.nXPos = pathToPt.get(pathToPt.size - 2);
-		mePos.nYPos = pathToPt.get(pathToPt.size - 1);
+
+		mePos.gridNXPos = pathToPt.get(pathToPt.size - 2);
+		mePos.gridNYPos = pathToPt.get(pathToPt.size - 1);
+		if(mePos.gridCurXPos==mePos.gridNXPos && mePos.gridCurYPos==mePos.gridNYPos) {
+			pathToPt.removeRange(pathToPt.size-2, pathToPt.size-1);
+		}
 	}
 	
 

@@ -11,13 +11,13 @@ import com.badlogic.ashley.utils.ImmutableArray;
 public class RegenSystem extends EntitySystem {
 	
 	public ImmutableArray<Entity> entities;
-	
 	public StatComponent stat;
 	public Entity e;
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public void addedToEngine(Engine engine) {
-		entities = engine.getEntitiesFor(Family.getFor(StatComponent.class));
+		entities = engine.getEntitiesFor(Family.all(StatComponent.class).get());
 	}
 	
 	@Override

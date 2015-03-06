@@ -60,40 +60,40 @@ public class Wave_of_Fire extends Ability {
 		Entity eFireBlast = new Entity();
 		pos = Mappers.posMap.get(me);
 		stat = Mappers.staMap.get(me);
-		projPos = new PositionComponent((int)pos.curXPos, (int)pos.curYPos, pos.direction);
+		projPos = new PositionComponent(pos.gridCurXPos, pos.gridCurYPos, pos.direction);
 		
 		switch(pos.direction) {
 		case Down:
-			projPos.curYPos--;
-			for(int i = (int) projPos.curYPos; i >= projPos.nYPos-this.range; i--) {
-				Vector2 cell = new Vector2(projPos.curXPos, i);
+			projPos.gridCurYPos--;
+			for(int i = projPos.gridCurYPos; i >= projPos.gridNYPos-this.range; i--) {
+				Vector2 cell = new Vector2(projPos.gridCurXPos, i);
 				path.add(cell);
 			}
 			break;
 		case Up:
-			projPos.curYPos++;
-			for(int i = (int) projPos.curYPos; i <= projPos.nYPos+this.range; i++) {
-				Vector2 cell = new Vector2(projPos.curXPos, i);
+			projPos.gridCurYPos++;
+			for(int i = projPos.gridCurYPos; i <= projPos.gridNYPos+this.range; i++) {
+				Vector2 cell = new Vector2(projPos.gridCurXPos, i);
 				path.add(cell);
 			}
 			break;
 		case Left:
-			projPos.curXPos--;
-			for(int i = (int) projPos.curXPos; i >= projPos.nXPos-this.range; i--) {
-				Vector2 cell = new Vector2(i, projPos.curYPos);
+			projPos.gridCurXPos--;
+			for(int i = projPos.gridCurXPos; i >= projPos.gridNXPos-this.range; i--) {
+				Vector2 cell = new Vector2(i, projPos.gridCurYPos);
 				path.add(cell);
 			}
 			break;
 		case Right:
-			projPos.curXPos++;
-			for(int i = (int) projPos.curXPos; i <= projPos.nXPos+this.range; i++) {
-				Vector2 cell = new Vector2(i, projPos.curYPos);
+			projPos.gridCurXPos++;
+			for(int i = projPos.gridCurXPos; i <= projPos.gridNXPos+this.range; i++) {
+				Vector2 cell = new Vector2(i, projPos.gridCurYPos);
 				path.add(cell);
 			}
 			break;
 		}
-		projPos.nXPos = (int) path.get(0).x;
-		projPos.nYPos = (int) path.get(0).y;
+		projPos.gridNXPos = (int) path.get(0).x;
+		projPos.gridNYPos = (int) path.get(0).y;
 		path.removeIndex(0);
 		eFireBlast.add(new RenderComponent(textureName));
 		eFireBlast.add(projPos);

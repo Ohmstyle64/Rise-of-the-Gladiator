@@ -51,8 +51,10 @@ public class TestLevel extends Level implements EntityListener {
 		PositionComponent pos = Mappers.posMap.get(player);
 		pos.curXPos = playerStart.x;
 		pos.curYPos = playerStart.y;
-		pos.nXPos = (int) playerStart.x;
-		pos.nYPos = (int) playerStart.y;
+		pos.gridNXPos = (int) playerStart.x;
+		pos.gridNYPos = (int) playerStart.y;
+		pos.gridCurXPos = (int) playerStart.x;
+		pos.gridCurYPos = (int) playerStart.y;
 	}
 
 	private void createRounds() {
@@ -72,7 +74,7 @@ public class TestLevel extends Level implements EntityListener {
 //		r1entities.add(r1e1);
 		
 		Entity r1e1 = new Entity();
-		r1e1.add(new PositionComponent(5, 5, DirectionType.Left));
+		r1e1.add(new PositionComponent(15, 5, DirectionType.Left));
 		r1e1.add(new RenderComponent(Constants.PIG_FORM));
 		r1e1.add(new CollisionComponent(ColliderType.character));
 		r1e1.add(new AIComponent(new BasicMeleeAI(r1e1, engine)));
@@ -82,16 +84,16 @@ public class TestLevel extends Level implements EntityListener {
 		r1e1.add(new StatComponent("Close_Enemy_1", 25f, 60f, Color.YELLOW, 2f, 2f, 1.5f));
 		r1entities.add(r1e1);
 		
-//		Entity r1e3 = new Entity();
-//		r1e3.add(new PositionComponent(5, 3, DirectionType.Left));
-//		r1e3.add(new RenderComponent(Constants.PIG_FORM));
-//		r1e3.add(new CollisionComponent(ColliderType.character));
-//		r1e3.add(new AIComponent(new CloseBasicE1(r1e3, engine)));
-//		Array<Ability> abilities_r1e3 = new Array<Ability>();
-//		abilities_r1e3.add(Constants.abilityMap.get(AbilityNameType.AT_BLADE_STRIKE));
-//		r1e3.add(new AbilityComponent(abilities_r1e3, engine));
-//		r1e3.add(new StatComponent("Close_Enemy_2", 25f, 60f, Color.YELLOW, 2f, 2f, 1.5f));
-//		r1entities.add(r1e3);
+		Entity r1e3 = new Entity();
+		r1e3.add(new PositionComponent(10, 3, DirectionType.Left));
+		r1e3.add(new RenderComponent(Constants.PIG_FORM));
+		r1e3.add(new CollisionComponent(ColliderType.character));
+		r1e3.add(new AIComponent(new BasicMeleeAI(r1e3, engine)));
+		Array<Ability> abilities_r1e3 = new Array<Ability>();
+		abilities_r1e3.add(Constants.abilityMap.get(AbilityNameType.AT_BLADE_STRIKE));
+		r1e3.add(new AbilityComponent(abilities_r1e3, engine));
+		r1e3.add(new StatComponent("Close_Enemy_2", 25f, 60f, Color.YELLOW, 2f, 2f, 1.5f));
+		r1entities.add(r1e3);
 		
 //		Entity r1e4 = new Entity();
 //		r1e4.add(new PositionComponent(5, 5, DirectionType.Left));

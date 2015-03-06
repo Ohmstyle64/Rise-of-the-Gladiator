@@ -66,8 +66,10 @@ public class CaravanLevel extends Level {
 		PositionComponent pos = Mappers.posMap.get(player);
 		pos.curXPos = playerStart.x;
 		pos.curYPos = playerStart.y;
-		pos.nXPos = (int) playerStart.x;
-		pos.nYPos = (int) playerStart.y;
+		pos.gridNXPos = (int) playerStart.x;
+		pos.gridNYPos = (int) playerStart.y;
+		pos.gridCurXPos = (int) playerStart.x;
+		pos.gridCurYPos = (int) playerStart.y;
 	}
 
 	@Override

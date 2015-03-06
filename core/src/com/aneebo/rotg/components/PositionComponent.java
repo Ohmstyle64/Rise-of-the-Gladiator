@@ -6,14 +6,16 @@ import com.badlogic.ashley.core.Component;
 public class PositionComponent extends Component {
 	public DirectionType direction;
 	public float curXPos, curYPos;
-	public int nXPos, nYPos;
+	public int gridNXPos, gridNYPos, gridCurXPos, gridCurYPos;
 	public boolean isMoveable;
 	
 	public PositionComponent(int x, int y, DirectionType direction) {
 		curXPos = x;
 		curYPos = y;
-		nXPos = x;
-		nYPos = y;
+		gridNXPos = x;
+		gridNYPos = y;
+		gridCurXPos = x;
+		gridCurYPos = y;
 		isMoveable = true;
 		this.direction = direction;
 	}
@@ -23,6 +25,26 @@ public class PositionComponent extends Component {
 	}
 	
 	public boolean isStopped() {
-		return curXPos==nXPos && curYPos==nYPos;
+		return gridCurXPos==gridNXPos && gridCurYPos==gridNYPos;
+	}
+	
+	public void setCurPos(int x, int y) {
+		curXPos = x;
+		curYPos = y;
+		gridNXPos = x;
+		gridNYPos = y;
+		gridCurYPos = y;
+	}
+	
+	public void setCurXPos(int x) {
+		curXPos = x;
+		gridNXPos = x;
+		gridCurXPos = x;
+	}
+
+	public void setCurYPos(int y) {
+		curYPos = y;
+		gridNYPos = y;
+		gridCurYPos = y;
 	}
 }

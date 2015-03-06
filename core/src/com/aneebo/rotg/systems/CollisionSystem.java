@@ -24,6 +24,7 @@ public class CollisionSystem extends EntitySystem {
 	private CollisionComponent ent1Col;
 	private CollisionComponent ent2Col;
 	private ProjectileComponent proj;
+	private LevelChangerComponent llc;
 	private Entity e1;
 	private Entity e2;
 	
@@ -34,9 +35,10 @@ public class CollisionSystem extends EntitySystem {
 		wallLayer = (TiledMapTileLayer) map.getLayers().get("wall");
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void addedToEngine(Engine engine) {
-		entities = engine.getEntitiesFor(Family.getFor(PositionComponent.class, CollisionComponent.class));
+		entities = engine.getEntitiesFor(Family.all(PositionComponent.class, CollisionComponent.class).get());
 	}
 	
 	@Override
@@ -48,10 +50,10 @@ public class CollisionSystem extends EntitySystem {
 			if(ent1Pos.isStopped()) continue;
 			
 			//CHECK IF ENTITIY HIT A WALL
-			if(wallLayer.getCell((int)ent1Pos.curXPos, (int)ent1Pos.curYPos) != null ||
-					wallLayer.getCell(ent1Pos.nXPos, ent1Pos.nYPos) != null) {
-				ent1Pos.nXPos = (int)ent1Pos.curXPos;
-				ent1Pos.nYPos = (int)ent1Pos.curYPos;
+			if(wallLayer.getCell(ent1Pos.gridCurXPos, ent1Pos.gridCurYPos) != null ||
+					wallLayer.getCell(ent1Pos.gridNXPos, ent1Pos.gridNYPos) != null) {
+				ent1Pos.gridNXPos = ent1Pos.gridCurXPos;
+				ent1Pos.gridNYPos = ent1Pos.gridCurYPos;
 				proj = Mappers.projMap.get(e1);
 				if(proj != null) proj.hitInAnimmate = true;
 			}
@@ -66,63 +68,113 @@ public class CollisionSystem extends EntitySystem {
 				
 				ent2Pos = Mappers.posMap.get(e2);
 				ent2Col = Mappers.colMap.get(e2);
-				//CHECK IF THE ENT2 IS WHERE ENT1 WANTS TO GO
-				if(ent1Col.type == ColliderType.character) {
-					if(ent2Col.type != ColliderType.projectile &&
-							ent1Pos.nXPos == ent2Pos.curXPos &&
-							ent1Pos.nYPos == ent2Pos.curYPos) {
+				
+				switch(ent1Col.type) {
+					case character:{
 						switch(ent2Col.type) {
-						case character:
-							ent1Pos.nXPos = (int)ent1Pos.curXPos;
-							ent1Pos.nYPos = (int)ent1Pos.curYPos;
-							break;
-						case merchant:
-							Mappers.mercMap.get(e2).isInitiated = true;
-							ent1Pos.nXPos = (int)ent1Pos.curXPos;
-							ent1Pos.nYPos = (int)ent1Pos.curYPos;
-							break;
-						case trap:
-							break;
-						case levelChange:
-							LevelChangerComponent lcc = Mappers.lvlcMap.get(e2);
-							Play.levelManager.goToLevel(lcc.level);
-							break;
-						default:
-							break;
+							case character: {
+								if(ent1Pos.gridNXPos == ent2Pos.gridCurXPos && ent1Pos.gridNYPos == ent2Pos.gridCurYPos ||
+										ent1Pos.gridNXPos == ent2Pos.gridNXPos && ent1Pos.gridNYPos == ent2Pos.gridNYPos) {
+									ent1Pos.setCurPos(ent1Pos.gridCurXPos, ent1Pos.gridCurYPos);
+								}
+								break;
+							}
+							case levelChange: {
+								if(ent1Pos.gridNXPos == ent2Pos.gridCurXPos && ent1Pos.gridNYPos == ent2Pos.gridCurYPos ||
+										ent1Pos.gridNXPos == ent2Pos.gridNXPos && ent1Pos.gridNYPos == ent2Pos.gridNYPos) {
+									llc = Mappers.lvlcMap.get(e2);
+									Play.levelManager.goToLevel(llc.level);
+								}
+								break;
+							}
+							case merchant: {
+								if(ent1Pos.gridNXPos == ent2Pos.gridCurXPos && ent1Pos.gridNYPos == ent2Pos.gridCurYPos ||
+										ent1Pos.gridNXPos == ent2Pos.gridNXPos && ent1Pos.gridNYPos == ent2Pos.gridNYPos) {
+									Mappers.mercMap.get(e2).isInitiated = true;
+									ent1Pos.setCurPos(ent1Pos.gridCurXPos, ent1Pos.gridCurYPos);
+								}
+								break;
+							}
+							case projectile : {
+								if(ent1Pos.gridNXPos == ent2Pos.gridCurXPos && ent1Pos.gridNYPos == ent2Pos.gridCurYPos ||
+										ent1Pos.gridNXPos == ent2Pos.gridNXPos && ent1Pos.gridNYPos == ent2Pos.gridNYPos ||
+										ent1Pos.gridCurXPos == ent2Pos.gridCurXPos && ent1Pos.gridCurXPos == ent2Pos.gridCurYPos) {
+									proj = Mappers.projMap.get(e2);
+									if(e1.equals(proj.from)) continue;
+									proj.hit = e1;
+								}
+								break;
+							}
+							case trap: {
+								//TODO: Need to implement
+								break;
+							}
 						}
+						break;
 					}
-				}else{
-					float dstX = Math.abs(ent1Pos.curXPos - ent2Pos.curXPos);
-					float dstY = Math.abs(ent1Pos.curYPos - ent2Pos.curYPos);
-					float totDst = (float) Math.max(dstX, dstY);
-					if(totDst <= 1f ) {
-						switch(ent1Col.type) {
-							case projectile:
-								switch(ent2Col.type) {
-									case character:
-										proj = Mappers.projMap.get(e1);
-										if(e2.equals(proj.from)) continue;
-										proj.hit = e2;
-										break;
-									case trap:
-										break;
-									case projectile:
-										break;
+					case levelChange: {
+						if(ent2Col.type.equals(ColliderType.character)) {
+							if(ent1Pos.gridNXPos == ent2Pos.gridCurXPos && ent1Pos.gridNYPos == ent2Pos.gridCurYPos ||
+									ent1Pos.gridNXPos == ent2Pos.gridNXPos && ent1Pos.gridNYPos == ent2Pos.gridNYPos) {
+								llc = Mappers.lvlcMap.get(e2);
+								Play.levelManager.goToLevel(llc.level);
+							}
+						}
+						break;
+					}
+					case merchant: {
+						if(ent2Col.type.equals(ColliderType.character)) {
+							if(ent1Pos.gridNXPos == ent2Pos.gridCurXPos && ent1Pos.gridNYPos == ent2Pos.gridCurYPos ||
+									ent1Pos.gridNXPos == ent2Pos.gridNXPos && ent1Pos.gridNYPos == ent2Pos.gridNYPos) {
+								Mappers.mercMap.get(e2).isInitiated = true;
+								ent1Pos.setCurPos(ent1Pos.gridCurXPos, ent1Pos.gridCurYPos);
+							}
+						}
+						break;
+					}
+					case projectile : {
+						switch(ent2Col.type) {
+							case character: {
+								if(ent1Pos.gridNXPos == ent2Pos.gridCurXPos && ent1Pos.gridNYPos == ent2Pos.gridCurYPos ||
+										ent1Pos.gridNXPos == ent2Pos.gridNXPos && ent1Pos.gridNYPos == ent2Pos.gridNYPos ||
+										ent1Pos.gridCurXPos == ent2Pos.gridCurXPos && ent1Pos.gridCurXPos == ent2Pos.gridCurYPos) {
+									proj = Mappers.projMap.get(e1);
+									if(e2.equals(proj.from)) continue;
+									proj.hit = e2;
 								}
 								break;
-							case trap:
-								switch(ent2Col.type) {
-								case character:
-									break;
-								case trap:
-									break;
-								case projectile:
-									break;
-								}
+							}
+							case projectile : {
+								//TODO: Need to implement
 								break;
+							}
+							case trap : {
+								//TODO: Need to implement
+								break;
+							}
 							default:
 								break;
 						}
+						break;
+					}
+					case trap: {
+						switch(ent2Col.type) {
+							case character : {
+								//TODO: Need to implement
+								break;
+							}
+							case projectile: {
+								//TODO: Need to implement
+								break;
+							}
+							case trap: {
+								//TODO: Need to implement
+								break;
+							}
+							default:
+								break;
+						}
+						break;
 					}
 				}
 			}

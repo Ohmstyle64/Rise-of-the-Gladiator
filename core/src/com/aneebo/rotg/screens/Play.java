@@ -126,9 +126,9 @@ public class Play implements Screen {
 		
 		//Play music
 		Music song1 = Assets.assetManager.get(Constants.TEST_MUSIC, Music.class);
-		song1.play();
-		song1.setVolume(.1f);
-		song1.setLooping(true);
+//		song1.play();
+//		song1.setVolume(.1f);
+//		song1.setLooping(true);
 	}
 	
 	private void createLevels() {
@@ -273,7 +273,7 @@ public class Play implements Screen {
 				if(pos.isStopped()) {
 					pos.direction = DirectionType.Left;
 					if(pos.isMoveable)
-						pos.nXPos--;
+						pos.gridNXPos--;
 				}
 			}
 		});
@@ -297,7 +297,7 @@ public class Play implements Screen {
 				if(pos.isStopped()) {
 					pos.direction = DirectionType.Right;
 					if(pos.isMoveable)
-						pos.nXPos++;
+						pos.gridNXPos++;
 				}
 			}
 		});
@@ -320,7 +320,7 @@ public class Play implements Screen {
 				if(pos.isStopped()) {
 					pos.direction = DirectionType.Up;
 					if(pos.isMoveable)
-						pos.nYPos++;
+						pos.gridNYPos++;
 				}
 			}
 		});
@@ -344,7 +344,7 @@ public class Play implements Screen {
 				if(pos.isStopped()) {
 					pos.direction = DirectionType.Down;
 					if(pos.isMoveable)
-						pos.nYPos--;
+						pos.gridNYPos--;
 				}
 			}
 		});

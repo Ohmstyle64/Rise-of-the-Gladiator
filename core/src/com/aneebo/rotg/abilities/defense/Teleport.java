@@ -69,7 +69,7 @@ public class Teleport extends Ability {
 		while(!emptySpot) {
 			for(int i = 0; i < size; i++) {
 				posMe = Mappers.posMap.get(targets.get(i));
-				if(randomX != (int)posMe.curXPos && randomY != (int)posMe.curYPos) {
+				if(randomX != (int)posMe.gridCurXPos && randomY != (int)posMe.gridCurYPos) {
 					emptySpot = true;
 				}else {
 					emptySpot = false;
@@ -80,10 +80,7 @@ public class Teleport extends Ability {
 			}
 		}
 		posMe = Mappers.posMap.get(me);
-		posMe.curXPos = randomX;
-		posMe.nXPos = randomX;
-		posMe.curYPos = randomY;
-		posMe.nYPos = randomY;
+		posMe.setCurPos(randomX, randomY);
 	}
 
 	@Override

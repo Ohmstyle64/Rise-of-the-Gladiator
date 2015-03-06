@@ -25,9 +25,10 @@ public class ProjectileSystem extends EntitySystem {
 		super(1);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public void addedToEngine(Engine engine) {
-		entities = engine.getEntitiesFor(Family.getFor(ProjectileComponent.class));
+		entities = engine.getEntitiesFor(Family.all(ProjectileComponent.class).get());
 		this.engine = engine;
 	}
 	
@@ -43,11 +44,11 @@ public class ProjectileSystem extends EntitySystem {
 					proj.rangeAbility.hit(proj, proj.from, proj.hit);
 					removeEntity(e);
 				} else if(pos.isStopped()) {
-					pos.nXPos = (int)proj.path.first().x;
-					pos.nYPos = (int)proj.path.first().y;
+					pos.gridNXPos = (int)proj.path.first().x;
+					pos.gridNYPos = (int)proj.path.first().y;
 					proj.path.removeIndex(0);
 					particle = Mappers.partMap.get(e);
-					particle.pEffect.setPosition(pos.curXPos*Constants.TILE_WIDTH, pos.curYPos*Constants.TILE_HEIGHT);
+					particle.pEffect.setPosition(pos.gridCurXPos*Constants.TILE_WIDTH, pos.gridCurYPos*Constants.TILE_HEIGHT);
 					particle.pEffect.start();
 				}else if(proj.hitInAnimmate) {
 					removeEntity(e);
