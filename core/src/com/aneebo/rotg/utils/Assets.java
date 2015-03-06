@@ -1,9 +1,11 @@
 package com.aneebo.rotg.utils;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.SkinLoader;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class Assets {
 	public static final AssetManager assetManager = new AssetManager();
@@ -23,6 +25,7 @@ public class Assets {
 		assetManager.load(Constants.BODY_SKELETON, Texture.class);
 		assetManager.load(Constants.TEST_GET_HIT, Sound.class);
 		assetManager.load(Constants.TEST_MUSIC, Music.class);
+		assetManager.load(Constants.SKIN, Skin.class, new SkinLoader.SkinParameter(Constants.ATLAS));
 		assetManager.finishLoading();
 	}
 	

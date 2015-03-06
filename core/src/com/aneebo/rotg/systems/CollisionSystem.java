@@ -76,6 +76,11 @@ public class CollisionSystem extends EntitySystem {
 							ent1Pos.nXPos = (int)ent1Pos.curXPos;
 							ent1Pos.nYPos = (int)ent1Pos.curYPos;
 							break;
+						case merchant:
+							Mappers.mercMap.get(e2).isInitiated = true;
+							ent1Pos.nXPos = (int)ent1Pos.curXPos;
+							ent1Pos.nYPos = (int)ent1Pos.curYPos;
+							break;
 						case trap:
 							break;
 						case levelChange:

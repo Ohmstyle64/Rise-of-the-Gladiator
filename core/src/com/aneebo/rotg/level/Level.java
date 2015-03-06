@@ -1,5 +1,7 @@
 package com.aneebo.rotg.level;
 
+import com.aneebo.rotg.inventory.Item;
+import com.aneebo.rotg.inventory.items.EmptyItem;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -59,6 +61,14 @@ public abstract class Level{
 		for(Entity e : r.entities) {
 			engine.removeEntity(e);
 		}
+	}
+	
+	protected Array<Item> fillRest(Array<Item> array) {
+		int size = array.items.length;
+		for(int i = array.size; i < size; i++) {
+			array.add(new EmptyItem());
+		}
+		return array;
 	}
 	
 	protected abstract void loadLevel();

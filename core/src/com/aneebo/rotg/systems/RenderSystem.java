@@ -3,10 +3,12 @@ package com.aneebo.rotg.systems;
 import com.aneebo.rotg.components.AbilityComponent;
 import com.aneebo.rotg.components.AnimationComponent;
 import com.aneebo.rotg.components.Mappers;
+import com.aneebo.rotg.components.MerchantComponent;
 import com.aneebo.rotg.components.ParticleComponent;
 import com.aneebo.rotg.components.PositionComponent;
 import com.aneebo.rotg.components.RenderComponent;
 import com.aneebo.rotg.components.StatComponent;
+import com.aneebo.rotg.ui.MerchantInventoryWindow;
 import com.aneebo.rotg.utils.Assets;
 import com.aneebo.rotg.utils.Constants;
 import com.badlogic.ashley.core.Engine;
@@ -23,6 +25,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class RenderSystem extends EntitySystem {
@@ -31,12 +35,15 @@ public class RenderSystem extends EntitySystem {
 	private FitViewport arenaViewPort;
 	private OrthogonalTiledMapRenderer renderer;
 	private ShapeRenderer shapeRenderer;
+	private Stage stage;
+	private Skin skin;
 	private BitmapFont font;
 	
 	private ImmutableArray<Entity> entities;
 	private ImmutableArray<Entity> abilityEntities;
 	private ImmutableArray<Entity> animEntities;
 	private ImmutableArray<Entity> particleEntities;
+	private ImmutableArray<Entity> merchantEntities;
 	
 	private AbilityComponent abilityComponent;
 	private PositionComponent posComponent;
@@ -44,14 +51,17 @@ public class RenderSystem extends EntitySystem {
 	private StatComponent statComponent;
 	private AnimationComponent animComponent;
 	private ParticleComponent partComponent;
+	private MerchantComponent merchantComponent;
 	private Animation anim;
 	private Entity e;
 	
-	public RenderSystem(OrthogonalTiledMapRenderer renderer) {
+	public RenderSystem(OrthogonalTiledMapRenderer renderer, Stage stage, Skin skin) {
 		super(4);
 		this.renderer = renderer;
 		font = new BitmapFont();
 		shapeRenderer = new ShapeRenderer();
+		this.stage = stage;
+		this.skin = skin;
 		arenaCam = new OrthographicCamera();
 		arenaViewPort = new FitViewport(Constants.WIDTH, Constants.HEIGHT, arenaCam);
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -64,6 +74,13 @@ public class RenderSystem extends EntitySystem {
 		animEntities = engine.getEntitiesFor(Family.all(AnimationComponent.class).get());
 		abilityEntities = engine.getEntitiesFor(Family.all(AbilityComponent.class).get());
 		particleEntities = engine.getEntitiesFor(Family.all(ParticleComponent.class).get());
+		merchantEntities = engine.getEntitiesFor(Family.all(MerchantComponent.class).get());
+		int size = merchantEntities.size();
+		for(int i = 0; i < size; i++) {
+			e = merchantEntities.get(i);
+			merchantComponent = Mappers.mercMap.get(e);
+			stage.addActor(merchantComponent.window);
+		}
 	}
 	
 	@Override
@@ -103,11 +120,22 @@ public class RenderSystem extends EntitySystem {
 					Constants.TILE_HEIGHT);
 		}
 		
+		//RENDER PARTICLES
 		size = particleEntities.size();
 		for(int i = 0; i < size; i++) {
 			e = particleEntities.get(i);
 			partComponent = Mappers.partMap.get(e);
 			partComponent.pEffect.draw(renderer.getBatch(), deltaTime);
+		}
+		
+		//RENDER INVENTORY WINDOWS
+		size = merchantEntities.size();
+		for(int i = 0; i < size; i++) {
+			e = merchantEntities.get(i);
+			merchantComponent = Mappers.mercMap.get(e);
+			if(merchantComponent.isSelling) {
+				merchantComponent.window.setVisible(true);
+			}
 		}
 		
 		//RENDER ANIMATIONS

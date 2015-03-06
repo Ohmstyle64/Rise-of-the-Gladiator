@@ -45,8 +45,11 @@ public class Constants {
 	//MUSIC
 	public static final String TEST_GET_HIT = "sounds/sfx/hit_sound.wav";
 	
-	
 	public static final String WORLD_MAP = "img/map/worldmap.tmx";
+	
+	//UI
+	public static final String SKIN = "img/gui/uiskin.json";
+	public static final String ATLAS = "img/gui/uiskin.atlas";
 	
 	public static final String BODY_PLAYER = "img/characters/animations/BODY_male.png";
 	public static final String BODY_SKELETON = "img/characters/animations/BODY_skeleton.png";

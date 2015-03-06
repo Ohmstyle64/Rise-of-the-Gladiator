@@ -24,6 +24,7 @@ import com.aneebo.rotg.systems.AbilitySystem;
 import com.aneebo.rotg.systems.CollisionSystem;
 import com.aneebo.rotg.systems.DeathSystem;
 import com.aneebo.rotg.systems.InputSystem;
+import com.aneebo.rotg.systems.MerchantSystem;
 import com.aneebo.rotg.systems.MovementSystem;
 import com.aneebo.rotg.systems.ProjectileSystem;
 import com.aneebo.rotg.systems.RegenSystem;
@@ -70,6 +71,7 @@ public class Play implements Screen {
 	private RegenSystem regenSystem;
 	private ProjectileSystem projectileSystem;
 	private DeathSystem deathSystem;
+	private MerchantSystem merchantSystem;
 	
 	private Engine engine;
 	private Entity player;
@@ -83,8 +85,8 @@ public class Play implements Screen {
 		
 	//UI
 	private Table table;
-	private Skin skin;
 	private Stage stage;
+	private Skin skin;
 	private ProgressBar healthBar;
 	private ProgressBar energyBar;
 	
@@ -92,14 +94,11 @@ public class Play implements Screen {
 	public void show() {
 		Assets.load();
 		
-		TextureAtlas atlas = new TextureAtlas("img/gui/uiskin.atlas");
-		skin = new Skin(Gdx.files.internal("img/gui/uiskin.json"),atlas);
-		
 		stage = new Stage();
 		stage.setViewport(new FitViewport(Constants.WIDTH, Constants.HEIGHT));
 
 		Gdx.input.setInputProcessor(stage);
-		
+		skin = Assets.assetManager.get(Constants.SKIN, Skin.class);
 		table = new Table(skin);
 		table.setFillParent(true);
 		
@@ -123,6 +122,7 @@ public class Play implements Screen {
 		engine.addSystem(regenSystem);
 		engine.addSystem(projectileSystem);
 		engine.addSystem(deathSystem);
+		engine.addSystem(merchantSystem);
 		
 		//Play music
 		Music song1 = Assets.assetManager.get(Constants.TEST_MUSIC, Music.class);
@@ -361,12 +361,13 @@ public class Play implements Screen {
 		collisionSystem = new CollisionSystem(levelManager.renderer().getMap());
 		inputSystem = new InputSystem(stage, skin);
 		movementSystem = new MovementSystem();
-		renderSystem = new RenderSystem(levelManager.renderer());
+		renderSystem = new RenderSystem(levelManager.renderer(), stage, skin);
 		abilitySystem = new AbilitySystem();
 		aiSystem = new AISystem();
 		regenSystem = new RegenSystem();
 		projectileSystem = new ProjectileSystem();
 		deathSystem = new DeathSystem();
+		merchantSystem = new MerchantSystem();
 	}
 	
 	@Override
