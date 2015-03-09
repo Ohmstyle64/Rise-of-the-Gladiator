@@ -11,6 +11,7 @@ import com.aneebo.rotg.inventory.Inventory;
 import com.aneebo.rotg.inventory.Item;
 import com.aneebo.rotg.inventory.items.ChestP1;
 import com.aneebo.rotg.level.Level;
+import com.aneebo.rotg.level.LevelManager;
 import com.aneebo.rotg.screens.Play;
 import com.aneebo.rotg.types.ColliderType;
 import com.aneebo.rotg.types.DirectionType;
@@ -25,8 +26,8 @@ import com.badlogic.gdx.utils.ObjectMap;
 
 public class CaravanLevel extends Level {
 
-	public CaravanLevel(Engine engine, Entity player, Vector2 playerStart) {
-		super(engine, player, "img/arena/arena_1.tmx", playerStart);
+	public CaravanLevel(Engine engine, Entity player, Vector2 playerStart, LevelManager manager) {
+		super(engine, player, "img/arena/arena_1.tmx", playerStart, manager);
 	}
 
 
@@ -38,7 +39,7 @@ public class CaravanLevel extends Level {
 		Entity merchant = new Entity();
 		merchant.add(new PositionComponent(5,5,DirectionType.Right));
 		merchant.add(new RenderComponent(Constants.DRAGON_FORM));
-		merchant.add(new StatComponent("Merchant", 1f, 1f, Color.WHITE, 1f, 1f, 0f));
+		merchant.add(new StatComponent("Merchant", 1f, 1f, Color.WHITE, 1f, 1f, 0f, false));
 		merchant.add(new CollisionComponent(ColliderType.merchant));
 		Array<Item> iList = new Array<Item>(true, Constants.INVENTORY_SIZE, Item.class);
 		iList.add(new ChestP1());
@@ -52,7 +53,7 @@ public class CaravanLevel extends Level {
 		Entity changer = new Entity();
 		changer.add(new PositionComponent(5,7,DirectionType.Down));
 		changer.add(new RenderComponent(Constants.ICE_FORM));
-		changer.add(new StatComponent("Change Level", 1f, 1f, Color.WHITE, 1f, 1f, 0f));
+		changer.add(new StatComponent("Change Level", 1f, 1f, Color.WHITE, 1f, 1f, 0f, false));
 		changer.add(new CollisionComponent(ColliderType.levelChange));
 		changer.add(new LevelChangerComponent(LevelType.TEST_LEVEL));
 		
@@ -74,12 +75,12 @@ public class CaravanLevel extends Level {
 
 	@Override
 	public void transitionIn(float deltaTime) {
-		Play.levelManager.enterLevel();
+		manager.enterLevel();
 	}
 
 
 	@Override
 	public void transitionOut(float deltaTime) {
-		Play.levelManager.leaveLevel();
+		manager.leaveLevel();
 	}
 }

@@ -1,5 +1,6 @@
 package com.aneebo.rotg.components;
 
+import com.aneebo.rotg.ui.HealthBlocks;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.graphics.Color;
 
@@ -17,13 +18,17 @@ public class StatComponent extends Component {
 	public int skillPoints;
 	public int currency;
 	
+	public boolean isPlayer;
+	
+	public HealthBlocks healthBlocks;
+	
 	public float increaseToAttackSpeed;
 	public float increaseToDamage;
 	public float increaseToRange;
 	public float damageMitigation;
 	public float magicResist;
 	
-	public StatComponent(String name, float health, float energy, Color color, float health_regen, float energy_regen, float speed) {
+	public StatComponent(String name, float health, float energy, Color color, float health_regen, float energy_regen, float speed, boolean isPlayer) {
 		this.name = name;
 		this.health = health;
 		this.energy = energy;
@@ -34,6 +39,8 @@ public class StatComponent extends Component {
 		this.energy_regen = energy_regen;
 		this.speed = speed;
 		this.eValue = 0;
+		this.isPlayer = isPlayer;
+		healthBlocks = new HealthBlocks(0, max_health, max_health);
 		skillPoints = 0;
 		currency = 0;
 		increaseToAttackSpeed = 0;

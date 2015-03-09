@@ -5,14 +5,17 @@ import com.aneebo.rotg.components.Mappers;
 import com.aneebo.rotg.components.ProjectileComponent;
 import com.aneebo.rotg.types.AbilityNameType;
 import com.aneebo.rotg.types.AbilityType;
+import com.aneebo.rotg.ui.FloatingTextManager;
+import com.aneebo.rotg.utils.Assets;
+import com.aneebo.rotg.utils.Constants;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 public abstract class Ability {
@@ -25,11 +28,10 @@ public abstract class Ability {
 	public boolean isInterrupted;
 	public boolean isActivated;
 	private boolean justStarted;
-	private ProgressBar bar;
-	private Label label;
-	private Skin skin;
 	protected Array<Entity> targets;
 	protected Engine engine;
+	private Animation cast;
+	private Vector2 drawPosition;
 
 	protected String textureName;
 	protected Array<Upgrade> upgrades;
@@ -54,11 +56,11 @@ public abstract class Ability {
 		cooldownTimer = cooldown;
 		tier = 0;
 		targets = new Array<Entity>();
-		skin = new Skin(Gdx.files.internal("img/gui/uiskin.json"));
-		bar = new ProgressBar(0f,1f,0.01f,false, skin);
-		label = new Label(name, skin);
-		bar.setPosition(Gdx.graphics.getWidth() / 2 - bar.getWidth() / 2, Gdx.graphics.getHeight() * 0.9f);
-		label.setPosition(Gdx.graphics.getWidth() / 2 - label.getWidth() / 2, Gdx.graphics.getHeight() * 0.9f - label.getHeight());
+		Texture t = Assets.assetManager.get(Constants.CASTTIMER, Texture.class);
+		TextureRegion r = new TextureRegion(t);
+		TextureRegion[][] frames = r.split(32, 32);
+		cast = new Animation(castTime / 9, frames[0]);
+		drawPosition = new Vector2();
 	}
 	
 	public Ability(Ability ability, Engine engine) {
@@ -66,8 +68,6 @@ public abstract class Ability {
 				ability.getDamage(), ability.getEnergy_cost(), ability.getTexture(), engine, ability.getUpgrades());
 	}
 	
-
-
 	public AbilityNameType getNameType() {
 		return nameType;
 	}
@@ -140,25 +140,8 @@ public abstract class Ability {
 	
 	public void render(Batch batch){
 		if(isAvailable && isActivated) {
-			bar.setVisible(false);
-			label.setVisible(false);
-		}else {
-			bar.setVisible(true);
-			label.setVisible(true);
+			batch.draw(cast.getKeyFrame(castTimeTimer), drawPosition.x, drawPosition.y);
 		}
-		float perc = castTimeTimer / castTime;
-		bar.setValue(perc);
-		if(perc < 0.15f) {
-			label.getStyle().fontColor = Color.GREEN;
-		}else if(perc < 0.25f) {
-			label.getStyle().fontColor = Color.CYAN;
-		}else if(perc < 0.75f)
-			label.getStyle().fontColor = Color.YELLOW;
-		else
-			label.getStyle().fontColor = Color.RED;
-			
-		bar.draw(batch, batch.getColor().a);
-		label.draw(batch, batch.getColor().a);
 	}
 
 	public void action(float delta, Entity me){
@@ -169,6 +152,7 @@ public abstract class Ability {
 			justStarted = false;
 		}
 		if(isActivated) {
+			drawPosition.set(Mappers.posMap.get(me).curXPos*Constants.TILE_WIDTH, (Mappers.posMap.get(me).curYPos + 1)*Constants.TILE_HEIGHT);
 			abilityActing(me);
 		}
 		if(castTimeTimer >=castTime) {

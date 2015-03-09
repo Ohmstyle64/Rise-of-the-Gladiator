@@ -20,8 +20,9 @@ public abstract class Level{
 	protected Entity player;
 	protected TiledMap tiledMap;
 	protected Vector2 playerStart;
+	protected LevelManager manager;
 	
-	public Level(Engine engine, Entity player, String mapLocation, Vector2 playerStart) {
+	public Level(Engine engine, Entity player, String mapLocation, Vector2 playerStart, LevelManager manager) {
 		this.engine = engine;
 		this.player = player;
 		this.mapLocation = mapLocation;
@@ -31,6 +32,8 @@ public abstract class Level{
 		tiledMap = new TmxMapLoader().load(mapLocation);
 		
 		rounds = new Array<Round>();
+		
+		this.manager = manager;
 	}
 	
 	public boolean isCompleted() {

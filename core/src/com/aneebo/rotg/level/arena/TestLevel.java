@@ -16,8 +16,8 @@ import com.aneebo.rotg.inventory.Item;
 import com.aneebo.rotg.inventory.items.ChestP2;
 import com.aneebo.rotg.inventory.items.PrimP2;
 import com.aneebo.rotg.level.Level;
+import com.aneebo.rotg.level.LevelManager;
 import com.aneebo.rotg.level.Prize;
-import com.aneebo.rotg.screens.Play;
 import com.aneebo.rotg.types.AbilityNameType;
 import com.aneebo.rotg.types.ColliderType;
 import com.aneebo.rotg.types.DirectionType;
@@ -32,8 +32,8 @@ import com.badlogic.gdx.utils.Array;
 
 public class TestLevel extends Level implements EntityListener {
 	
-	public TestLevel(Engine engine, Entity player, Vector2 playerStart) {
-		super(engine, player, "img/arena/arena_1.tmx", playerStart);
+	public TestLevel(Engine engine, Entity player, Vector2 playerStart, LevelManager manager) {
+		super(engine, player, "img/arena/arena_1.tmx", playerStart, manager);
 	}
 
 	@Override
@@ -80,8 +80,8 @@ public class TestLevel extends Level implements EntityListener {
 		r1e1.add(new AIComponent(new BasicMeleeAI(r1e1, engine)));
 		Array<Ability> abilities_r1e2 = new Array<Ability>();
 		abilities_r1e2.add(Constants.abilityMap.get(AbilityNameType.AT_BLADE_STRIKE));
-		r1e1.add(new AbilityComponent(abilities_r1e2, engine));
-		r1e1.add(new StatComponent("Close_Enemy_1", 25f, 60f, Color.YELLOW, 2f, 2f, 1.5f));
+		r1e1.add(new AbilityComponent(abilities_r1e2, engine, manager.getFloatingTextMgr()));
+		r1e1.add(new StatComponent("Close_Enemy_1", 25f, 60f, Color.YELLOW, 2f, 2f, 1.5f, false));
 		r1entities.add(r1e1);
 		
 		Entity r1e3 = new Entity();
@@ -91,8 +91,8 @@ public class TestLevel extends Level implements EntityListener {
 		r1e3.add(new AIComponent(new BasicMeleeAI(r1e3, engine)));
 		Array<Ability> abilities_r1e3 = new Array<Ability>();
 		abilities_r1e3.add(Constants.abilityMap.get(AbilityNameType.AT_BLADE_STRIKE));
-		r1e3.add(new AbilityComponent(abilities_r1e3, engine));
-		r1e3.add(new StatComponent("Close_Enemy_2", 25f, 60f, Color.YELLOW, 2f, 2f, 1.5f));
+		r1e3.add(new AbilityComponent(abilities_r1e3, engine, manager.getFloatingTextMgr()));
+		r1e3.add(new StatComponent("Close_Enemy_2", 25f, 60f, Color.YELLOW, 2f, 2f, 1.5f, false));
 		r1entities.add(r1e3);
 		
 //		Entity r1e4 = new Entity();
@@ -121,8 +121,8 @@ public class TestLevel extends Level implements EntityListener {
 		Array<Ability> abilities_r2e1 = new Array<Ability>();
 		abilities_r2e1.add(Constants.abilityMap.get(AbilityNameType.AT_WAVE_OF_FIRE));
 		abilities_r2e1.add(Constants.abilityMap.get(AbilityNameType.DF_TELEPORT));
-		r2e1.add(new AbilityComponent(abilities_r2e1, engine));
-		r2e1.add(new StatComponent("Range_Enemy_1", 25f, 60f, Color.YELLOW, 2f, 2f, 1.3f));
+		r2e1.add(new AbilityComponent(abilities_r2e1, engine, manager.getFloatingTextMgr()));
+		r2e1.add(new StatComponent("Range_Enemy_1", 25f, 60f, Color.YELLOW, 2f, 2f, 1.3f, false));
 		r2entities.add(r2e1);
 		
 		Round r2 = new Round(r2entities);
@@ -138,8 +138,8 @@ public class TestLevel extends Level implements EntityListener {
 		r3e1.add(new AIComponent(new BasicMeleeAI(r3e1, engine)));
 		Array<Ability> abilities_r3e1 = new Array<Ability>();
 		abilities_r3e1.add(Constants.abilityMap.get(AbilityNameType.AT_BLADE_STRIKE));
-		r3e1.add(new AbilityComponent(abilities_r3e1, engine));
-		r3e1.add(new StatComponent("Enemy3", 45f, 50f, Color.YELLOW, 2f, 2f, 1.3f));
+		r3e1.add(new AbilityComponent(abilities_r3e1, engine, manager.getFloatingTextMgr()));
+		r3e1.add(new StatComponent("Enemy3", 45f, 50f, Color.YELLOW, 2f, 2f, 1.3f, false));
 		r3entities.add(r3e1);
 		
 		Entity r3e2 = new Entity();
@@ -149,8 +149,8 @@ public class TestLevel extends Level implements EntityListener {
 		r3e2.add(new AIComponent(new BasicMeleeAI(r3e2, engine)));
 		Array<Ability> abilities_r3e2 = new Array<Ability>();
 		abilities_r3e2.add(Constants.abilityMap.get(AbilityNameType.AT_BLADE_STRIKE));
-		r3e2.add(new AbilityComponent(abilities_r3e2, engine));
-		r3e2.add(new StatComponent("Enemy3", 45f, 50f, Color.YELLOW, 2f, 2f, 1.3f));
+		r3e2.add(new AbilityComponent(abilities_r3e2, engine, manager.getFloatingTextMgr()));
+		r3e2.add(new StatComponent("Enemy3", 45f, 50f, Color.YELLOW, 2f, 2f, 1.3f, false));
 		r3entities.add(r3e2);
 		
 		Round r3 = new Round(r3entities);
@@ -177,7 +177,7 @@ public class TestLevel extends Level implements EntityListener {
 				inv.inventory.addItemsToInventory(prize.prize);
 				InputComponent input = Mappers.inpMap.get(player);
 				input.needRefresh = true;
-				Play.levelManager.goToLevel(LevelType.CARAVAN_LEVEL);
+				manager.goToLevel(LevelType.CARAVAN_LEVEL);
 			}else {
 				addEntities();
 				StatComponent stat = Mappers.staMap.get(player);
@@ -190,12 +190,12 @@ public class TestLevel extends Level implements EntityListener {
 	@Override
 	public void transitionIn(float deltaTime) {
 		engine.addEntityListener(this);
-		Play.levelManager.enterLevel();
+		manager.enterLevel();
 	}
 
 	@Override
 	public void transitionOut(float deltaTime) {
 		engine.removeEntityListener(this);
-		Play.levelManager.leaveLevel();
+		manager.leaveLevel();
 	}
 }

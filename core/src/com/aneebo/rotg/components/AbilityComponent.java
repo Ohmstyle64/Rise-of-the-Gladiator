@@ -1,23 +1,26 @@
 package com.aneebo.rotg.components;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 
 import com.aneebo.rotg.abilities.Ability;
 import com.aneebo.rotg.types.AbilityNameType;
+import com.aneebo.rotg.ui.FloatingTextManager;
 import com.aneebo.rotg.utils.Constants;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.reflect.ClassReflection;
+import com.badlogic.gdx.utils.reflect.Constructor;
+import com.badlogic.gdx.utils.reflect.ReflectionException;
 
 public class AbilityComponent extends Component {
 	public Array<Ability> abilityList;
 	public Array<Ability> abilitySlots;
 	public ObjectMap<AbilityNameType, Ability> abilityMap;
+	public FloatingTextManager ftm;
 	
-	public AbilityComponent(Array<Ability> abilityList, Engine engine) {
-		
+	public AbilityComponent(Array<Ability> abilityList, Engine engine, FloatingTextManager ftm) {
+		this.ftm = ftm;
 		this.abilityList = new Array<Ability>();
 		
 		abilitySlots = new Array<Ability>();
@@ -27,21 +30,11 @@ public class AbilityComponent extends Component {
 		for(int i = 0; i < abilityList.size; i++) {
 			Class<?> clazz = abilityList.get(i).getClass();
 			try {
-				Constructor<?> ctor = clazz.getConstructor(Ability.class, Engine.class);
+				Constructor ctor = ClassReflection.getConstructor(clazz, Ability.class, Engine.class);
 				Ability a = (Ability) ctor.newInstance(abilityList.get(i), engine);
 				this.abilityList.add(a);
 				abilityMap.put(a.getNameType(), a);
-			} catch (NoSuchMethodException e) {
-				e.printStackTrace();
-			} catch (SecurityException e) {
-				e.printStackTrace();
-			} catch (InstantiationException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
+			} catch (ReflectionException e) {
 				e.printStackTrace();
 			}
 		}

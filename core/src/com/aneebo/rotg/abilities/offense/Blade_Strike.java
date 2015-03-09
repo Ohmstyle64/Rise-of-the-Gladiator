@@ -3,7 +3,9 @@ package com.aneebo.rotg.abilities.offense;
 import com.aneebo.rotg.abilities.Ability;
 import com.aneebo.rotg.abilities.upgrades.Upgrade;
 import com.aneebo.rotg.abilities.util.Target;
+import com.aneebo.rotg.components.AbilityComponent;
 import com.aneebo.rotg.components.Mappers;
+import com.aneebo.rotg.components.PositionComponent;
 import com.aneebo.rotg.components.ProjectileComponent;
 import com.aneebo.rotg.components.StatComponent;
 import com.aneebo.rotg.types.AbilityNameType;
@@ -18,7 +20,9 @@ import com.badlogic.gdx.utils.Array;
 
 public class Blade_Strike extends Ability {
 
-	private StatComponent stat;
+	private StatComponent statComponent;
+	private PositionComponent positionComponent;
+	private AbilityComponent abilityComponent;
 	private Sound hit;
 	
 	public Blade_Strike(AbilityNameType nameType, float castTime,
@@ -36,12 +40,17 @@ public class Blade_Strike extends Ability {
 	@Override
 	protected void onAbilityEnd(Entity me) {
 		for(Entity e : targets) {
-			stat = Mappers.staMap.get(e);
-			float damageDealt = ((1+Mappers.staMap.get(me).eValue)*damage+Mappers.staMap.get(me).increaseToDamage)*(1-stat.damageMitigation);
-			stat.health -= damageDealt;
-			Gdx.app.log(Mappers.staMap.get(me).name," has dealt "+damageDealt+" to "+stat.name);
+			statComponent = Mappers.staMap.get(e);
+			positionComponent = Mappers.posMap.get(e);
+			abilityComponent = Mappers.abMap.get(e);
+			
+			
+			float damageDealt = ((1+Mappers.staMap.get(me).eValue)*damage+Mappers.staMap.get(me).increaseToDamage)*(1-statComponent.damageMitigation);
+			statComponent.health -= damageDealt;
+			abilityComponent.ftm.addMessages(-damageDealt+"", positionComponent.curXPos*Constants.TILE_WIDTH, (positionComponent.curYPos+1)*Constants.TILE_HEIGHT);
+			Gdx.app.log(Mappers.staMap.get(me).name," has dealt "+damageDealt+" to "+statComponent.name);
 			Mappers.staMap.get(me).eValue = 0;
-			if(stat.name.equals("Player")) {
+			if(statComponent.isPlayer) {
 				hit = Assets.assetManager.get(Constants.TEST_GET_HIT, Sound.class);
 				hit.play();
 				Gdx.input.vibrate(1000);
@@ -51,16 +60,16 @@ public class Blade_Strike extends Ability {
 
 	@Override
 	protected void onAbilityStart(Entity me) {
-		stat = Mappers.staMap.get(me);
-		stat.energy -= energy_cost;
-		if(stat.energy < 0) {
+		statComponent = Mappers.staMap.get(me);
+		statComponent.energy -= energy_cost;
+		if(statComponent.energy < 0) {
 			//TODO:This needs to be an alert in the GUI
-			Gdx.app.log(stat.name, "Not enough energy!");
-			stat.energy = 0;
+			Gdx.app.log(statComponent.name, "Not enough energy!");
+			statComponent.energy = 0;
 			isInterrupted = true;
 			return;
 		}
-		stat.energy -= energy_cost;
+		statComponent.energy -= energy_cost;
 	}
 
 	@Override

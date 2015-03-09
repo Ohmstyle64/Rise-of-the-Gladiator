@@ -4,6 +4,7 @@ import com.aneebo.rotg.abilities.Ability;
 import com.aneebo.rotg.components.AbilityComponent;
 import com.aneebo.rotg.components.Mappers;
 import com.aneebo.rotg.components.PositionComponent;
+import com.aneebo.rotg.ui.FloatingTextManager;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
@@ -27,10 +28,11 @@ public class AbilitySystem extends EntitySystem {
 	
 	private Vector2 range;
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public void addedToEngine(Engine engine) {
-		abilityEntities = engine.getEntitiesFor(Family.getFor(AbilityComponent.class, PositionComponent.class));
-		posEntities = engine.getEntitiesFor(Family.getFor(PositionComponent.class));
+		abilityEntities = engine.getEntitiesFor(Family.all(AbilityComponent.class, PositionComponent.class).get());
+		posEntities = engine.getEntitiesFor(Family.all(PositionComponent.class).get());
 		range = new Vector2();
 		enemyInRange = new Array<Entity>(4);
 	}

@@ -33,6 +33,7 @@ import com.aneebo.rotg.types.AbilityNameType;
 import com.aneebo.rotg.types.ColliderType;
 import com.aneebo.rotg.types.DirectionType;
 import com.aneebo.rotg.types.LevelType;
+import com.aneebo.rotg.ui.FloatingTextManager;
 import com.aneebo.rotg.utils.Assets;
 import com.aneebo.rotg.utils.Constants;
 import com.badlogic.ashley.core.Engine;
@@ -49,7 +50,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
@@ -58,6 +58,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.VisProgressBar;
 
 public class Play implements Screen {
 
@@ -79,7 +81,8 @@ public class Play implements Screen {
 	private PositionComponent pos;
 	private AbilityComponent ability;
 	
-	public static LevelManager levelManager;
+	public LevelManager levelManager;
+	public FloatingTextManager ftm;
 	
 	WindowStyle as;
 		
@@ -87,20 +90,23 @@ public class Play implements Screen {
 	private Table table;
 	private Stage stage;
 	private Skin skin;
-	private ProgressBar healthBar;
-	private ProgressBar energyBar;
+	private VisProgressBar energyBar;
 	
 	@Override
 	public void show() {
 		Assets.load();
+
+		VisUI.load();
 		
 		stage = new Stage();
 		stage.setViewport(new FitViewport(Constants.WIDTH, Constants.HEIGHT));
 
 		Gdx.input.setInputProcessor(stage);
-		skin = Assets.assetManager.get(Constants.SKIN, Skin.class);
+		skin = Assets.assetManager.get(Constants.UI_SKIN, Skin.class);
 		table = new Table(skin);
 		table.setFillParent(true);
+
+		ftm = new FloatingTextManager();
 		
 		engine = new Engine();
 
@@ -125,19 +131,20 @@ public class Play implements Screen {
 		engine.addSystem(merchantSystem);
 		
 		//Play music
-		Music song1 = Assets.assetManager.get(Constants.TEST_MUSIC, Music.class);
+//		Music song1 = Assets.assetManager.get(Constants.TEST_MUSIC, Music.class);
 //		song1.play();
 //		song1.setVolume(.1f);
 //		song1.setLooping(true);
 	}
 	
 	private void createLevels() {
-		TestLevel testLevel = new TestLevel(engine, player, new Vector2(2,2));
-		CaravanLevel caravanLevel = new CaravanLevel(engine, player, new Vector2(2,2));
+		levelManager = new LevelManager(ftm);
+		TestLevel testLevel = new TestLevel(engine, player, new Vector2(2,2), levelManager);
+		CaravanLevel caravanLevel = new CaravanLevel(engine, player, new Vector2(2,2), levelManager);
 		ObjectMap<LevelType, Level> levels = new ObjectMap<LevelType, Level>(2);
 		levels.put(LevelType.TEST_LEVEL, testLevel);
 		levels.put(LevelType.CARAVAN_LEVEL, caravanLevel);
-		levelManager = new LevelManager(levels, LevelType.CARAVAN_LEVEL);
+		levelManager.createLevels(levels, LevelType.CARAVAN_LEVEL);
 	}
 
 	private void createPlayer() {
@@ -156,8 +163,8 @@ public class Play implements Screen {
 		player.add(pos = new PositionComponent(3,4, DirectionType.Right));
 		player.add(new InputComponent());
 		player.add(new CollisionComponent(ColliderType.character));
-		player.add(ability = new AbilityComponent(abilityList, engine));
-		player.add(stat = new StatComponent("Player", 35f, 60f, Color.RED, 5, 5, 1.5f));
+		player.add(ability = new AbilityComponent(abilityList, engine, ftm));
+		player.add(stat = new StatComponent("Player", 35f, 60f, Color.RED, 5, 5, 1.5f, true));
 		player.add(new RenderComponent(Constants.DRAGON_FORM));
 //		player.add(new AnimationComponent(Assets.assetManager.get(Constants.BODY_PLAYER, Texture.class),64,64, stat.speed / 16));
 		ObjectMap<Integer, Item> equipped = new ObjectMap<Integer, Item>();
@@ -195,16 +202,11 @@ public class Play implements Screen {
 		Table statTable = new Table();
 		
 		Label name = new Label(stat.name, skin);
-		Label health = new Label("Health ", skin);
-		healthBar = new ProgressBar(0, 1f, 0.01f, false, skin);
-		healthBar.setValue(1f);
 		Label energy = new Label("Energy ", skin);
-		energyBar = new ProgressBar(0, 1f, 0.01f, false, skin);
+		energyBar = new VisProgressBar(0, stat.max_energy, .1f, false);
 		energyBar.setValue(1f);
 		
-		statTable.add(name).left().row();
-		statTable.add(health);
-		statTable.add(healthBar).row();
+		statTable.add(name).left().padRight(50f);
 		statTable.add(energy);
 		statTable.add(energyBar);
 		
@@ -358,10 +360,10 @@ public class Play implements Screen {
 	}
 
 	private void createSystems() {
-		collisionSystem = new CollisionSystem(levelManager.renderer().getMap());
+		collisionSystem = new CollisionSystem(levelManager.renderer().getMap(), levelManager);
 		inputSystem = new InputSystem(stage, skin);
 		movementSystem = new MovementSystem();
-		renderSystem = new RenderSystem(levelManager.renderer(), stage, skin);
+		renderSystem = new RenderSystem(levelManager.renderer(), stage);
 		abilitySystem = new AbilitySystem();
 		aiSystem = new AISystem();
 		regenSystem = new RegenSystem();
@@ -387,8 +389,7 @@ public class Play implements Screen {
 	}
 
 	private void UIUpdates() {
-		healthBar.setValue(stat.health / stat.max_health);
-		energyBar.setValue(stat.energy / stat.max_energy);
+		energyBar.setValue(stat.energy);
 	}
 
 	@Override
@@ -423,6 +424,7 @@ public class Play implements Screen {
 		regenSystem.dispose();
 		projectileSystem.dipose();
 		deathSystem.dipose();
+		VisUI.dispose();
 		stage.dispose();
 		Assets.dispose();
 	}

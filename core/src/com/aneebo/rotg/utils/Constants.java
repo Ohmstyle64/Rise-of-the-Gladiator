@@ -45,11 +45,15 @@ public class Constants {
 	//MUSIC
 	public static final String TEST_GET_HIT = "sounds/sfx/hit_sound.wav";
 	
+	public static final String FONT = "img/gui/default.fnt";
+
 	public static final String WORLD_MAP = "img/map/worldmap.tmx";
 	
 	//UI
-	public static final String SKIN = "img/gui/uiskin.json";
-	public static final String ATLAS = "img/gui/uiskin.atlas";
+	public static final String UI_SKIN = "img/gui/uiskin.json";
+	public static final String UI_ATLAS = "img/gui/uiskin.atlas";
+	public static final String CASTTIMER = "img/gui/casttimer.png";
+	public static final String HEALTH_ATLAS = "img/gui/healthBlocks.pack";
 	
 	public static final String BODY_PLAYER = "img/characters/animations/BODY_male.png";
 	public static final String BODY_SKELETON = "img/characters/animations/BODY_skeleton.png";
@@ -76,6 +80,7 @@ public class Constants {
 	public static final int INVENTORY_SIZE = 12;
 	
 	public static final ObjectMap<AbilityNameType, Ability> abilityMap = new ObjectMap<AbilityNameType, Ability>();
+	
 	static {
 		
 		Array<Upgrade> fake = new Array<Upgrade>(3);

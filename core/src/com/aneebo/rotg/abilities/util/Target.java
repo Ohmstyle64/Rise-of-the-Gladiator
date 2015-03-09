@@ -112,17 +112,11 @@ public class Target {
 	
 	public static Array<Entity> incommingProjectiles(Entity me, Entity[] allEntities, float range) {
 		targets.clear();
-		pos = Mappers.posMap.get(me);
-		float mX = pos.curXPos;
-		float mY = pos.curYPos;
-		float diffX, diffY;
 		
 		for(Entity e : allEntities) {
 			proj = Mappers.projMap.get(e);
 			if(proj== null) continue;
-			diffX = Math.abs(mX - Mappers.posMap.get(e).curXPos);
-			diffY = Math.abs(mY - Mappers.posMap.get(e).curYPos);
-			if(Math.sqrt(diffX*diffX + diffY*diffY) <= range) targets.add(e);
+			targets.add(e);
 		}
 		return targets;
 	}

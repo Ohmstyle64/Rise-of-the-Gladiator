@@ -22,7 +22,7 @@ public class MerchantComponent extends Component {
 		isInitiated = false;
 		isSelling = false;
 		dialogPart = 0;
-		window = new MerchantInventoryWindow("Trader", Assets.assetManager.get(Constants.SKIN, Skin.class), this);
+		window = new MerchantInventoryWindow("Trader", Assets.assetManager.get(Constants.UI_SKIN, Skin.class), this);
 		window.setVisible(false);
 	}
 }

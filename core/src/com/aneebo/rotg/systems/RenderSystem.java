@@ -8,7 +8,6 @@ import com.aneebo.rotg.components.ParticleComponent;
 import com.aneebo.rotg.components.PositionComponent;
 import com.aneebo.rotg.components.RenderComponent;
 import com.aneebo.rotg.components.StatComponent;
-import com.aneebo.rotg.ui.MerchantInventoryWindow;
 import com.aneebo.rotg.utils.Assets;
 import com.aneebo.rotg.utils.Constants;
 import com.badlogic.ashley.core.Engine;
@@ -26,7 +25,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class RenderSystem extends EntitySystem {
@@ -36,7 +34,6 @@ public class RenderSystem extends EntitySystem {
 	private OrthogonalTiledMapRenderer renderer;
 	private ShapeRenderer shapeRenderer;
 	private Stage stage;
-	private Skin skin;
 	private BitmapFont font;
 	
 	private ImmutableArray<Entity> entities;
@@ -55,13 +52,12 @@ public class RenderSystem extends EntitySystem {
 	private Animation anim;
 	private Entity e;
 	
-	public RenderSystem(OrthogonalTiledMapRenderer renderer, Stage stage, Skin skin) {
+	public RenderSystem(OrthogonalTiledMapRenderer renderer, Stage stage) {
 		super(4);
 		this.renderer = renderer;
-		font = new BitmapFont();
+		font = Assets.assetManager.get(Constants.FONT, BitmapFont.class);
 		shapeRenderer = new ShapeRenderer();
 		this.stage = stage;
-		this.skin = skin;
 		arenaCam = new OrthographicCamera();
 		arenaViewPort = new FitViewport(Constants.WIDTH, Constants.HEIGHT, arenaCam);
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -101,23 +97,15 @@ public class RenderSystem extends EntitySystem {
 			e = entities.get(i);
 			posComponent = Mappers.posMap.get(e);
 			renderComponent = Mappers.renMap.get(e);
-			statComponent = Mappers.staMap.get(e);
+			
 			renderer.getBatch().draw(Assets.assetManager.get(renderComponent.textureName, Texture.class),
 					posComponent.curXPos*Constants.TILE_WIDTH, 
 					posComponent.curYPos*Constants.TILE_HEIGHT);
-			if(statComponent== null) continue;
-			font.draw(renderer.getBatch(), 
-					statComponent.name,
-					posComponent.curXPos*Constants.TILE_WIDTH,
-					posComponent.curYPos*Constants.TILE_HEIGHT + 70);
-			font.draw(renderer.getBatch(), String.format("%.1f", statComponent.health)+"",
-					posComponent.curXPos*Constants.TILE_WIDTH,
-					posComponent.curYPos*Constants.TILE_HEIGHT + 50);
-			shapeRenderer.setColor(statComponent.color);
-			shapeRenderer.rect(posComponent.curXPos*Constants.TILE_WIDTH,
-					posComponent.curYPos*Constants.TILE_HEIGHT, 
-					Constants.TILE_WIDTH, 
-					Constants.TILE_HEIGHT);
+			statComponent = Mappers.staMap.get(e);
+			if(statComponent == null) continue;
+			statComponent.healthBlocks.setPosition(posComponent.curXPos*Constants.TILE_WIDTH, (posComponent.curYPos-1f)*Constants.TILE_HEIGHT);
+			statComponent.healthBlocks.setValue(statComponent.health);
+			statComponent.healthBlocks.draw(renderer.getBatch());
 		}
 		
 		//RENDER PARTICLES
@@ -161,7 +149,6 @@ public class RenderSystem extends EntitySystem {
 					animComponent.stateTime = 0;
 				}
 			}
-			
 		}
 		
 		//RENDER ABILITIES
@@ -181,6 +168,8 @@ public class RenderSystem extends EntitySystem {
 							abilityComponent.abilitySlots.get(j).getRange()*Constants.TILE_WIDTH);
 					abilityComponent.abilitySlots.get(j).render(renderer.getBatch());
 				}
+				abilityComponent.ftm.update(deltaTime);
+				abilityComponent.ftm.draw(renderer.getBatch(), font);
 			}
 		}
 		
@@ -203,5 +192,12 @@ public class RenderSystem extends EntitySystem {
 	public void dispose() {
 		renderer.dispose();
 		font.dispose();
+		int size = entities.size();
+		for(int i = 0; i < size; i++) {
+			e = entities.get(i);
+			statComponent = Mappers.staMap.get(e);
+			if(statComponent == null) continue;
+			statComponent.healthBlocks.dispose();
+		}
 	}
 }

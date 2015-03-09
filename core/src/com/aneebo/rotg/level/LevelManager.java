@@ -1,7 +1,7 @@
 package com.aneebo.rotg.level;
 
-import com.aneebo.rotg.screens.Play;
 import com.aneebo.rotg.types.LevelType;
+import com.aneebo.rotg.ui.FloatingTextManager;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.ObjectMap;
 
@@ -11,11 +11,16 @@ public class LevelManager {
 	private LevelType nextLevel;
 	private boolean isTransitionIn;
 	private boolean isTransitionOut;
+	private FloatingTextManager ftm;
 	
 	private OrthogonalTiledMapRenderer renderer;
 	
-	public LevelManager(ObjectMap<LevelType, Level> levels, LevelType startLevel) {
-		levelList = levels;
+	public LevelManager(FloatingTextManager ftm) {
+		this.ftm = ftm;
+	}
+	
+	public void createLevels(ObjectMap<LevelType, Level> levelList, LevelType startLevel) {
+		this.levelList = levelList;
 		currentLevel = levelList.get(startLevel);
 		renderer = new OrthogonalTiledMapRenderer(currentLevel.tiledMap);
 		currentLevel.loadLevel();
@@ -54,7 +59,7 @@ public class LevelManager {
 	public void enterLevel() {
 		currentLevel.loadLevel();
 		currentLevel.addEntities();
-		Play.levelManager.transitionIn(false);
+		transitionIn(false);
 
 	}
 	
@@ -67,5 +72,10 @@ public class LevelManager {
 	public OrthogonalTiledMapRenderer renderer() {
 		return renderer;
 	}
+
+	public FloatingTextManager getFloatingTextMgr() {
+		return ftm;
+	}
+	
 	
 }

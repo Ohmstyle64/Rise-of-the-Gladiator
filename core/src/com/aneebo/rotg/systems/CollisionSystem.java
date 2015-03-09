@@ -5,6 +5,7 @@ import com.aneebo.rotg.components.LevelChangerComponent;
 import com.aneebo.rotg.components.Mappers;
 import com.aneebo.rotg.components.PositionComponent;
 import com.aneebo.rotg.components.ProjectileComponent;
+import com.aneebo.rotg.level.LevelManager;
 import com.aneebo.rotg.screens.Play;
 import com.aneebo.rotg.types.ColliderType;
 import com.badlogic.ashley.core.Engine;
@@ -29,10 +30,12 @@ public class CollisionSystem extends EntitySystem {
 	private Entity e2;
 	
 	private TiledMapTileLayer wallLayer;
+	private LevelManager manager;
 	
-	public CollisionSystem(TiledMap map) {
+	public CollisionSystem(TiledMap map, LevelManager manager) {
 		super(2);
 		wallLayer = (TiledMapTileLayer) map.getLayers().get("wall");
+		this.manager = manager;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -83,7 +86,7 @@ public class CollisionSystem extends EntitySystem {
 								if(ent1Pos.gridNXPos == ent2Pos.gridCurXPos && ent1Pos.gridNYPos == ent2Pos.gridCurYPos ||
 										ent1Pos.gridNXPos == ent2Pos.gridNXPos && ent1Pos.gridNYPos == ent2Pos.gridNYPos) {
 									llc = Mappers.lvlcMap.get(e2);
-									Play.levelManager.goToLevel(llc.level);
+									manager.goToLevel(llc.level);
 								}
 								break;
 							}
@@ -117,7 +120,7 @@ public class CollisionSystem extends EntitySystem {
 							if(ent1Pos.gridNXPos == ent2Pos.gridCurXPos && ent1Pos.gridNYPos == ent2Pos.gridCurYPos ||
 									ent1Pos.gridNXPos == ent2Pos.gridNXPos && ent1Pos.gridNYPos == ent2Pos.gridNYPos) {
 								llc = Mappers.lvlcMap.get(e2);
-								Play.levelManager.goToLevel(llc.level);
+								manager.goToLevel(llc.level);
 							}
 						}
 						break;
