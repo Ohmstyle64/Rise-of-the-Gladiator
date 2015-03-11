@@ -44,7 +44,6 @@ public class Blade_Strike extends Ability {
 			positionComponent = Mappers.posMap.get(e);
 			abilityComponent = Mappers.abMap.get(e);
 			
-			
 			float damageDealt = ((1+Mappers.staMap.get(me).eValue)*damage+Mappers.staMap.get(me).increaseToDamage)*(1-statComponent.damageMitigation);
 			statComponent.health -= damageDealt;
 			abilityComponent.ftm.addMessages(-damageDealt+"", positionComponent.curXPos*Constants.TILE_WIDTH, (positionComponent.curYPos+1)*Constants.TILE_HEIGHT);
@@ -54,6 +53,9 @@ public class Blade_Strike extends Ability {
 				hit = Assets.assetManager.get(Constants.TEST_GET_HIT, Sound.class);
 				hit.play();
 				Gdx.input.vibrate(1000);
+				Mappers.renMap.get(e).camera.shake(1f, .1f);
+			} else {
+				Mappers.renMap.get(e).flashRed(10);
 			}
 		}
 	}
@@ -63,7 +65,9 @@ public class Blade_Strike extends Ability {
 		statComponent = Mappers.staMap.get(me);
 		statComponent.energy -= energy_cost;
 		if(statComponent.energy < 0) {
-			//TODO:This needs to be an alert in the GUI
+			positionComponent = Mappers.posMap.get(me);
+			abilityComponent = Mappers.abMap.get(me);
+			abilityComponent.ftm.addMessages("Not enough energy!", positionComponent.curXPos*Constants.TILE_WIDTH, (positionComponent.curYPos+1)*Constants.TILE_HEIGHT);
 			Gdx.app.log(statComponent.name, "Not enough energy!");
 			statComponent.energy = 0;
 			isInterrupted = true;

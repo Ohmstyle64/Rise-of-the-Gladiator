@@ -27,7 +27,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 public class CaravanLevel extends Level {
 
 	public CaravanLevel(Engine engine, Entity player, Vector2 playerStart, LevelManager manager) {
-		super(engine, player, "img/arena/arena_1.tmx", playerStart, manager);
+		super(engine, player, Constants.TEST_MAP, playerStart, manager);
 	}
 
 
@@ -37,8 +37,8 @@ public class CaravanLevel extends Level {
 		totalRounds = 1;
 		Array<Entity> entities = new Array<Entity>(2);
 		Entity merchant = new Entity();
-		merchant.add(new PositionComponent(5,5,DirectionType.Right));
-		merchant.add(new RenderComponent(Constants.DRAGON_FORM));
+		merchant.add(new PositionComponent(9,5,DirectionType.Right));
+		merchant.add(new RenderComponent(Constants.DRAGON_FORM, manager.getCamera()));
 		merchant.add(new StatComponent("Merchant", 1f, 1f, Color.WHITE, 1f, 1f, 0f, false));
 		merchant.add(new CollisionComponent(ColliderType.merchant));
 		Array<Item> iList = new Array<Item>(true, Constants.INVENTORY_SIZE, Item.class);
@@ -51,8 +51,8 @@ public class CaravanLevel extends Level {
 		merchant.add(new MerchantComponent(inv, dialogue));
 		
 		Entity changer = new Entity();
-		changer.add(new PositionComponent(5,7,DirectionType.Down));
-		changer.add(new RenderComponent(Constants.ICE_FORM));
+		changer.add(new PositionComponent(9,7,DirectionType.Down));
+		changer.add(new RenderComponent(Constants.ICE_FORM, manager.getCamera()));
 		changer.add(new StatComponent("Change Level", 1f, 1f, Color.WHITE, 1f, 1f, 0f, false));
 		changer.add(new CollisionComponent(ColliderType.levelChange));
 		changer.add(new LevelChangerComponent(LevelType.TEST_LEVEL));

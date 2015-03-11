@@ -10,14 +10,15 @@ import com.aneebo.rotg.components.RenderComponent;
 import com.aneebo.rotg.components.StatComponent;
 import com.aneebo.rotg.utils.Assets;
 import com.aneebo.rotg.utils.Constants;
+import com.aneebo.rotg.utils.RoTGCamera;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -29,7 +30,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class RenderSystem extends EntitySystem {
 
-	private OrthographicCamera arenaCam;
+	private RoTGCamera arenaCam;
 	private FitViewport arenaViewPort;
 	private OrthogonalTiledMapRenderer renderer;
 	private ShapeRenderer shapeRenderer;
@@ -52,13 +53,13 @@ public class RenderSystem extends EntitySystem {
 	private Animation anim;
 	private Entity e;
 	
-	public RenderSystem(OrthogonalTiledMapRenderer renderer, Stage stage) {
+	public RenderSystem(OrthogonalTiledMapRenderer renderer, Stage stage, RoTGCamera camera) {
 		super(4);
 		this.renderer = renderer;
 		font = Assets.assetManager.get(Constants.FONT, BitmapFont.class);
 		shapeRenderer = new ShapeRenderer();
 		this.stage = stage;
-		arenaCam = new OrthographicCamera();
+		arenaCam = camera;
 		arenaViewPort = new FitViewport(Constants.WIDTH, Constants.HEIGHT, arenaCam);
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 	}
@@ -83,6 +84,9 @@ public class RenderSystem extends EntitySystem {
 	public void update(float deltaTime) {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
+		if(arenaCam.time > 0) {
+			arenaCam.update(deltaTime);
+		}
 		//RENDER MAP
 		renderer.setView(arenaCam);
 		renderer.render();
@@ -97,10 +101,27 @@ public class RenderSystem extends EntitySystem {
 			e = entities.get(i);
 			posComponent = Mappers.posMap.get(e);
 			renderComponent = Mappers.renMap.get(e);
-			
+			//Flashing Red Effect
+			float savedRed = 0, savedGreen = 0, savedBlue = 0;
+			if(renderComponent.frame_limit != 0 && renderComponent.frames < renderComponent.frame_limit) {
+				renderComponent.frames++;
+				Color c = renderer.getBatch().getColor();
+				savedRed = c.r;
+				savedGreen = c.g;
+				savedBlue = c.b;
+				renderer.getBatch().setColor(1, 0, 0, 1);
+			}
 			renderer.getBatch().draw(Assets.assetManager.get(renderComponent.textureName, Texture.class),
 					posComponent.curXPos*Constants.TILE_WIDTH, 
 					posComponent.curYPos*Constants.TILE_HEIGHT);
+			
+			//End Flashing Red
+			if(renderComponent.frame_limit != 0) {
+				renderer.getBatch().setColor(savedRed, savedGreen, savedBlue, 1);
+				if(renderComponent.frames >= renderComponent.frame_limit) {
+					renderComponent.reset();
+				}
+			}
 			statComponent = Mappers.staMap.get(e);
 			if(statComponent == null) continue;
 			statComponent.healthBlocks.setPosition(posComponent.curXPos*Constants.TILE_WIDTH, (posComponent.curYPos-1f)*Constants.TILE_HEIGHT);

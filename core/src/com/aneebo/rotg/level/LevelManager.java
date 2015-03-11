@@ -2,6 +2,7 @@ package com.aneebo.rotg.level;
 
 import com.aneebo.rotg.types.LevelType;
 import com.aneebo.rotg.ui.FloatingTextManager;
+import com.aneebo.rotg.utils.RoTGCamera;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.ObjectMap;
 
@@ -12,11 +13,13 @@ public class LevelManager {
 	private boolean isTransitionIn;
 	private boolean isTransitionOut;
 	private FloatingTextManager ftm;
+	private RoTGCamera camera;
 	
 	private OrthogonalTiledMapRenderer renderer;
 	
-	public LevelManager(FloatingTextManager ftm) {
+	public LevelManager(FloatingTextManager ftm, RoTGCamera camera) {
 		this.ftm = ftm;
+		this.camera = camera;
 	}
 	
 	public void createLevels(ObjectMap<LevelType, Level> levelList, LevelType startLevel) {
@@ -76,6 +79,11 @@ public class LevelManager {
 	public FloatingTextManager getFloatingTextMgr() {
 		return ftm;
 	}
+
+	public RoTGCamera getCamera() {
+		return camera;
+	}
+	
 	
 	
 }

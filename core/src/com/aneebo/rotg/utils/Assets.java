@@ -6,6 +6,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
@@ -31,6 +32,7 @@ public class Assets {
 		assetManager.load(Constants.FONT, BitmapFont.class);
 		assetManager.load(Constants.CASTTIMER, Texture.class);
 		assetManager.load(Constants.HEALTH_ATLAS, TextureAtlas.class);
+		assetManager.load(Constants.PEFFECT_FIRE, ParticleEffect.class);
 		
 		assetManager.finishLoading();
 	}

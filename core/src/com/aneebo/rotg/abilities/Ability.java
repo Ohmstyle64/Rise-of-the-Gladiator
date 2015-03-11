@@ -5,7 +5,6 @@ import com.aneebo.rotg.components.Mappers;
 import com.aneebo.rotg.components.ProjectileComponent;
 import com.aneebo.rotg.types.AbilityNameType;
 import com.aneebo.rotg.types.AbilityType;
-import com.aneebo.rotg.ui.FloatingTextManager;
 import com.aneebo.rotg.utils.Assets;
 import com.aneebo.rotg.utils.Constants;
 import com.badlogic.ashley.core.Engine;

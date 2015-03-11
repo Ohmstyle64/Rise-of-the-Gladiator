@@ -62,8 +62,8 @@ public class Teleport extends Ability {
 	protected void onAbilityEnd(Entity me) {
 		
 		boolean emptySpot = false;
-		int randomX = MathUtils.random(Constants.MAP_X / Constants.TILE_WIDTH + 2, Constants.MAP_WIDTH / Constants.TILE_WIDTH - 2);
-		int randomY = MathUtils.random(Constants.MAP_Y / Constants.TILE_HEIGHT + 2, Constants.MAP_HEIGHT / Constants.TILE_HEIGHT - 2);
+		int randomX = MathUtils.random(Constants.FIRST_COL, Constants.LAST_COL);
+		int randomY = MathUtils.random(Constants.FIRST_ROW, Constants.LAST_ROW);
 		int size = targets.size;
 		
 		while(!emptySpot) {
@@ -73,8 +73,8 @@ public class Teleport extends Ability {
 					emptySpot = true;
 				}else {
 					emptySpot = false;
-					randomX = MathUtils.random(Constants.MAP_X / Constants.TILE_WIDTH + 2, Constants.MAP_WIDTH / Constants.TILE_WIDTH - 2);
-					randomY = MathUtils.random(Constants.MAP_Y / Constants.TILE_HEIGHT + 2, Constants.MAP_HEIGHT / Constants.TILE_HEIGHT - 2);
+					randomX = MathUtils.random(Constants.FIRST_COL, Constants.LAST_COL);
+					randomY = MathUtils.random(Constants.FIRST_ROW, Constants.LAST_ROW);
 					break;
 				}
 			}

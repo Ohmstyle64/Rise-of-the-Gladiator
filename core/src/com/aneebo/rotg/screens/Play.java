@@ -36,11 +36,11 @@ import com.aneebo.rotg.types.LevelType;
 import com.aneebo.rotg.ui.FloatingTextManager;
 import com.aneebo.rotg.utils.Assets;
 import com.aneebo.rotg.utils.Constants;
+import com.aneebo.rotg.utils.RoTGCamera;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -83,6 +83,7 @@ public class Play implements Screen {
 	
 	public LevelManager levelManager;
 	public FloatingTextManager ftm;
+	public RoTGCamera camera;
 	
 	WindowStyle as;
 		
@@ -107,6 +108,8 @@ public class Play implements Screen {
 		table.setFillParent(true);
 
 		ftm = new FloatingTextManager();
+		
+		camera = new RoTGCamera();
 		
 		engine = new Engine();
 
@@ -138,9 +141,9 @@ public class Play implements Screen {
 	}
 	
 	private void createLevels() {
-		levelManager = new LevelManager(ftm);
-		TestLevel testLevel = new TestLevel(engine, player, new Vector2(2,2), levelManager);
-		CaravanLevel caravanLevel = new CaravanLevel(engine, player, new Vector2(2,2), levelManager);
+		levelManager = new LevelManager(ftm, camera);
+		TestLevel testLevel = new TestLevel(engine, player, new Vector2(7,2), levelManager);
+		CaravanLevel caravanLevel = new CaravanLevel(engine, player, new Vector2(7,2), levelManager);
 		ObjectMap<LevelType, Level> levels = new ObjectMap<LevelType, Level>(2);
 		levels.put(LevelType.TEST_LEVEL, testLevel);
 		levels.put(LevelType.CARAVAN_LEVEL, caravanLevel);
@@ -153,7 +156,7 @@ public class Play implements Screen {
 		abilityList.add(Constants.abilityMap.get(AbilityNameType.DF_BLADE_BLOCK));
 		abilityList.add(Constants.abilityMap.get(AbilityNameType.AT_WAVE_OF_FIRE));
 		abilityList.add(Constants.abilityMap.get(AbilityNameType.AT_DASHING_STRIKE));
-//		abilityList.add(Constants.abilityMap.get(AbilityNameType.DF_TELEPORT));
+		abilityList.add(Constants.abilityMap.get(AbilityNameType.DF_TELEPORT));
 //		abilityList.add(Constants.abilityMap.get(AbilityNameType.DF_FORCE_FIELD));
 //		abilityList.add(Constants.abilityMap.get(AbilityNameType.DF_PURE_HEART));
 		
@@ -164,8 +167,8 @@ public class Play implements Screen {
 		player.add(new InputComponent());
 		player.add(new CollisionComponent(ColliderType.character));
 		player.add(ability = new AbilityComponent(abilityList, engine, ftm));
-		player.add(stat = new StatComponent("Player", 35f, 60f, Color.RED, 5, 5, 1.5f, true));
-		player.add(new RenderComponent(Constants.DRAGON_FORM));
+		player.add(stat = new StatComponent("Player", 35f, 60f, Color.RED, 7, 2, 1.5f, true));
+		player.add(new RenderComponent(Constants.DRAGON_FORM, camera));
 //		player.add(new AnimationComponent(Assets.assetManager.get(Constants.BODY_PLAYER, Texture.class),64,64, stat.speed / 16));
 		ObjectMap<Integer, Item> equipped = new ObjectMap<Integer, Item>();
 		ChestP1 cp1 = new ChestP1();
@@ -206,9 +209,9 @@ public class Play implements Screen {
 		energyBar = new VisProgressBar(0, stat.max_energy, .1f, false);
 		energyBar.setValue(1f);
 		
-		statTable.add(name).left().padRight(50f);
+		statTable.add(name).left();
 		statTable.add(energy);
-		statTable.add(energyBar);
+		statTable.add(energyBar).center();
 		
 		return statTable;
 	}
@@ -360,10 +363,10 @@ public class Play implements Screen {
 	}
 
 	private void createSystems() {
-		collisionSystem = new CollisionSystem(levelManager.renderer().getMap(), levelManager);
-		inputSystem = new InputSystem(stage, skin);
+		collisionSystem = new CollisionSystem(levelManager);
+		inputSystem = new InputSystem(stage);
 		movementSystem = new MovementSystem();
-		renderSystem = new RenderSystem(levelManager.renderer(), stage);
+		renderSystem = new RenderSystem(levelManager.renderer(), stage, camera);
 		abilitySystem = new AbilitySystem();
 		aiSystem = new AISystem();
 		regenSystem = new RegenSystem();

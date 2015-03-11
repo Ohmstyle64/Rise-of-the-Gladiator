@@ -13,6 +13,8 @@ import com.aneebo.rotg.components.StatComponent;
 import com.aneebo.rotg.types.AbilityNameType;
 import com.aneebo.rotg.types.AbilityType;
 import com.aneebo.rotg.types.ColliderType;
+import com.aneebo.rotg.utils.Assets;
+import com.aneebo.rotg.utils.Constants;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
@@ -95,7 +97,7 @@ public class Wave_of_Fire extends Ability {
 		projPos.gridNXPos = (int) path.get(0).x;
 		projPos.gridNYPos = (int) path.get(0).y;
 		path.removeIndex(0);
-		eFireBlast.add(new RenderComponent(textureName));
+		eFireBlast.add(new RenderComponent(textureName, null));
 		eFireBlast.add(projPos);
 		eFireBlast.add(new CollisionComponent(ColliderType.projectile));
 		eFireBlast.add(new ProjectileComponent(me, this, path, 3f, damage));

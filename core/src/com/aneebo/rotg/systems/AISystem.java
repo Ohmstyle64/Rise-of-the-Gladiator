@@ -17,6 +17,7 @@ public class AISystem extends EntitySystem {
 		super(1);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public void addedToEngine(Engine engine) {
 		entities = engine.getEntitiesFor(Family.all(AIComponent.class).get());

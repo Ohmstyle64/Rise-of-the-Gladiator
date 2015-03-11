@@ -6,7 +6,6 @@ import com.aneebo.rotg.components.Mappers;
 import com.aneebo.rotg.components.PositionComponent;
 import com.aneebo.rotg.components.ProjectileComponent;
 import com.aneebo.rotg.level.LevelManager;
-import com.aneebo.rotg.screens.Play;
 import com.aneebo.rotg.types.ColliderType;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -32,9 +31,9 @@ public class CollisionSystem extends EntitySystem {
 	private TiledMapTileLayer wallLayer;
 	private LevelManager manager;
 	
-	public CollisionSystem(TiledMap map, LevelManager manager) {
+	public CollisionSystem(LevelManager manager) {
 		super(2);
-		wallLayer = (TiledMapTileLayer) map.getLayers().get("wall");
+		wallLayer = (TiledMapTileLayer) manager.renderer().getMap().getLayers().get("Walls");
 		this.manager = manager;
 	}
 

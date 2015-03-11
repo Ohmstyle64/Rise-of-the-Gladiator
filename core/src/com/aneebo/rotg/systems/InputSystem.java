@@ -11,6 +11,7 @@ import com.aneebo.rotg.inventory.ItemSlotListener;
 import com.aneebo.rotg.inventory.SlotData;
 import com.aneebo.rotg.inventory.items.EmptyItem;
 import com.aneebo.rotg.types.DirectionType;
+import com.aneebo.rotg.utils.Assets;
 import com.aneebo.rotg.utils.Constants;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -51,10 +52,10 @@ public class InputSystem extends EntitySystem {
 	private Skin skin;
 	private Window win;
 
-	public InputSystem(Stage stage, Skin skin) {
+	public InputSystem(Stage stage) {
 		super(0);
 		this.stage = stage;
-		this.skin = skin;
+		this.skin = Assets.assetManager.get(Constants.UI_SKIN, Skin.class);
 		itemSlotListener = new ItemSlotListener();
 	}
 	

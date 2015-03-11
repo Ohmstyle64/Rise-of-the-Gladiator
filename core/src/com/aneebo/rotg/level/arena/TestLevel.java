@@ -33,7 +33,7 @@ import com.badlogic.gdx.utils.Array;
 public class TestLevel extends Level implements EntityListener {
 	
 	public TestLevel(Engine engine, Entity player, Vector2 playerStart, LevelManager manager) {
-		super(engine, player, "img/arena/arena_1.tmx", playerStart, manager);
+		super(engine, player, Constants.TEST_MAP, playerStart, manager);
 	}
 
 	@Override
@@ -75,7 +75,7 @@ public class TestLevel extends Level implements EntityListener {
 		
 		Entity r1e1 = new Entity();
 		r1e1.add(new PositionComponent(15, 5, DirectionType.Left));
-		r1e1.add(new RenderComponent(Constants.PIG_FORM));
+		r1e1.add(new RenderComponent(Constants.PIG_FORM, manager.getCamera()));
 		r1e1.add(new CollisionComponent(ColliderType.character));
 		r1e1.add(new AIComponent(new BasicMeleeAI(r1e1, engine)));
 		Array<Ability> abilities_r1e2 = new Array<Ability>();
@@ -86,7 +86,7 @@ public class TestLevel extends Level implements EntityListener {
 		
 		Entity r1e3 = new Entity();
 		r1e3.add(new PositionComponent(10, 3, DirectionType.Left));
-		r1e3.add(new RenderComponent(Constants.PIG_FORM));
+		r1e3.add(new RenderComponent(Constants.PIG_FORM, manager.getCamera()));
 		r1e3.add(new CollisionComponent(ColliderType.character));
 		r1e3.add(new AIComponent(new BasicMeleeAI(r1e3, engine)));
 		Array<Ability> abilities_r1e3 = new Array<Ability>();
@@ -115,7 +115,7 @@ public class TestLevel extends Level implements EntityListener {
 		//ENTITIES
 		Entity r2e1 = new Entity();
 		r2e1.add(new PositionComponent(11, 5, DirectionType.Left));
-		r2e1.add(new RenderComponent(Constants.ICE_FORM));
+		r2e1.add(new RenderComponent(Constants.ICE_FORM, manager.getCamera()));
 		r2e1.add(new CollisionComponent(ColliderType.character));
 		r2e1.add(new AIComponent(new BasicRangeAI(r2e1, engine)));
 		Array<Ability> abilities_r2e1 = new Array<Ability>();
@@ -133,7 +133,7 @@ public class TestLevel extends Level implements EntityListener {
 		//ENTITIES
 		Entity r3e1 = new Entity();
 		r3e1.add(new PositionComponent(11, 5, DirectionType.Left));
-		r3e1.add(new RenderComponent(Constants.ICE_FORM));
+		r3e1.add(new RenderComponent(Constants.ICE_FORM, manager.getCamera()));
 		r3e1.add(new CollisionComponent(ColliderType.character));
 		r3e1.add(new AIComponent(new BasicMeleeAI(r3e1, engine)));
 		Array<Ability> abilities_r3e1 = new Array<Ability>();
@@ -144,7 +144,7 @@ public class TestLevel extends Level implements EntityListener {
 		
 		Entity r3e2 = new Entity();
 		r3e2.add(new PositionComponent(2, 8, DirectionType.Left));
-		r3e2.add(new RenderComponent(Constants.ICE_FORM));
+		r3e2.add(new RenderComponent(Constants.ICE_FORM, manager.getCamera()));
 		r3e2.add(new CollisionComponent(ColliderType.character));
 		r3e2.add(new AIComponent(new BasicMeleeAI(r3e2, engine)));
 		Array<Ability> abilities_r3e2 = new Array<Ability>();

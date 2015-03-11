@@ -12,7 +12,7 @@ public class FloatingTextManager {
 	private Array<FloatingTextMessage> messages;
 	
 	public FloatingTextManager() {
-		ftp = new FloatingTextPool();
+		ftp = new FloatingTextPool(3);
 		messages = new Array<FloatingTextManager.FloatingTextMessage>();
 	}
 	
@@ -36,6 +36,10 @@ public class FloatingTextManager {
 	
 	private class FloatingTextPool extends Pool<FloatingTextMessage> {
 
+		public FloatingTextPool(int initialCapacity) {
+			super(initialCapacity);
+		}
+		
 		@Override
 		protected FloatingTextMessage newObject() {
 			return new FloatingTextMessage();

@@ -33,6 +33,7 @@ public class PositionComponent extends Component {
 		curYPos = y;
 		gridNXPos = x;
 		gridNYPos = y;
+		gridCurXPos = x;
 		gridCurYPos = y;
 	}
 	

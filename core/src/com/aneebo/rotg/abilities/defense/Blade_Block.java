@@ -9,7 +9,6 @@ import com.aneebo.rotg.components.ProjectileComponent;
 import com.aneebo.rotg.components.StatComponent;
 import com.aneebo.rotg.types.AbilityNameType;
 import com.aneebo.rotg.types.AbilityType;
-import com.aneebo.rotg.ui.FloatingTextManager;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;

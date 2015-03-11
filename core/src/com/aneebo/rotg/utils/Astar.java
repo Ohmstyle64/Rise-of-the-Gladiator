@@ -8,7 +8,6 @@ import com.badlogic.gdx.utils.IntArray;
  *  @author Kevin
  *  */
 public class Astar {
-	private static final int DIAGONAL = Integer.MAX_VALUE;
 	private static final int LATERAL = 10;
 	private boolean[] validityMap;
 	private final int width, height;
@@ -59,7 +58,6 @@ public class Astar {
 		open.add(root, 0);
 
 		int lastColumn = width - 1, lastRow = height - 1;
-		int i = 0;
 		while (open.size > 0) {
 			PathNode node = open.pop();
 			if (node.x == targetX && node.y == targetY) {
@@ -75,17 +73,12 @@ public class Astar {
 			int y = node.y;
 			if (x < lastColumn) {
 				addNode(node, x + 1, y, LATERAL);
-//				if (y < lastRow) addNode(node, x + 1, y + 1, DIAGONAL);
-//				if (y > 0) addNode(node, x + 1, y - 1, DIAGONAL);
 			}
 			if (x > 0) {
 				addNode(node, x - 1, y, LATERAL);
-//				if (y < lastRow) addNode(node, x - 1, y + 1, DIAGONAL);
-//				if (y > 0) addNode(node, x - 1, y - 1, DIAGONAL);
 			}
 			if (y < lastRow) addNode(node, x, y + 1, LATERAL);
 			if (y > 0) addNode(node, x, y - 1, LATERAL);
-			i++;
 		}
 		return path;
 	}

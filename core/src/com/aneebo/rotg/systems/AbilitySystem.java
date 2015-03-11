@@ -4,7 +4,6 @@ import com.aneebo.rotg.abilities.Ability;
 import com.aneebo.rotg.components.AbilityComponent;
 import com.aneebo.rotg.components.Mappers;
 import com.aneebo.rotg.components.PositionComponent;
-import com.aneebo.rotg.ui.FloatingTextManager;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;

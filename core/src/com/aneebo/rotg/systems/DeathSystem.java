@@ -15,10 +15,11 @@ public class DeathSystem extends EntitySystem {
 	private StatComponent stat;
 	private Engine engine;
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public void addedToEngine(Engine engine) {
 		this.engine = engine;
-		entities = engine.getEntitiesFor(Family.getFor(StatComponent.class));
+		entities = engine.getEntitiesFor(Family.all(StatComponent.class).get());
 	}
 	
 	@Override
