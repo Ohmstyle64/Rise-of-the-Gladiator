@@ -16,4 +16,5 @@ public class Mappers {
 	public static final ComponentMapper<AnimationComponent> animMap = ComponentMapper.getFor(AnimationComponent.class);
 	public static final ComponentMapper<ParticleComponent> partMap = ComponentMapper.getFor(ParticleComponent.class);
 	public static final ComponentMapper<MerchantComponent> mercMap = ComponentMapper.getFor(MerchantComponent.class);
+	public static final ComponentMapper<EffectComponent> effMap = ComponentMapper.getFor(EffectComponent.class);
 }

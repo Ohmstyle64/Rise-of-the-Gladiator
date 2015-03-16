@@ -43,4 +43,11 @@ public class AbilityComponent extends Component {
 		abilitySlots.addAll(this.abilityList, 0, Math.min(Constants.MAX_ABILITY_SLOTS,this.abilityList.size));
 	}
 	
+	public boolean isActive() {
+		for(Ability a : abilityList) {
+			if(a.isActivated)
+				return true;
+		}
+		return false;
+	}
 }

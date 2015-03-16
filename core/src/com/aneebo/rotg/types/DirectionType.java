@@ -1,7 +1,7 @@
 package com.aneebo.rotg.types;
 
 public enum DirectionType {
-	Left(1), Right(3), Up(0), Down(2);
+	Left(1), Right(0), Up(2), Down(3);
 	
 	private int val;
 	

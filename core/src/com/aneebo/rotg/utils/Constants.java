@@ -38,6 +38,8 @@ public class Constants {
 	public static final String ELVEN_SCALEMAIL_1 = "img/item/armor/elven_scalemail.png";
 	public static final String SHORTSWORD_1 = "img/item/weapon/short_sword2.png";
 	public static final String SPEAR_1 = "img/item/weapon/spear2.png";
+	public static final String PLAYER_WALK = "img/characters/Walk_Animation.png";
+	public static final String PLAYER_SLASH = "img/characters/Slash_Animation.png";
 	
 	//SOUND EFFECTS
 	public static final String TEST_MUSIC = "sounds/music/pilot.mp3";
@@ -91,7 +93,7 @@ public class Constants {
 		Array<Upgrade> fake = new Array<Upgrade>(3);
 		
 		//Create abilities
-		Blade_Strike bs = new Blade_Strike(AbilityNameType.AT_BLADE_STRIKE, 2, 2, AbilityType.melee_offensive, "Blade Strike", 3, 10f, 8f, EMPTY_CELL, null, fake);
+		Blade_Strike bs = new Blade_Strike(AbilityNameType.AT_BLADE_STRIKE, 1, 2, AbilityType.melee_offensive, "Blade Strike", 3, 10f, 8f, EMPTY_CELL, null, fake);
 		Blade_Block bb = new Blade_Block(AbilityNameType.DF_BLADE_BLOCK, 2, 3, AbilityType.melee_defensive, "Blade Block", 3, 0f, 10f, EMPTY_CELL, null, fake);
 		Quick_Knife qk = new Quick_Knife(AbilityNameType.AT_QUICK_KNIFE, 1, 3, AbilityType.melee_offensive, "Quick Knife", 2, 30f, 0f, EMPTY_CELL, null, fake);
 		Force_Field ff = new Force_Field(AbilityNameType.DF_FORCE_FIELD, 2, 1.5f, AbilityType.magic, "Force Field", 0, 30f, 0f, EMPTY_CELL, null, fake);

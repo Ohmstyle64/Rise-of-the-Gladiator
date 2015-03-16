@@ -33,6 +33,8 @@ public class Assets {
 		assetManager.load(Constants.CASTTIMER, Texture.class);
 		assetManager.load(Constants.HEALTH_ATLAS, TextureAtlas.class);
 		assetManager.load(Constants.PEFFECT_FIRE, ParticleEffect.class);
+		assetManager.load(Constants.PLAYER_WALK, Texture.class);
+		assetManager.load(Constants.PLAYER_SLASH, Texture.class);
 		
 		assetManager.finishLoading();
 	}
