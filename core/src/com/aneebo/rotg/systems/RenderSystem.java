@@ -155,21 +155,21 @@ public class RenderSystem extends EntitySystem {
 			animComponent = Mappers.animMap.get(e);
 			statComponent = Mappers.staMap.get(e);
 			
-			if(posComponent.isStopped()) {
-				renderer.getBatch().draw(animComponent.idle[posComponent.direction.getVal()],
-						posComponent.curXPos * Constants.TILE_WIDTH,
-						posComponent.curYPos * Constants.TILE_HEIGHT);
-				animComponent.stateTime = 0;
-			}else {
-				animComponent.stateTime += deltaTime;
-				anim = animComponent.animations[posComponent.direction.getVal()];
-				renderer.getBatch().draw(anim.getKeyFrame(animComponent.stateTime),
-						posComponent.curXPos * Constants.TILE_WIDTH,
-						posComponent.curYPos * Constants.TILE_HEIGHT);
-				if(anim.isAnimationFinished(animComponent.stateTime)) {
-					animComponent.stateTime = 0;
-				}
-			}
+//			if(posComponent.isStopped()) {
+//				renderer.getBatch().draw(animComponent.idle[posComponent.direction.getVal()],
+//						posComponent.curXPos * Constants.TILE_WIDTH,
+//						posComponent.curYPos * Constants.TILE_HEIGHT);
+//				animComponent.stateTime = 0;
+//			}else {
+//				animComponent.stateTime += deltaTime;
+//				anim = animComponent.animations[posComponent.direction.getVal()];
+//				renderer.getBatch().draw(anim.getKeyFrame(animComponent.stateTime),
+//						posComponent.curXPos * Constants.TILE_WIDTH,
+//						posComponent.curYPos * Constants.TILE_HEIGHT);
+//				if(anim.isAnimationFinished(animComponent.stateTime)) {
+//					animComponent.stateTime = 0;
+//				}
+//			}
 		}
 		
 		//RENDER ABILITIES
