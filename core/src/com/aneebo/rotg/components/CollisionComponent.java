@@ -9,4 +9,8 @@ public class CollisionComponent extends Component {
 	public CollisionComponent(ColliderType type) {
 		this.type = type;
 	}
+	
+	public CollisionComponent() {
+		
+	}
 }

@@ -12,7 +12,6 @@ import com.aneebo.rotg.inventory.Item;
 import com.aneebo.rotg.inventory.items.ChestP1;
 import com.aneebo.rotg.level.Level;
 import com.aneebo.rotg.level.LevelManager;
-import com.aneebo.rotg.screens.Play;
 import com.aneebo.rotg.types.ColliderType;
 import com.aneebo.rotg.types.DirectionType;
 import com.aneebo.rotg.types.LevelType;
@@ -38,8 +37,8 @@ public class CaravanLevel extends Level {
 		Array<Entity> entities = new Array<Entity>(2);
 		Entity merchant = new Entity();
 		merchant.add(new PositionComponent(9,5,DirectionType.Right));
-		merchant.add(new RenderComponent(Constants.DRAGON_FORM, manager.getCamera()));
-		merchant.add(new StatComponent("Merchant", 1f, 1f, Color.WHITE, 1f, 1f, 0f, false));
+		merchant.add(new RenderComponent(Constants.DRAGON_FORM));
+		merchant.add(new StatComponent("Merchant", "Male", 1f, 1f, Color.WHITE, 1f, 1f, 0f, false));
 		merchant.add(new CollisionComponent(ColliderType.merchant));
 		Array<Item> iList = new Array<Item>(true, Constants.INVENTORY_SIZE, Item.class);
 		iList.add(new ChestP1());
@@ -52,8 +51,8 @@ public class CaravanLevel extends Level {
 		
 		Entity changer = new Entity();
 		changer.add(new PositionComponent(9,7,DirectionType.Down));
-		changer.add(new RenderComponent(Constants.ICE_FORM, manager.getCamera()));
-		changer.add(new StatComponent("Change Level", 1f, 1f, Color.WHITE, 1f, 1f, 0f, false));
+		changer.add(new RenderComponent(Constants.ICE_FORM));
+		changer.add(new StatComponent("Change Level", "Male", 1f, 1f, Color.WHITE, 1f, 1f, 0f, false));
 		changer.add(new CollisionComponent(ColliderType.levelChange));
 		changer.add(new LevelChangerComponent(LevelType.TEST_LEVEL));
 		

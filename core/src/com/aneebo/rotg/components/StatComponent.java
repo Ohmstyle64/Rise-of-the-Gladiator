@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 
 public class StatComponent extends Component {
 	public String name;
+	public String gender;
 	public float health;
 	public float max_health;
 	public float energy;
@@ -20,7 +21,7 @@ public class StatComponent extends Component {
 	
 	public boolean isPlayer;
 	
-	public HealthBlocks healthBlocks;
+	public transient HealthBlocks healthBlocks;
 	
 	public float increaseToAttackSpeed;
 	public float increaseToDamage;
@@ -28,8 +29,13 @@ public class StatComponent extends Component {
 	public float damageMitigation;
 	public float magicResist;
 	
-	public StatComponent(String name, float health, float energy, Color color, float health_regen, float energy_regen, float speed, boolean isPlayer) {
+	public StatComponent() {
+		
+	}
+	
+	public StatComponent(String name, String gender, float health, float energy, Color color, float health_regen, float energy_regen, float speed, boolean isPlayer) {
 		this.name = name;
+		this.gender = gender;
 		this.health = health;
 		this.energy = energy;
 		this.max_energy = energy;

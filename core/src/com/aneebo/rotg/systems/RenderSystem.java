@@ -8,6 +8,7 @@ import com.aneebo.rotg.components.ParticleComponent;
 import com.aneebo.rotg.components.PositionComponent;
 import com.aneebo.rotg.components.RenderComponent;
 import com.aneebo.rotg.components.StatComponent;
+import com.aneebo.rotg.ui.HealthBlocks;
 import com.aneebo.rotg.utils.Assets;
 import com.aneebo.rotg.utils.Constants;
 import com.aneebo.rotg.utils.RoTGCamera;
@@ -42,6 +43,7 @@ public class RenderSystem extends EntitySystem {
 	private ImmutableArray<Entity> animEntities;
 	private ImmutableArray<Entity> particleEntities;
 	private ImmutableArray<Entity> merchantEntities;
+	private ImmutableArray<Entity> statEntities;
 	
 	private AbilityComponent abilityComponent;
 	private PositionComponent posComponent;
@@ -72,11 +74,20 @@ public class RenderSystem extends EntitySystem {
 		abilityEntities = engine.getEntitiesFor(Family.all(AbilityComponent.class).get());
 		particleEntities = engine.getEntitiesFor(Family.all(ParticleComponent.class).get());
 		merchantEntities = engine.getEntitiesFor(Family.all(MerchantComponent.class).get());
+		statEntities = engine.getEntitiesFor(Family.all(StatComponent.class).get());
+		
 		int size = merchantEntities.size();
 		for(int i = 0; i < size; i++) {
 			e = merchantEntities.get(i);
 			merchantComponent = Mappers.mercMap.get(e);
 			stage.addActor(merchantComponent.window);
+		}
+		
+		size = statEntities.size();
+		for(int i = 0; i < size; i++) {
+			e = statEntities.get(i);
+			statComponent = Mappers.staMap.get(e);
+			statComponent.healthBlocks = new HealthBlocks(0, statComponent.max_health, statComponent.max_health);
 		}
 	}
 	
@@ -101,6 +112,10 @@ public class RenderSystem extends EntitySystem {
 			e = entities.get(i);
 			posComponent = Mappers.posMap.get(e);
 			renderComponent = Mappers.renMap.get(e);
+			if(renderComponent.shake) {
+				arenaCam.smallShake();
+				renderComponent.shake = false;
+			}
 			//Flashing Red Effect
 			float savedRed = 0, savedGreen = 0, savedBlue = 0;
 			if(renderComponent.frame_limit != 0 && renderComponent.frames < renderComponent.frame_limit) {

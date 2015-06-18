@@ -74,5 +74,4 @@ public class MovementSystem extends EntitySystem {
 	public void dispose() {
 		
 	}
-
 }

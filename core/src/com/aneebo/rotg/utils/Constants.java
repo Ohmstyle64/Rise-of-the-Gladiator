@@ -27,6 +27,10 @@ public class Constants {
 	public static final int WIDTH = 800;
 	public static final int HEIGHT = 480;
 	
+	//WarpClient Key
+	public static final String API_KEY = "75a8ca517cc741a00d02e8d39f11d5cf577dade0e6043b4636b840150958d43e";
+	public static final String SECRET_KEY = "7e3294fc235f275dd233e6f93125e5a98753529ec8298acc9bfa6fd8ed7be96c";
+	
 	//ASSET PATHS
 	public static final String DRAGON_FORM = "img/characters/dragon_form.png";
 	public static final String PIG_FORM = "img/characters/pig_form.png";

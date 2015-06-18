@@ -97,7 +97,7 @@ public class Wave_of_Fire extends Ability {
 		projPos.gridNXPos = (int) path.get(0).x;
 		projPos.gridNYPos = (int) path.get(0).y;
 		path.removeIndex(0);
-		eFireBlast.add(new RenderComponent(textureName, null));
+		eFireBlast.add(new RenderComponent(textureName));
 		eFireBlast.add(projPos);
 		eFireBlast.add(new CollisionComponent(ColliderType.projectile));
 		eFireBlast.add(new ProjectileComponent(me, this, path, 3f, damage));

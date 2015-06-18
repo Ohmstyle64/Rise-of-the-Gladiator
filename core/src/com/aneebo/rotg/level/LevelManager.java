@@ -27,7 +27,7 @@ public class LevelManager {
 		currentLevel = levelList.get(startLevel);
 		renderer = new OrthogonalTiledMapRenderer(currentLevel.tiledMap);
 		currentLevel.loadLevel();
-		currentLevel.addEntities();
+//		currentLevel.addEntities();
 		isTransitionIn = false;
 		isTransitionOut = false;
 	}

@@ -22,11 +22,12 @@ public abstract class AiPlan {
 	private Vector2 dir;
 	private Vector2 ref;
 	
+	@SuppressWarnings("unchecked")
 	public AiPlan(Entity me, Engine engine) {
 		this.engine = engine;
 		this.me = me;
-		entities = engine.getEntitiesFor(Family.getFor(AIComponent.class, AbilityComponent.class));
-		player = engine.getEntitiesFor(Family.getFor(InputComponent.class)).first();
+		entities = engine.getEntitiesFor(Family.all(AIComponent.class, AbilityComponent.class).get());
+		player = engine.getEntitiesFor(Family.all(InputComponent.class).get()).first();
 		dir = new Vector2();
 		ref = new Vector2();
 	}

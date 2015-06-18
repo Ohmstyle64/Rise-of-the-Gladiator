@@ -60,6 +60,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisProgressBar;
+import com.shephertz.app42.paas.sdk.java.storage.Storage;
 
 public class Play implements Screen {
 
@@ -95,9 +96,6 @@ public class Play implements Screen {
 	
 	@Override
 	public void show() {
-		Assets.load();
-
-		VisUI.load();
 		
 		stage = new Stage();
 		stage.setViewport(new FitViewport(Constants.WIDTH, Constants.HEIGHT));
@@ -113,8 +111,9 @@ public class Play implements Screen {
 		
 		engine = new Engine();
 
-		createPlayer();
-
+		
+//		createPlayer();
+		
 		createLevels();
 		
 		createSystems();
@@ -133,6 +132,8 @@ public class Play implements Screen {
 		engine.addSystem(deathSystem);
 		engine.addSystem(merchantSystem);
 		
+		
+		
 		//Play music
 //		Music song1 = Assets.assetManager.get(Constants.TEST_MUSIC, Music.class);
 //		song1.play();
@@ -140,6 +141,22 @@ public class Play implements Screen {
 //		song1.setLooping(true);
 	}
 	
+
+	private void loadPlayer(Storage storage) {
+//		Json json = new Json();
+//		GladiatorObject go = null;
+//		ArrayList<JSONDocument> docs = storage.jsonDocList;
+//		for(JSONDocument doc : docs) {
+//			go  = json.fromJson(GladiatorObject.class, doc.jsonDoc);
+//		}
+//		player = go.loadEntity(engine, ftm);
+//		player.add(new InputComponent());
+//		player.add(new CollisionComponent(ColliderType.character));
+//		engine.addEntity(player);
+//		System.out.println("Player Created!");
+	}
+
+
 	private void createLevels() {
 		levelManager = new LevelManager(ftm, camera);
 		TestLevel testLevel = new TestLevel(engine, player, new Vector2(7,2), levelManager);
@@ -154,12 +171,11 @@ public class Play implements Screen {
 		Array<Ability> abilityList = new Array<Ability>();
 		abilityList.add(Constants.abilityMap.get(AbilityNameType.AT_BLADE_STRIKE));
 		abilityList.add(Constants.abilityMap.get(AbilityNameType.DF_BLADE_BLOCK));
-		abilityList.add(Constants.abilityMap.get(AbilityNameType.AT_WAVE_OF_FIRE));
-		abilityList.add(Constants.abilityMap.get(AbilityNameType.AT_DASHING_STRIKE));
-		abilityList.add(Constants.abilityMap.get(AbilityNameType.DF_TELEPORT));
+//		abilityList.add(Constants.abilityMap.get(AbilityNameType.AT_WAVE_OF_FIRE));
+//		abilityList.add(Constants.abilityMap.get(AbilityNameType.AT_DASHING_STRIKE));
+//		abilityList.add(Constants.abilityMap.get(AbilityNameType.DF_TELEPORT));
 //		abilityList.add(Constants.abilityMap.get(AbilityNameType.DF_FORCE_FIELD));
 //		abilityList.add(Constants.abilityMap.get(AbilityNameType.DF_PURE_HEART));
-		
 		
 		
 		player = new Entity();
@@ -167,8 +183,9 @@ public class Play implements Screen {
 		player.add(new InputComponent());
 		player.add(new CollisionComponent(ColliderType.character));
 		player.add(ability = new AbilityComponent(abilityList, engine, ftm));
-		player.add(stat = new StatComponent("Player", 35f, 60f, Color.RED, 7, 2, 1.5f, true));
-		player.add(new RenderComponent(Constants.DRAGON_FORM, camera));
+		player.add(stat = new StatComponent("Default_Male_Warrior", "Male", 35f, 60f, Color.RED, 7, 2, 1.5f, true));
+		RenderComponent render;
+		player.add(render = new RenderComponent(Constants.DRAGON_FORM));
 //		player.add(new AnimationComponent(Assets.assetManager.get(Constants.BODY_PLAYER, Texture.class),64,64, stat.speed / 16));
 		ObjectMap<Integer, Item> equipped = new ObjectMap<Integer, Item>();
 		ChestP1 cp1 = new ChestP1();
@@ -181,6 +198,16 @@ public class Play implements Screen {
 		player.add(new InventoryComponent(new Inventory(player, equipped, fillRest(iList))));
 		
 		engine.addEntity(player);
+		
+//		final GladiatorObject go = new GladiatorObject();
+//		
+//		go.setUserName(ServerRequestController.getInstance().getLocalUser());
+//		go.setAbilities(ability);
+//		go.setPos(pos);
+//		go.setRender(render);
+//		go.setStat(stat);
+//		final Json j = new Json(OutputType.json);
+		
 	}
 		
 	private Array<Item> fillRest(Array<Item> array) {

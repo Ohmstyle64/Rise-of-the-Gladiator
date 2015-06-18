@@ -1,6 +1,7 @@
 package com.aneebo.rotg.systems;
 
 import com.aneebo.rotg.abilities.Ability;
+import com.aneebo.rotg.client.ServerRequestController;
 import com.aneebo.rotg.components.AbilityComponent;
 import com.aneebo.rotg.components.InputComponent;
 import com.aneebo.rotg.components.InventoryComponent;
@@ -51,12 +52,17 @@ public class InputSystem extends EntitySystem {
 	private Stage stage;
 	private Skin skin;
 	private Window win;
+	
+	private byte[] update;
+	private boolean needsUpdate;
 
 	public InputSystem(Stage stage) {
 		super(0);
 		this.stage = stage;
 		this.skin = Assets.assetManager.get(Constants.UI_SKIN, Skin.class);
 		itemSlotListener = new ItemSlotListener();
+		update = new byte[3];
+		needsUpdate = false;
 	}
 	
 	private void createInventoryWindow() {
@@ -224,51 +230,65 @@ public class InputSystem extends EntitySystem {
 		posComponent = Mappers.posMap.get(player);
 		abilityComponent = Mappers.abMap.get(player);
 		inputComponent = Mappers.inpMap.get(player);
-		createInventoryWindow();
+//		createInventoryWindow();
 	}
 
 	@Override
 	public void update(float deltaTime) {
 		//SINGLEPLAYER ONLY
-		abilitySlots = abilityComponent.abilitySlots;
-		if(Gdx.input.isKeyJustPressed(Keys.NUMPAD_1)) {
-			if(abilitySlots.get(0) instanceof Ability) {
-				if(posComponent.isStopped())
-					abilitySlots.get(0).isActivated = true;
-			}else
-				abilitySlots.get(0).isActivated = true;
-		}else if(Gdx.input.isKeyJustPressed(Keys.NUMPAD_2)) {
-			abilitySlots.get(1).isActivated = true;
-		}
+//		abilitySlots = abilityComponent.abilitySlots;
+//		if(Gdx.input.isKeyJustPressed(Keys.NUMPAD_1)) {
+//			if(abilitySlots.get(0) instanceof Ability) {
+//				if(posComponent.isStopped())
+//					abilitySlots.get(0).isActivated = true;
+//			}else
+//				abilitySlots.get(0).isActivated = true;
+//		}else if(Gdx.input.isKeyJustPressed(Keys.NUMPAD_2)) {
+//			abilitySlots.get(1).isActivated = true;
+//		}
 		
 		if(!posComponent.isStopped()) return;
 		
 		if(Gdx.input.isKeyJustPressed(Keys.A)) {
 			posComponent.direction = DirectionType.Left;
-			if(posComponent.isMoveable)
+			if(posComponent.isMoveable) {
 				posComponent.gridNXPos--;
+				needsUpdate = true;
+			}
 		}else if(Gdx.input.isKeyJustPressed(Keys.D)) {
 			posComponent.direction = DirectionType.Right;
-			if(posComponent.isMoveable)
+			if(posComponent.isMoveable) {
 				posComponent.gridNXPos++;
+				needsUpdate = true;
+			}
 		}else if(Gdx.input.isKeyJustPressed(Keys.W)) {
 			posComponent.direction = DirectionType.Up;
-			if(posComponent.isMoveable)
+			if(posComponent.isMoveable) {
 				posComponent.gridNYPos++;
+				needsUpdate = true;
+			}
 		}else if(Gdx.input.isKeyJustPressed(Keys.S)) {
 			posComponent.direction = DirectionType.Down;
-			if(posComponent.isMoveable)
+			if(posComponent.isMoveable) {
 				posComponent.gridNYPos--;
+				needsUpdate = true;
+			}
+		}
+		if(needsUpdate) {
+			update[1] = (byte) posComponent.gridNXPos;
+			update[2] = (byte) posComponent.gridNYPos;
+			ServerRequestController.getInstance().sendUpdatePeers(update);
+			needsUpdate = false;
 		}
 		
-		if(Gdx.input.isKeyJustPressed(Keys.C)) {
-			win.setVisible(!win.isVisible());
-		}
+//		if(Gdx.input.isKeyJustPressed(Keys.C)) {
+//			win.setVisible(!win.isVisible());
+//		}
 
-		if(inputComponent.needRefresh) {
-			refreshData();
-			inputComponent.needRefresh = false;
-		}
+//		if(inputComponent.needRefresh) {
+//			refreshData();
+//			inputComponent.needRefresh = false;
+//		}
 	}
 
 	public void dispose() {

@@ -53,7 +53,7 @@ public class Blade_Strike extends Ability {
 				hit = Assets.assetManager.get(Constants.TEST_GET_HIT, Sound.class);
 				hit.play();
 				Gdx.input.vibrate(1000);
-				Mappers.renMap.get(e).camera.shake(1f, .1f);
+				Mappers.renMap.get(e).shake = true;
 			} else {
 				Mappers.renMap.get(e).flashRed(10);
 			}

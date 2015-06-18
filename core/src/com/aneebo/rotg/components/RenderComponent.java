@@ -1,18 +1,22 @@
 package com.aneebo.rotg.components;
 
-import com.aneebo.rotg.utils.RoTGCamera;
 import com.badlogic.ashley.core.Component;
 
 public class RenderComponent extends Component {
 	
 	public String textureName;
-	public RoTGCamera camera;
+	public boolean shake;
+	public float shakeFreq;
 	public int frames;
 	public int frame_limit;
+	
+	public RenderComponent() {
+		
+	}
 
-	public RenderComponent(String textureName, RoTGCamera camera) {
+	public RenderComponent(String textureName) {
 		this.textureName = textureName;
-		this.camera = camera;
+		shake = false;
 		frames = 0;
 		frame_limit = 0;
 	}
