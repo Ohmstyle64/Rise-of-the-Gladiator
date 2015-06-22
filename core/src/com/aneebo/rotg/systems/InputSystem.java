@@ -61,7 +61,7 @@ public class InputSystem extends EntitySystem {
 		this.stage = stage;
 		this.skin = Assets.assetManager.get(Constants.UI_SKIN, Skin.class);
 		itemSlotListener = new ItemSlotListener();
-		update = new byte[3];
+		update = new byte[5];
 		needsUpdate = false;
 	}
 	
@@ -277,6 +277,8 @@ public class InputSystem extends EntitySystem {
 		if(needsUpdate) {
 			update[1] = (byte) posComponent.gridNXPos;
 			update[2] = (byte) posComponent.gridNYPos;
+			update[3] = (byte) posComponent.gridCurXPos;
+			update[4] = (byte) posComponent.gridCurYPos;
 			ServerRequestController.getInstance().sendUpdatePeers(update);
 			needsUpdate = false;
 		}

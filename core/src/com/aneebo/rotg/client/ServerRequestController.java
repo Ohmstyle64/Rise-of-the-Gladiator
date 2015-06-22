@@ -3,13 +3,8 @@ package com.aneebo.rotg.client;
 import java.util.HashMap;
 
 import com.aneebo.rotg.client.listener.ConnectionListener;
-import com.aneebo.rotg.client.listener.NotifyRoomListener;
 import com.aneebo.rotg.client.listener.RoomListener;
 import com.aneebo.rotg.client.listener.ZoneListener;
-import com.aneebo.rotg.components.AbilityComponent;
-import com.aneebo.rotg.components.Mappers;
-import com.aneebo.rotg.components.PositionComponent;
-import com.aneebo.rotg.components.StatComponent;
 import com.aneebo.rotg.utils.Constants;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
@@ -17,8 +12,8 @@ import com.badlogic.gdx.utils.Array;
 import com.shephertz.app42.gaming.multiplayer.client.WarpClient;
 import com.shephertz.app42.gaming.multiplayer.client.command.WarpResponseResultCode;
 import com.shephertz.app42.gaming.multiplayer.client.events.LiveRoomInfoEvent;
+import com.shephertz.app42.gaming.multiplayer.client.events.RoomData;
 import com.shephertz.app42.gaming.multiplayer.client.events.RoomEvent;
-import com.shephertz.app42.gaming.multiplayer.client.events.UpdateEvent;
 import com.shephertz.app42.paas.sdk.java.storage.StorageService;
 import com.shephertz.app42.paas.sdk.java.user.UserService;
 
@@ -29,7 +24,6 @@ public class ServerRequestController {
 	public UserService userService;
 	public StorageService storageService;
 	
-	private Array<Entity> enemies;
 	private RoomUsers roomUsers;
 	private String localUser;
 	private String roomId;
@@ -37,33 +31,21 @@ public class ServerRequestController {
 	private boolean inRoom;
 	private byte userRoomId;
 	
-	private PositionComponent pos;
-	private StatComponent stat;
-	private AbilityComponent abc;
-	
 	private PlatformConnector platformConnector;
 	
-	//Constants for the update byte array
-	private static final int VAL = 255;
-	private static final int X1_POS = 0;
-	private static final int X2_POS = 1;
-	private static final int Y1_POS = 2;
-	private static final int Y2_POS = 3;
-	private static final int DIR = 4;
-
 	private ServerRequestController(PlatformConnector platformConnector) {
 		this.platformConnector = platformConnector;
 		initServer();
 		
-		warpClient.addConnectionRequestListener(new ConnectionListener(this));
-		warpClient.addRoomRequestListener(new RoomListener(this));
-		warpClient.addNotificationListener(new NotifyRoomListener(this));
-		warpClient.addZoneRequestListener(new ZoneListener(this));
-		enemies = new Array<Entity>();
 		inRoom = false;
 	}
 	
 	
+	public byte getUserRoomId() {
+		return userRoomId;
+	}
+
+
 	public String getLocalUser() {
 		return localUser;
 	}
@@ -76,6 +58,11 @@ public class ServerRequestController {
 		return docId;
 	}
 
+	public WarpClient getWarpClient() {
+		return warpClient;
+	}
+
+
 	public static ServerRequestController loadInstance(PlatformConnector platformConnector) {
 		if(instance == null) {
 			instance = new ServerRequestController(platformConnector);
@@ -86,12 +73,18 @@ public class ServerRequestController {
 	public static ServerRequestController getInstance() {
 		return instance;
 	}
+	
+	public void initUdp() {
+		warpClient.initUDP();
+	}
 
 	private void initServer() {
 		try {
 			WarpClient.initialize(Constants.API_KEY, Constants.SECRET_KEY);
 			warpClient = WarpClient.getInstance();
-			
+			warpClient.addConnectionRequestListener(new ConnectionListener(this));
+			warpClient.addRoomRequestListener(new RoomListener(this));
+			warpClient.addZoneRequestListener(new ZoneListener(this));
 			platformConnector.initialize();
 			
 		} catch(Exception e) {
@@ -156,11 +149,6 @@ public class ServerRequestController {
 		}
 	}
 	
-	public void setEnemiesToUpdate(Array<Entity> enemies, byte userRoomId) {
-		this.enemies = enemies;
-		this.userRoomId = userRoomId;
-	}
-	
 	public void sendUpdatePeers(byte[] update) {
 		if(inRoom) {
 			update[0] = userRoomId;
@@ -168,14 +156,10 @@ public class ServerRequestController {
 		}
 	}
 	
-	public void onSendUpdatePeersDone(final UpdateEvent event) {
-		byte[] update = event.getUpdate();
-		if(update[0]==userRoomId) return;
-		Gdx.app.log("NETWORK", "Update received!");
-		for(Entity e : enemies) {
-			pos = Mappers.posMap.get(e);
-			pos.gridNXPos = update[1];
-			pos.gridNYPos = update[2];
+	public void sendUpdatePeersFast(byte[] update) {
+		if(inRoom) {
+			update[0] = userRoomId;
+			warpClient.sendUDPUpdatePeers(update);
 		}
 	}
 	
@@ -193,6 +177,15 @@ public class ServerRequestController {
 				roomUsers.getRoomUsers(roomInfo);
 			}
 		});
+	}
+
+	public void onUserLeftRoom(RoomData arg0, String userName) {
+		
+	}
+
+	public void disconnect() {
+		warpClient.unsubscribeRoom(roomId);
+		warpClient.leaveRoom(roomId);
 	}
 	
 	

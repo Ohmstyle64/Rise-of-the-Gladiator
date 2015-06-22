@@ -1,5 +1,7 @@
 package com.aneebo.rotg.screens;
 
+import java.util.HashMap;
+
 import com.aneebo.rotg.abilities.Ability;
 import com.aneebo.rotg.base.GladiatorFactory;
 import com.aneebo.rotg.base.GladiatorObject;
@@ -31,6 +33,7 @@ import com.aneebo.rotg.utils.Constants;
 import com.aneebo.rotg.utils.RoTGCamera;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -44,15 +47,22 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.kotcrab.vis.ui.widget.VisProgressBar;
+import com.shephertz.app42.gaming.multiplayer.client.events.ChatEvent;
 import com.shephertz.app42.gaming.multiplayer.client.events.LiveRoomInfoEvent;
+import com.shephertz.app42.gaming.multiplayer.client.events.LobbyData;
+import com.shephertz.app42.gaming.multiplayer.client.events.MoveEvent;
+import com.shephertz.app42.gaming.multiplayer.client.events.RoomData;
+import com.shephertz.app42.gaming.multiplayer.client.events.UpdateEvent;
+import com.shephertz.app42.gaming.multiplayer.client.listener.NotifyListener;
 
-public class FightScreen implements Screen {
+public class FightScreen implements Screen, NotifyListener {
 	
 	private Stage stage;
 	private Skin skin;
@@ -63,9 +73,13 @@ public class FightScreen implements Screen {
 	private Entity enemy;
 	private Engine engine;
 	
+	private boolean isLoaded;
+	
 	private PositionComponent pos;
 	private StatComponent stat;
 	private AbilityComponent ability;
+	
+	private byte[] update;
 	
 	//Systems
 	private CollisionSystem collisionSystem;
@@ -85,14 +99,17 @@ public class FightScreen implements Screen {
 	
 	private String playerJsonData;
 	private String enemyJsonData;
+	private String cityName;
 	private LiveRoomInfoEvent roomInfo;
 	
 	
 
-	public FightScreen(String playerJsonData, String enemyJsonData, LiveRoomInfoEvent roomInfo) {
+	public FightScreen(String cityName, String playerJsonData, String enemyJsonData, LiveRoomInfoEvent roomInfo) {
+		this.cityName = cityName;
 		this.playerJsonData = playerJsonData;
 		this.enemyJsonData = enemyJsonData;
 		this.roomInfo = roomInfo;
+		isLoaded = false;
 	}
 
 	@Override
@@ -135,6 +152,7 @@ public class FightScreen implements Screen {
 		engine.addSystem(deathSystem);
 //		engine.addSystem(merchantSystem);
 		
+		isLoaded = true;
 	}
 	
 	private Array<Item> fillRest(Array<Item> array) {
@@ -150,6 +168,16 @@ public class FightScreen implements Screen {
 		table.add(createStats()).top().left().row();	
 		table.add(createMovementButtons()).bottom().left().expand();
 		table.add(createAbilitySlots());
+		TextButton backButton = new TextButton("BACK", skin);
+		backButton.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				ServerRequestController.getInstance().disconnect();
+				ServerRequestController.getInstance().getWarpClient().removeNotificationListener(FightScreen.this);
+				((Game)Gdx.app.getApplicationListener()).setScreen(new CityScreen(cityName, playerJsonData));
+			}
+		});
+		table.add(backButton);
 		//Add Action Buttons
 		//Add Potion Buttons
 		stage.addActor(table);
@@ -238,6 +266,9 @@ public class FightScreen implements Screen {
 						pos.gridNXPos--;
 						update[1] = (byte) pos.gridNXPos;
 						update[2] = (byte) pos.gridNYPos;
+						update[3] = (byte) pos.gridCurXPos;
+						update[4] = (byte) pos.gridCurYPos;
+						ServerRequestController.getInstance().sendUpdatePeers(update);
 					}
 				}
 			}
@@ -261,8 +292,14 @@ public class FightScreen implements Screen {
 			public void clicked(InputEvent event, float x, float y) {
 				if(pos.isStopped()) {
 					pos.direction = DirectionType.Right;
-					if(pos.isMoveable)
+					if(pos.isMoveable) {
 						pos.gridNXPos++;
+						update[1] = (byte) pos.gridNXPos;
+						update[2] = (byte) pos.gridNYPos;
+						update[3] = (byte) pos.gridCurXPos;
+						update[4] = (byte) pos.gridCurYPos;
+						ServerRequestController.getInstance().sendUpdatePeers(update);				
+					}
 				}
 			}
 		});
@@ -284,8 +321,14 @@ public class FightScreen implements Screen {
 			public void clicked(InputEvent event, float x, float y) {
 				if(pos.isStopped()) {
 					pos.direction = DirectionType.Up;
-					if(pos.isMoveable)
+					if(pos.isMoveable) {
 						pos.gridNYPos++;
+						update[1] = (byte) pos.gridNXPos;
+						update[2] = (byte) pos.gridNYPos;
+						update[3] = (byte) pos.gridCurXPos;
+						update[4] = (byte) pos.gridCurYPos;
+						ServerRequestController.getInstance().sendUpdatePeers(update);						
+					}
 				}
 			}
 		});
@@ -308,8 +351,14 @@ public class FightScreen implements Screen {
 			public void clicked(InputEvent event, float x, float y) {
 				if(pos.isStopped()) {
 					pos.direction = DirectionType.Down;
-					if(pos.isMoveable)
+					if(pos.isMoveable) {
 						pos.gridNYPos--;
+						update[1] = (byte) pos.gridNXPos;
+						update[2] = (byte) pos.gridNYPos;
+						update[3] = (byte) pos.gridCurXPos;
+						update[4] = (byte) pos.gridCurYPos;
+						ServerRequestController.getInstance().sendUpdatePeers(update);						
+					}
 				}
 			}
 		});
@@ -363,9 +412,6 @@ public class FightScreen implements Screen {
 		
 		engine.addEntity(player);
 		engine.addEntity(enemy);
-		Array<Entity> enemies = new Array<Entity>(1);
-		enemies.add(enemy);
-		ServerRequestController.getInstance().setEnemiesToUpdate(enemies, playId);
 	}
 
 	@Override
@@ -398,14 +444,125 @@ public class FightScreen implements Screen {
 
 	@Override
 	public void hide() {
-		// TODO Auto-generated method stub
-
+		dispose();
 	}
 
 	@Override
 	public void dispose() {
 		stage.dispose();
 		Assets.dispose();
+	}
+
+	@Override
+	public void onChatReceived(ChatEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onGameStarted(String arg0, String arg1, String arg2) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onGameStopped(String arg0, String arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onMoveCompleted(MoveEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onNextTurnRequest(String arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onPrivateChatReceived(String arg0, String arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onPrivateUpdateReceived(String arg0, byte[] arg1, boolean arg2) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onRoomCreated(RoomData arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onRoomDestroyed(RoomData arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onUpdatePeersReceived(UpdateEvent arg0) {
+		//TODO:No updates should be sent until all users have sent a notification
+		//that they have loaded the fightscreen.
+		if(!isLoaded) return;
+		
+		update = arg0.getUpdate();
+		if(update[0]==ServerRequestController.getInstance().getUserRoomId()) return;
+		pos = Mappers.posMap.get(enemy);
+		pos.gridNXPos = update[1];
+		pos.gridNYPos = update[2];
+		pos.gridCurXPos = update[3];
+		pos.gridCurYPos = update[4];
+	}
+
+	@Override
+	public void onUserChangeRoomProperty(RoomData arg0, String arg1,
+			HashMap<String, Object> arg2, HashMap<String, String> arg3) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onUserJoinedLobby(LobbyData arg0, String arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onUserJoinedRoom(RoomData arg0, String arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onUserLeftLobby(LobbyData arg0, String arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onUserLeftRoom(RoomData arg0, String arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onUserPaused(String arg0, boolean arg1, String arg2) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onUserResumed(String arg0, boolean arg1, String arg2) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

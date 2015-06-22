@@ -1,5 +1,6 @@
 package com.aneebo.rotg.systems;
 
+import com.aneebo.rotg.client.ServerRequestController;
 import com.aneebo.rotg.components.Mappers;
 import com.aneebo.rotg.components.PositionComponent;
 import com.aneebo.rotg.components.ProjectileComponent;
@@ -19,8 +20,11 @@ public class MovementSystem extends EntitySystem {
 	private StatComponent stat;
 	private Entity e;
 	
+	private byte[] update;
+	
 	public MovementSystem() {
 		super(3);
+		update = new byte[5];
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -64,6 +68,13 @@ public class MovementSystem extends EntitySystem {
 				if(pos.curYPos <= pos.gridNYPos) {
 					pos.setCurYPos(pos.gridNYPos);
 				}
+			}
+			if(Mappers.inpMap.get(e) != null) {
+				update[1] = (byte) pos.gridNXPos;
+				update[2] = (byte) pos.gridNYPos;
+				update[3] = (byte) pos.gridCurXPos;
+				update[4] = (byte) pos.gridCurYPos;
+				ServerRequestController.getInstance().sendUpdatePeersFast(update);
 			}
 		}
 	}

@@ -81,13 +81,17 @@ public class MatchmakingScreen implements Screen, LoadArena, RoomUsers, FindUser
 	public void getRoomUsers(LiveRoomInfoEvent roomInfo) {
 		if(roomInfo.getJoinedUsers().length >= roomInfo.getData().getMaxUsers()) {
 			this.roomInfo = roomInfo;
-			ServerRequestController.getInstance().findAUsersData(this, roomInfo.getJoinedUsers()[1]);
+			for(String user : roomInfo.getJoinedUsers()) {
+				if(!user.equals(ServerRequestController.getInstance().getLocalUser()))
+					ServerRequestController.getInstance().findAUsersData(this, user);
+			}
 		}
 	}
 
 	@Override
-	public void loadUserData(String json) {
-		((Game)Gdx.app.getApplicationListener()).setScreen(new FightScreen(jsonData, json, roomInfo));
+	public void loadUserData(final String json) {
+		FightScreen fightScreen = new FightScreen(cityName, jsonData, json, roomInfo);
+		ServerRequestController.getInstance().getWarpClient().addNotificationListener(fightScreen);
+		((Game)Gdx.app.getApplicationListener()).setScreen(fightScreen);
 	}
-
 }
