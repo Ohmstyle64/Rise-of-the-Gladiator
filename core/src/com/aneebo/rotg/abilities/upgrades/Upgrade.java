@@ -1,31 +1,50 @@
 package com.aneebo.rotg.abilities.upgrades;
 
-import com.aneebo.rotg.abilities.Ability;
 
 public abstract class Upgrade {
 	protected String name;
-	protected int[] cost;
-	private int upgradeLevel;
+	private int[] cost;
+	protected int rank;
 	
-	public Upgrade( String name, int[] cost) {
+	public Upgrade(String name, int[] cost) {
 		this.name = name;
 		this.cost = cost;
-		upgradeLevel = 0;
+		rank = -1;
 	}
 	
-	public int increaseUpgradeLevel(Ability ability, int pts) {
-		if(upgradeLevel==cost.length) return pts;
+	public int increaseUpgradeLevel(int pts) {
+		if(rank==cost.length-1) return pts;
 		int size = cost.length;
-		for(int i = upgradeLevel; i < size; i++) {
+		for(int i = rank; i < size; i++) {
 			if(pts >= cost[i]) {
 				pts -= cost[i];
-				upgradeLevel++;
-				handleUpgrade(ability);
+				rank++;
+				handleUpgrade();
 			}
 		}
 		return pts;
 	}
 	
-	protected abstract void handleUpgrade(Ability ability);
+	protected abstract void handleUpgrade();
+	
+	public String getName() {
+		return name;
+	}
+	
+	public int getRank() {
+		return rank;
+	}
+	
+	public int getSpentCost() {
+		int spent = 0;
+		
+		if(rank==-1) return 0;
+		
+		for(int i = 0; i < rank; i++) {
+			spent += cost[i];
+		}
+		
+		return spent;
+	}
 	
 }

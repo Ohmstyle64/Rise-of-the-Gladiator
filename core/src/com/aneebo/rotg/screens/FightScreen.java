@@ -253,7 +253,7 @@ public class FightScreen implements Screen, NotifyListener {
 		region = new TextureRegionDrawable(atlas.findRegion("tab_selected"));
 		leftimgBtnStyle.down = region;
 		
-		final byte[] update = new byte[3];
+		final byte[] update = new byte[5];
 		
 		//Create Left Button
 		ImageButton leftBtn = new ImageButton(leftimgBtnStyle);
@@ -395,6 +395,7 @@ public class FightScreen implements Screen, NotifyListener {
 
 	private void loadEntities() {
 		GladiatorObject goPlayer = GladiatorFactory.getInstance().getGOFromJson(playerJsonData);
+		GladiatorFactory.reset();
 		GladiatorObject goEnemy = GladiatorFactory.getInstance().getGOFromJson(enemyJsonData);
 		byte playId = 0;
 		int cmp = goPlayer.getUserName().compareTo(goEnemy.getUserName());
@@ -409,7 +410,7 @@ public class FightScreen implements Screen, NotifyListener {
 		}
 		player = goPlayer.loadEntity(engine, ftm, true);
 		enemy = goEnemy.loadEntity(engine, ftm, false);
-		
+		ServerRequestController.getInstance().setUserRoomId(playId);
 		engine.addEntity(player);
 		engine.addEntity(enemy);
 	}
@@ -537,20 +538,17 @@ public class FightScreen implements Screen, NotifyListener {
 
 	@Override
 	public void onUserJoinedRoom(RoomData arg0, String arg1) {
-		// TODO Auto-generated method stub
-		
+		Gdx.app.log("NETWORK", "User Joined: "+arg1);
 	}
 
 	@Override
 	public void onUserLeftLobby(LobbyData arg0, String arg1) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void onUserLeftRoom(RoomData arg0, String arg1) {
-		// TODO Auto-generated method stub
-		
+		Gdx.app.log("NETWORK", "User Left: "+arg1);
 	}
 
 	@Override

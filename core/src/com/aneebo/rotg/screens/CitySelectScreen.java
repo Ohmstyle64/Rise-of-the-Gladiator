@@ -15,6 +15,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class CitySelectScreen implements Screen {
@@ -29,18 +30,19 @@ public class CitySelectScreen implements Screen {
 	private static final int RADIUS = 46;
 	private Circle[] cityArea;
 	private MapObjects cities;
+		
+		public CitySelectScreen(String jsonData) {
+			this.jsonData = jsonData; 
+		}
 	
-	public CitySelectScreen(String jsonData) {
-		this.jsonData = jsonData; 
-	}
-
-	@Override
-	public void show() {
+		@Override
+		public void show() {
 		tiledMap = new TmxMapLoader().load(Constants.WORLD_MAP);
 		renderer = new OrthogonalTiledMapRenderer(tiledMap);
 		sRender = new ShapeRenderer();
 		cam = new OrthographicCamera();
 		vPort = new FitViewport(Constants.WIDTH, Constants.HEIGHT, cam);
+		vPort.apply(true);
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		
 		MapLayer layer = tiledMap.getLayers().get("cities");
@@ -50,8 +52,9 @@ public class CitySelectScreen implements Screen {
 		for(int i = 0; i < cityArea.length; i++) {
 			MapObject city = cities.get(i);
 			Float x = (Float)city.getProperties().get("x");
-			Float y = (Float)city.getProperties().get("y");			
-			cityArea[i] = new Circle(x,y,RADIUS);
+			Float y = (Float)city.getProperties().get("y");
+			Vector3 screenCoor = cam.project(new Vector3(x,y,0));
+			cityArea[i] = new Circle(screenCoor.x, screenCoor.y, RADIUS);
 		}
 		
 	}
@@ -66,7 +69,6 @@ public class CitySelectScreen implements Screen {
 		renderer.setView(cam);
 		renderer.render();
 		drawCities();
-		
 	}
 	
 
@@ -112,7 +114,7 @@ public class CitySelectScreen implements Screen {
 
 	@Override
 	public void hide() {
-		
+		dispose();
 	}
 
 	@Override

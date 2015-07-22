@@ -131,24 +131,6 @@ public class Wave_of_Fire extends Ability {
 	}
 
 	@Override
-	public void activateTier1() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void activateTier2() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void activateTier3() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	protected void abilityActing(Entity me) {
 		// TODO Auto-generated method stub
 		

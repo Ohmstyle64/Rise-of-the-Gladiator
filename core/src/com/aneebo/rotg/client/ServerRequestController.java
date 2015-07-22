@@ -3,17 +3,9 @@ package com.aneebo.rotg.client;
 import java.util.HashMap;
 
 import com.aneebo.rotg.client.listener.ConnectionListener;
-import com.aneebo.rotg.client.listener.RoomListener;
 import com.aneebo.rotg.client.listener.ZoneListener;
 import com.aneebo.rotg.utils.Constants;
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.utils.Array;
 import com.shephertz.app42.gaming.multiplayer.client.WarpClient;
-import com.shephertz.app42.gaming.multiplayer.client.command.WarpResponseResultCode;
-import com.shephertz.app42.gaming.multiplayer.client.events.LiveRoomInfoEvent;
-import com.shephertz.app42.gaming.multiplayer.client.events.RoomData;
-import com.shephertz.app42.gaming.multiplayer.client.events.RoomEvent;
 import com.shephertz.app42.paas.sdk.java.storage.StorageService;
 import com.shephertz.app42.paas.sdk.java.user.UserService;
 
@@ -24,7 +16,6 @@ public class ServerRequestController {
 	public UserService userService;
 	public StorageService storageService;
 	
-	private RoomUsers roomUsers;
 	private String localUser;
 	private String roomId;
 	private String docId;
@@ -83,7 +74,6 @@ public class ServerRequestController {
 			WarpClient.initialize(Constants.API_KEY, Constants.SECRET_KEY);
 			warpClient = WarpClient.getInstance();
 			warpClient.addConnectionRequestListener(new ConnectionListener(this));
-			warpClient.addRoomRequestListener(new RoomListener(this));
 			warpClient.addZoneRequestListener(new ZoneListener(this));
 			platformConnector.initialize();
 			
@@ -96,11 +86,6 @@ public class ServerRequestController {
 		localUser = userName;
 		platformConnector.setLocalUser(userName);
 		warpClient.connectWithUserName(userName);
-	}
-	
-	//TODO:Need to remove. Used in development..
-	public void joinRoomId() {
-		warpClient.joinRoom("315081425");
 	}
 	
 	public void loadArenas(final String cityName, final LoadArena callback) {
@@ -133,22 +118,6 @@ public class ServerRequestController {
 		warpClient.joinRoomWithProperties(properties);
 	}
 		
-	public void onJoinRoomDone(RoomEvent event) {
-		if(event.getResult()==WarpResponseResultCode.SUCCESS) {
-			this.roomId = event.getData().getId();
-			platformConnector.setRoomId(roomId);
-			warpClient.subscribeRoom(roomId);
-			inRoom = true;
-		} else if(event.getResult()==WarpResponseResultCode.RESOURCE_NOT_FOUND) {
-			//Handle the room isn't wasn't found
-			System.out.println("Room not found! "+event.getResult());
-		} else {
-			//Handle something else broken
-			System.out.println("Something else is broken! "+event.getResult());
-			
-		}
-	}
-	
 	public void sendUpdatePeers(byte[] update) {
 		if(inRoom) {
 			update[0] = userRoomId;
@@ -163,30 +132,28 @@ public class ServerRequestController {
 		}
 	}
 	
-	public void getLiveRoomInfo(RoomUsers callback) {
+	public void getLiveRoomInfo() {
 		if(inRoom) {
-			roomUsers = callback;
 			warpClient.getLiveRoomInfo(roomId);
 		}
 	}
 	
-	public void onLiveRoomInfoDone(final LiveRoomInfoEvent roomInfo) {
-		Gdx.app.postRunnable(new Runnable() {
-			@Override
-			public void run() {
-				roomUsers.getRoomUsers(roomInfo);
-			}
-		});
-	}
-
-	public void onUserLeftRoom(RoomData arg0, String userName) {
-		
+	public void setUserRoomId(byte id) {
+		userRoomId = id;
 	}
 
 	public void disconnect() {
 		warpClient.unsubscribeRoom(roomId);
 		warpClient.leaveRoom(roomId);
 	}
-	
-	
+
+
+	public void setRoomId(String roomId) {
+		this.roomId = roomId;
+	}
+
+
+	public void setInRoom(boolean inRoom) {
+		this.inRoom = inRoom;
+	}
 }

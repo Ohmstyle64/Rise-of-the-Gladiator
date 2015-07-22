@@ -26,7 +26,6 @@ public class ServerRequestDesktop implements PlatformConnector {
 	public StorageService storageService;
 	
 	private String localUser;
-	private String roomId;
 	private String docId;
 	
 	@Override
@@ -41,10 +40,6 @@ public class ServerRequestDesktop implements PlatformConnector {
 		this.localUser = localUser;
 	}
 
-	public void setRoomId(String roomId) {
-		this.roomId = roomId;
-	}
-
 	public void setDocId(String docId) {
 		this.docId = docId;
 	}
@@ -53,11 +48,6 @@ public class ServerRequestDesktop implements PlatformConnector {
 	public String getLocalUser() {
 
 		return localUser;
-	}
-
-	@Override
-	public String getRoomId() {
-		return roomId;
 	}
 
 	@Override

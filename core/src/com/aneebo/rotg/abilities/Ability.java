@@ -22,7 +22,7 @@ public abstract class Ability {
 	protected AbilityType type;
 	protected String name;
 	protected AbilityNameType nameType;
-	protected float castTimeTimer, cooldownTimer, damage, energy_cost, range, castTime, cooldown;
+	protected float castTimeTimer, cooldownTimer, damage, energy_cost, range, castTime, cooldown, actDamage, actEnergy_cost, actRange;
 	public boolean isAvailable;
 	public boolean isInterrupted;
 	public boolean isActivated;
@@ -47,6 +47,9 @@ public abstract class Ability {
 		this.engine = engine;
 		this.textureName = textureName;
 		this.upgrades = upgrades;
+		actDamage = damage;
+		actEnergy_cost = energy_cost;
+		actRange = range;
 		justStarted = true;
 		isAvailable = false;
 		isInterrupted = false;
@@ -67,6 +70,20 @@ public abstract class Ability {
 				ability.getDamage(), ability.getEnergy_cost(), ability.getTexture(), engine, ability.getUpgrades());
 	}
 	
+	
+	
+	public void setActDamage(float damage) {
+		this.actDamage = damage;
+	}
+
+	public void setActEnergy_cost(float energy_cost) {
+		this.actEnergy_cost = energy_cost;
+	}
+	
+	public void setActRange(float actRange) {
+		this.actRange = actRange;
+	}
+
 	public AbilityNameType getNameType() {
 		return nameType;
 	}
@@ -167,12 +184,6 @@ public abstract class Ability {
 	protected abstract void abilityActing(Entity me);
 	
 	public abstract Array<Entity> getTargets(Entity me, Entity[] allEnemies);
-	
-	public abstract void activateTier1();
-	
-	public abstract void activateTier2();
-	
-	public abstract void activateTier3();
 	
 	public abstract void hit(ProjectileComponent proj, Entity from, Entity hit);
 

@@ -29,7 +29,6 @@ public class ServerRequestAndroid implements PlatformConnector {
 	private Context context;
 	
 	private String localUser;
-	private String roomId;
 	private String docId;
 	
 	public ServerRequestAndroid(Context context) {
@@ -49,11 +48,6 @@ public class ServerRequestAndroid implements PlatformConnector {
 	}
 
 	@Override
-	public void setRoomId(String roomId) {
-		this.roomId = roomId;
-	}
-
-	@Override
 	public void setDocId(String docId) {
 		this.docId = docId;
 	}
@@ -61,11 +55,6 @@ public class ServerRequestAndroid implements PlatformConnector {
 	@Override
 	public String getLocalUser() {
 		return localUser;
-	}
-
-	@Override
-	public String getRoomId() {
-		return roomId;
 	}
 
 	@Override

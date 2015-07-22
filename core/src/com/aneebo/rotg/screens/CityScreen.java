@@ -1,5 +1,6 @@
 package com.aneebo.rotg.screens;
 
+import com.aneebo.rotg.client.ServerRequestController;
 import com.aneebo.rotg.utils.Assets;
 import com.aneebo.rotg.utils.Constants;
 import com.badlogic.gdx.Game;
@@ -43,7 +44,9 @@ public class CityScreen implements Screen {
 		fightBtn.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				((Game)Gdx.app.getApplicationListener()).setScreen(new MatchmakingScreen(jsonData, cityName));
+				MatchmakingScreen screen = new MatchmakingScreen(jsonData, cityName);
+				ServerRequestController.getInstance().getWarpClient().addRoomRequestListener(screen);
+				((Game)Gdx.app.getApplicationListener()).setScreen(screen);
 			}
 		});
 		TextButton vendorBtn = new TextButton("Vendor", skin);
@@ -64,7 +67,7 @@ public class CityScreen implements Screen {
 		characterBtn.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				((Game)Gdx.app.getApplicationListener()).setScreen(new CharacterScreen(jsonData));
+				((Game)Gdx.app.getApplicationListener()).setScreen(new CharacterScreen(cityName, jsonData));
 			}
 		});
 		

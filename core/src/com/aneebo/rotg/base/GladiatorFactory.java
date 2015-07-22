@@ -44,4 +44,8 @@ public class GladiatorFactory {
 		
 		return go;
 	}
+	
+	public static void reset() {
+		go = new GladiatorObject();
+	}
 }

@@ -19,7 +19,7 @@ public class Blade_Block extends Ability {
 	private StatComponent stat;
 	private AbilityComponent ab;
 	private Entity e;
-	
+	private boolean canPerfectBlock;
 
 	public Blade_Block(AbilityNameType nameType, float castTime,
 			float range, AbilityType type, String name, float cooldown,
@@ -27,13 +27,17 @@ public class Blade_Block extends Ability {
 			Array<Upgrade> upgrades) {
 		super(nameType, castTime, range, type, name, cooldown, damage, energy_cost,
 				textureName, engine, upgrades);
+		
+		canPerfectBlock = false;
 	}
 
 	public Blade_Block(Ability ability, Engine engine) {
 		super(ability, engine);
 	}
 
-	
+	public void setCanPerfectBlock(boolean canPerfectBlock) {
+		this.canPerfectBlock = canPerfectBlock;
+	}
 
 	@Override
 	protected void onAbilityEnd(Entity me) {
@@ -74,27 +78,6 @@ public class Blade_Block extends Ability {
 		targets.addAll(Target.oneDirectional(me, allEnemies, getRange()));
 		
 		return targets;
-	}
-
-
-	@Override
-	public void activateTier1() {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	@Override
-	public void activateTier2() {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	@Override
-	public void activateTier3() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

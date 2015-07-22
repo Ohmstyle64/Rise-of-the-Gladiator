@@ -8,10 +8,8 @@ public interface PlatformConnector {
 	
 	public void initialize();
 	public String getLocalUser();
-	public String getRoomId();
 	public String getDocId();
 	public void setLocalUser(String localUser);
-	public void setRoomId(String roomId);
 	public void setDocId(String docId);
 	public void loadArenas(final String cityName, final LoadArena callback);
 	public void saveNewUserOrUpdate(String json, final SaveNewUser callback);

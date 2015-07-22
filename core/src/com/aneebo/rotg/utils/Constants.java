@@ -3,13 +3,9 @@ package com.aneebo.rotg.utils;
 import com.aneebo.rotg.abilities.Ability;
 import com.aneebo.rotg.abilities.defense.Blade_Block;
 import com.aneebo.rotg.abilities.defense.Force_Field;
-import com.aneebo.rotg.abilities.defense.Pure_Heart;
 import com.aneebo.rotg.abilities.defense.Teleport;
 import com.aneebo.rotg.abilities.offense.Blade_Strike;
 import com.aneebo.rotg.abilities.offense.DashingStrike;
-import com.aneebo.rotg.abilities.offense.Electric_Charge;
-import com.aneebo.rotg.abilities.offense.Explode;
-import com.aneebo.rotg.abilities.offense.Ice_Strike;
 import com.aneebo.rotg.abilities.offense.Quick_Knife;
 import com.aneebo.rotg.abilities.offense.Wave_of_Fire;
 import com.aneebo.rotg.abilities.upgrades.Upgrade;
@@ -26,6 +22,19 @@ public class Constants {
 	public static final boolean DEBUG = false;
 	public static final int WIDTH = 800;
 	public static final int HEIGHT = 480;
+	
+	public static final int WIDTH_LR = 960;
+	public static final int HEIGHT_LR = 450;
+	public static final int TILEDIM_LR = 64;
+	
+	public static final int WIDTH_MR = 1280;
+	public static final int HEIGHT_MR = 720;
+	public static final int TILEDIM_MR = 85;
+	
+	public static final int WIDTH_HR = 1920;
+	public static final int HEIGHT_HR = 1080;
+	public static final int TILEDIM_HR = 128;
+	
 	
 	//WarpClient Key
 	public static final String API_KEY = "75a8ca517cc741a00d02e8d39f11d5cf577dade0e6043b4636b840150958d43e";
@@ -101,12 +110,7 @@ public class Constants {
 		Blade_Block bb = new Blade_Block(AbilityNameType.DF_BLADE_BLOCK, 2, 3, AbilityType.melee_defensive, "Blade Block", 3, 0f, 10f, EMPTY_CELL, null, fake);
 		Quick_Knife qk = new Quick_Knife(AbilityNameType.AT_QUICK_KNIFE, 1, 3, AbilityType.melee_offensive, "Quick Knife", 2, 30f, 0f, EMPTY_CELL, null, fake);
 		Force_Field ff = new Force_Field(AbilityNameType.DF_FORCE_FIELD, 2, 1.5f, AbilityType.magic, "Force Field", 0, 30f, 0f, EMPTY_CELL, null, fake);
-		Pure_Heart ph = new Pure_Heart(AbilityNameType.DF_PURE_HEART, 1, 3, AbilityType.magic, "Pure Heart", 0, 30f, 0f, EMPTY_CELL, null, fake);
 
-		Explode ex = new Explode(AbilityNameType.AT_EXPLODE, 1, 3, AbilityType.magic, "Explode", 0, 30f, 0f, EMPTY_CELL, null, fake);
-
-		Electric_Charge ec = new Electric_Charge(AbilityNameType.AT_ELECTRIC_CHARGE, 1, 3, AbilityType.magic, "Pure Heart", 0, 30f, 0f, EMPTY_CELL, null, fake);
-		Ice_Strike is = new Ice_Strike(AbilityNameType.AT_ICE_STRIKE, 1, 3, AbilityType.magic, "Ice Strike", 0, 30f, 0f, EMPTY_CELL, null, fake);
 		Wave_of_Fire wof = new Wave_of_Fire(AbilityNameType.AT_WAVE_OF_FIRE, 2, 8, AbilityType.magic, "Wave of Fire", 5, 20f, 2f, FIREBALL_EFFECT, null, fake);
 		Teleport tel = new Teleport(AbilityNameType.DF_TELEPORT, 2, LAST_COL, AbilityType.magic, "Teleport", 0, 0f, 0f, EMPTY_CELL, null, fake);
 		DashingStrike ds = new DashingStrike(AbilityNameType.AT_DASHING_STRIKE, 0.5f, 3f, AbilityType.magic, "Dashing Strike", 5f, 0f, 0f, EMPTY_CELL, null, fake);
@@ -114,14 +118,10 @@ public class Constants {
 		//Add to map
 		abilityMap.put(bs.getNameType(), bs);
 		abilityMap.put(bb.getNameType(), bb);
-		abilityMap.put(ex.getNameType(), ex);
 		abilityMap.put(wof.getNameType(), wof);
 		abilityMap.put(tel.getNameType(), tel);
 		abilityMap.put(qk.getNameType(), qk);
 		abilityMap.put(ff.getNameType(), ff);
-		abilityMap.put(ph.getNameType(), ph);
-		abilityMap.put(ec.getNameType(), ec);
-		abilityMap.put(is.getNameType(), is);
 		abilityMap.put(ds.getNameType(), ds);
 		
 	}

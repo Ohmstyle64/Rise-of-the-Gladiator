@@ -62,23 +62,6 @@ public class DashingStrike extends Ability {
 		return targets;
 	}
 
-	@Override
-	public void activateTier1() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void activateTier2() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void activateTier3() {
-		// TODO Auto-generated method stub
-
-	}
 
 	@Override
 	public void hit(ProjectileComponent proj, Entity from, Entity hit) {
